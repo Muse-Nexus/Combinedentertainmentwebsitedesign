@@ -77,14 +77,17 @@ const Rainbow = ({ active }: { active: boolean }) => {
 };
 
 const Sun = ({ active }: { active: boolean }) => {
+  if (!active) return null;
+  
   return (
     <motion.div
       initial={{ y: '50vh', x: '10vw', opacity: 0 }}
       animate={{ 
-        y: active ? '5vh' : '50vh', 
-        x: active ? '0vw' : '10vw',
-        opacity: active ? 1 : 0 
+        y: '5vh', 
+        x: '0vw',
+        opacity: 1 
       }}
+      exit={{ y: '50vh', x: '10vw', opacity: 0 }}
       transition={{ duration: 3, type: "spring", bounce: 0.2, delay: 0.5 }}
       className="absolute right-[5%] top-[5%] w-64 h-64 z-[46] pointer-events-none"
     >
@@ -178,7 +181,7 @@ const ServiceCard = ({ id, title, img, color, delay, isLanded }: any) => {
       }}
       className="group relative flex flex-col h-[500px] w-full rounded-3xl overflow-hidden cursor-pointer shadow-2xl origin-bottom"
     >
-      <Link to={`/service/${id}`} className="block w-full h-full">
+      <Link to={`/${id}`} className="block w-full h-full">
         <div className={`absolute inset-0 ${color} opacity-0 group-hover:opacity-90 transition-opacity duration-500 z-10 mix-blend-multiply`} />
         <img 
           src={img} 
@@ -374,7 +377,9 @@ export const LandingPage = () => {
 
         {/* MIRACLE ELEMENTS */}
         <Rainbow active={isMiracle} />
-        <Sun active={isMiracle} />
+        <AnimatePresence>
+          <Sun active={isMiracle} />
+        </AnimatePresence>
 
         <div className="absolute inset-0 z-30 pointer-events-none">
              <LightningFlash active={!isMiracle} />
@@ -405,7 +410,7 @@ export const LandingPage = () => {
       <Clouds scrollProgress={cloudProgress} />
 
       {/* --- SCROLL TRACK SPACER --- */}
-      <div style={{ height: TOTAL_SCROLL_HEIGHT }} className="w-full pointer-events-none relative z-[-1]" />
+      <div style={{ height: TOTAL_SCROLL_HEIGHT }} className="w-full pointer-events-none relative" aria-hidden="true" />
 
       {/* --- GROUND CONTENT --- */}
       <div 
@@ -440,29 +445,45 @@ export const LandingPage = () => {
                 </motion.div>
                 
                 {/* 3 GROWING CARDS */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 items-end">
                    <ServiceCard 
-                      id="magic"
-                      title="Magic Brent"
-                      img={magicImg}
-                      color="bg-red-600"
+                      id="balloon-twisting"
+                      title="Balloon Twisting & Facepainting"
+                      img="https://images.unsplash.com/photo-1659670216057-977bb5a43a7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWxsb29uJTIwdHdpc3RpbmclMjBlbnRlcnRhaW5tZW50JTIwcGFydHl8ZW58MXx8fHwxNzc0MzQ4NzQ4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      color="bg-pink-700"
+                      delay={0.4}
+                      isLanded={isLanded}
+                   />
+                   <ServiceCard 
+                      id="balloon-decor"
+                      title="Balloon Decor"
+                      img="https://images.unsplash.com/photo-1765850261645-69a4734ae89e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWxsb29uJTIwZGVjb3JhdGlvbiUyMGV2ZW50fGVufDF8fHx8MTc3NDM0ODc0OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      color="bg-orange-500"
                       delay={0.6}
                       isLanded={isLanded}
                    />
                    <ServiceCard 
-                      id="kids-circus"
-                      title="Cirque Jolie"
-                      img={circusImg}
-                      color="bg-pink-600"
+                      id="strolling"
+                      title="Strolling Entertainment"
+                      img="https://images.unsplash.com/photo-1658950453954-c5b0a3964b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHJvbGxpbmclMjBwZXJmb3JtZXIlMjBlbnRlcnRhaW5lcnxlbnwxfHx8fDE3NzQzNDg3NDl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      color="bg-red-600"
                       delay={0.8}
                       isLanded={isLanded}
                    />
                    <ServiceCard 
-                      id="gameshow"
-                      title="Game Show"
-                      img={gameshowImg}
-                      color="bg-blue-600"
+                      id="magic"
+                      title="Magic"
+                      img={magicImg}
+                      color="bg-teal-500"
                       delay={1.0}
+                      isLanded={isLanded}
+                   />
+                   <ServiceCard 
+                      id="casino-gameshow"
+                      title="Casino & Gameshow"
+                      img={gameshowImg}
+                      color="bg-purple-700"
+                      delay={1.2}
                       isLanded={isLanded}
                    />
                 </div>

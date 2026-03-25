@@ -17,10 +17,11 @@ export function Footer() {
           <div>
             <h3 className="text-white font-bold mb-4">Services</h3>
             <ul className="space-y-2">
-              <li><Link to="/magic" className="hover:text-teal-400 transition-colors">Magic</Link></li>
-              <li><Link to="/game-show" className="hover:text-red-400 transition-colors">Game Show</Link></li>
-              <li><Link to="/kids-circus" className="hover:text-orange-400 transition-colors">Kids & Circus</Link></li>
-              <li><Link to="/corporate" className="hover:text-blue-400 transition-colors">Corporate</Link></li>
+              <li><Link to="/balloon-twisting" className="hover:text-burgundy transition-colors">Balloon Twisting & Facepainting</Link></li>
+              <li><Link to="/balloon-decor" className="hover:text-coral transition-colors">Balloon Decor</Link></li>
+              <li><Link to="/strolling" className="hover:text-cream transition-colors">Strolling Entertainment</Link></li>
+              <li><Link to="/magic" className="hover:text-sage transition-colors">Magic</Link></li>
+              <li><Link to="/casino-gameshow" className="hover:text-lavender transition-colors">Casino & Gameshow</Link></li>
             </ul>
           </div>
 
@@ -31,7 +32,7 @@ export function Footer() {
                <a href="#" className="hover:text-white transition-colors"><Facebook /></a>
                <a href="/contact" className="hover:text-white transition-colors"><Mail /></a>
             </div>
-            <Link to="/contact" className="text-orange-400 hover:text-orange-300 font-medium">
+            <Link to="/contact" className="text-coral hover:text-coral/80 font-medium">
                 Book an Event &rarr;
             </Link>
           </div>

@@ -4,6 +4,14 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "Poppins", sans-serif;
   
+  /* Umbrella Colors - Matching the navigation panels */
+  --color-burgundy: #8B1538;
+  --color-coral: #FF6B4A;
+  --color-cream: #F4E5D3;
+  --color-sage: #7BA591;
+  --color-lavender: #9B7EBD;
+  
+  /* Legacy rain/sun colors (keep for compatibility) */
   --color-rain-dark: #1a1a1a;
   --color-rain-gray: #4a4a4a;
   --color-sun-yellow: #fcd34d;
@@ -14,6 +22,7 @@
 body {
   @apply bg-slate-950 text-white font-sans antialiased;
   overflow-x: hidden;
+  position: relative;
 }
 
 h1, h2, h3, h4, h5, h6 {

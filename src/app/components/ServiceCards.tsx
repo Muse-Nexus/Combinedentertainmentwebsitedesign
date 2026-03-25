@@ -1,40 +1,65 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Wand2, Trophy, Tent, Briefcase } from 'lucide-react';
+import { Wand2, Trophy, Tent, Briefcase, Palette } from 'lucide-react';
+
+// Import actual performance photos
+import balloonTwistingImg from 'figma:asset/f0b5279ca3d5a0c0c4bdc34ff27cdd453528b236.png'; // Rainbow butterfly face painting duo
+import balloonDecorImg from 'figma:asset/53d9d3524104146dff3c3a3fdf5e34a4b2297974.png'; // Halloween spider arch
+import strollingImg from 'figma:asset/8daf5f5cc3bd5bf23f90d4e0c90aed9a69af4c50.png'; // Strolling performers
+import magicImg from 'figma:asset/dc7c79a57bdb0cc560f00e95f1ab7e039868e3db.png'; // Magic card performance
+import casinoImg from 'figma:asset/a2cd29b03be5bb9a9ac72d8b8aaf9e5d1c5da4b0.png'; // Large casino event
 
 const services = [
   {
+    id: 'balloon-twisting',
+    title: 'Balloon Twisting & Facepainting',
+    shortTitle: 'Balloon Twisting',
+    icon: Palette,
+    desc: 'Colorful balloon creations and beautiful facepainting that delight kids and adults alike.',
+    color: 'bg-pink-700',
+    link: '/balloon-twisting',
+    image: balloonTwistingImg
+  },
+  {
+    id: 'balloon-decor',
+    title: 'Balloon Decor',
+    shortTitle: 'Balloon Decor',
+    icon: Tent,
+    desc: 'Stunning balloon installations and decor that transform any venue into a celebration.',
+    color: 'bg-orange-500',
+    link: '/balloon-decor',
+    image: balloonDecorImg
+  },
+  {
+    id: 'strolling',
+    title: 'Strolling Entertainment',
+    shortTitle: 'Strolling Entertainment',
+    icon: Trophy,
+    desc: 'Roaming performers who mingle with your guests, bringing magic and wonder up close.',
+    color: 'bg-red-600',
+    link: '/strolling',
+    image: strollingImg
+  },
+  {
     id: 'magic',
     title: 'Magic',
+    shortTitle: 'Magic',
     icon: Wand2,
     desc: 'Mind-blowing close-up and stage magic that breaks the ice and leaves guests wondering "How?"',
     color: 'bg-teal-500',
-    link: '/magic'
+    link: '/magic',
+    image: magicImg
   },
   {
-    id: 'gameshow',
-    title: 'Game Show',
-    icon: Trophy,
-    desc: 'High-energy interactive game shows that get everyone involved. Perfect for team building.',
-    color: 'bg-red-500',
-    link: '/game-show'
-  },
-  {
-    id: 'kids',
-    title: 'Kids & Circus',
-    icon: Tent,
-    desc: 'Whimsical characters, stilt walkers, and face painting to delight the young and young at heart.',
-    color: 'bg-orange-500',
-    link: '/kids-circus'
-  },
-  {
-    id: 'corporate',
-    title: 'Corporate',
+    id: 'casino-gameshow',
+    title: 'Casino & Gameshow',
+    shortTitle: 'Casino & Gameshow',
     icon: Briefcase,
-    desc: 'Professional entertainment solutions tailored for galas, conferences, and brand activations.',
-    color: 'bg-blue-900',
-    link: '/corporate'
+    desc: 'Casino nights and high-energy game shows that get everyone involved. Perfect for team building.',
+    color: 'bg-purple-700',
+    link: '/casino-gameshow',
+    image: casinoImg
   }
 ];
 
@@ -84,7 +109,7 @@ export function ServiceCards() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {services.map((service, index) => (
                     <motion.div
                         key={service.id}
@@ -92,26 +117,39 @@ export function ServiceCards() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                     >
-                        <div className={`h-32 ${service.color} flex items-center justify-center p-8`}>
-                            <service.icon className="text-white w-16 h-16 group-hover:scale-110 transition-transform duration-300" />
-                        </div>
-                        <div className="p-8">
-                            <h3 className="text-2xl font-bold mb-4 text-slate-900">{service.title}</h3>
-                            <p className="text-slate-600 mb-6">{service.desc}</p>
-                            <Link 
-                                to={service.link}
-                                className={`inline-block px-6 py-2 rounded-full border-2 font-bold transition-colors ${
-                                    service.id === 'magic' ? 'border-teal-500 text-teal-600 hover:bg-teal-50' :
-                                    service.id === 'gameshow' ? 'border-red-500 text-red-600 hover:bg-red-50' :
-                                    service.id === 'kids' ? 'border-orange-500 text-orange-600 hover:bg-orange-50' :
-                                    'border-blue-900 text-blue-900 hover:bg-blue-50'
-                                }`}
-                            >
-                                Explore
-                            </Link>
-                        </div>
+                        <Link 
+                            to={service.link}
+                            className="block relative rounded-3xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 aspect-[3/4]"
+                        >
+                            {/* Background Image */}
+                            <div className="absolute inset-0">
+                                <img 
+                                    src={service.image} 
+                                    alt={service.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                {/* Dark overlay for text readability */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+                            </div>
+
+                            {/* Content Overlay */}
+                            <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
+                                {/* Title at bottom with better responsive sizing */}
+                                <div className="mt-auto">
+                                    <h3 className="text-white font-black uppercase leading-tight tracking-tight
+                                                   text-2xl sm:text-3xl lg:text-2xl xl:text-3xl
+                                                   [text-shadow:_2px_2px_8px_rgb(0_0_0_/_80%)]">
+                                        {service.title.split(' ').map((word, i) => (
+                                            <span key={i} className="block">{word}</span>
+                                        ))}
+                                    </h3>
+                                    <div className="mt-4 inline-block px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-bold text-slate-900">
+                                        Explore Service →
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
                     </motion.div>
                 ))}
             </div>
