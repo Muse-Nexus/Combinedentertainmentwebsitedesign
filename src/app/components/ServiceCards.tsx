@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { Wand2, Trophy, Tent, Briefcase, Palette } from 'lucide-react';
 
 // Import actual performance photos
-import balloonTwistingImg from 'figma:asset/f0b5279ca3d5a0c0c4bdc34ff27cdd453528b236.png'; // Rainbow butterfly face painting duo
-import balloonDecorImg from 'figma:asset/53d9d3524104146dff3c3a3fdf5e34a4b2297974.png'; // Halloween spider arch
-import strollingImg from 'figma:asset/8daf5f5cc3bd5bf23f90d4e0c90aed9a69af4c50.png'; // Strolling performers
-import magicImg from 'figma:asset/dc7c79a57bdb0cc560f00e95f1ab7e039868e3db.png'; // Magic card performance
-import casinoImg from 'figma:asset/a2cd29b03be5bb9a9ac72d8b8aaf9e5d1c5da4b0.png'; // Large casino event
+import balloonTwistingImg from 'figma:asset/2d7c73d4755e1fac69d1e3d3e0a5c0f4f0ab4b3a.png'; // Face painting black and white
+import balloonDecorImg from 'figma:asset/6b4c34e54104146dff3c3a3fdf5e34a4b2297974.png'; // White balloon installations
+import strollingImg from 'figma:asset/3b2a1f5cc3bd5bf23f90d4e0c90aed9a69af4c50.png'; // Dark strolling performance
+import magicImg from 'figma:asset/f4e5d6c79a57bdb0cc560f00e95f1ab7e039868e3db.png'; // Magic performance
+import casinoImg from 'figma:asset/a2cd29b03be5bb9a9ac72d8b8aaf9e5d1c5da4b0.png'; // Casino crowd event
 
 const services = [
   {
@@ -134,19 +134,14 @@ export function ServiceCards() {
                             </div>
 
                             {/* Content Overlay */}
-                            <div className="relative h-full flex flex-col justify-between p-6 md:p-8">
-                                {/* Title at bottom with better responsive sizing */}
-                                <div className="mt-auto">
-                                    <h3 className="text-white font-black uppercase leading-tight tracking-tight
-                                                   text-2xl sm:text-3xl lg:text-2xl xl:text-3xl
+                            <div className="relative h-full flex flex-col justify-end p-6">
+                                {/* Title at bottom - smaller and left-aligned */}
+                                <div>
+                                    <h3 className="text-white font-black uppercase leading-tight tracking-tight text-left
+                                                   text-lg sm:text-xl lg:text-lg xl:text-xl mb-3
                                                    [text-shadow:_2px_2px_8px_rgb(0_0_0_/_80%)]">
-                                        {service.title.split(' ').map((word, i) => (
-                                            <span key={i} className="block">{word}</span>
-                                        ))}
+                                        {service.title}
                                     </h3>
-                                    <div className="mt-4 inline-block px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-bold text-slate-900">
-                                        Explore Service →
-                                    </div>
                                 </div>
                             </div>
                         </Link>

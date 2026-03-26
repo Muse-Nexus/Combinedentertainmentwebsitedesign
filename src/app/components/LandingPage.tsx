@@ -13,6 +13,13 @@ import circusImg from 'figma:asset/3c9be9ef73fc66abe4a14bc8212a5e7646bb489c.png'
 import gameshowImg from 'figma:asset/b587c1e163734b07d9864abf0c7580ed29a6a47f.png';
 import cloudTexture from 'figma:asset/a4d5b9382b0fb1113c06693396a4b58d8adf4b36.png';
 
+// Service Card Images
+import balloonTwistingCardImg from 'figma:asset/f0b5279ca3d5a0c0c4bdc34ff27cdd453528b236.png'; // Rainbow butterfly face painting duo
+import balloonDecorCardImg from 'figma:asset/53d9d3524104146dff3c3a3fdf5e34a4b2297974.png'; // Halloween spider arch
+import strollingCardImg from 'figma:asset/8daf5f5cc3bd5bf23f90d4e0c90aed9a69af4c50.png'; // Strolling performers
+import magicCardImg from 'figma:asset/dc7c79a57bdb0cc560f00e95f1ab7e039868e3db.png'; // Magic card performance
+import casinoCardImg from 'figma:asset/a2cd29b03be5bb9a9ac72d8b8aaf9e5d1c5da4b0.png'; // Casino event
+
 // --- SUB-COMPONENTS ---
 
 const LightningFlash = ({ active }: { active: boolean }) => {
@@ -395,12 +402,21 @@ export const LandingPage = () => {
                 alt="Raining Entertainment" 
                 className="w-64 mb-6 drop-shadow-2xl" 
              />
-             <h1 className="text-5xl md:text-7xl font-display font-black text-white/90 tracking-tight drop-shadow-2xl text-center px-4">
-                <span className="block text-2xl font-sans font-normal tracking-widest mb-2 opacity-70">WAIT FOR THE</span>
-                STORM TO PASS
-             </h1>
-             <div className="mt-12 animate-bounce opacity-50">
-                <ArrowDown className="w-8 h-8 text-white" />
+             <div className="mt-12">
+                <motion.div 
+                  className="text-3xl font-bold text-white/90 tracking-widest drop-shadow-2xl"
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  SCROLL
+                </motion.div>
+                <motion.div 
+                  className="mt-4 flex justify-center"
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ArrowDown className="w-8 h-8 text-white opacity-70" />
+                </motion.div>
              </div>
         </motion.div>
 
@@ -449,7 +465,7 @@ export const LandingPage = () => {
                    <ServiceCard 
                       id="balloon-twisting"
                       title="Balloon Twisting & Facepainting"
-                      img="https://images.unsplash.com/photo-1659670216057-977bb5a43a7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWxsb29uJTIwdHdpc3RpbmclMjBlbnRlcnRhaW5tZW50JTIwcGFydHl8ZW58MXx8fHwxNzc0MzQ4NzQ4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      img={balloonTwistingCardImg}
                       color="bg-pink-700"
                       delay={0.4}
                       isLanded={isLanded}
@@ -457,7 +473,7 @@ export const LandingPage = () => {
                    <ServiceCard 
                       id="balloon-decor"
                       title="Balloon Decor"
-                      img="https://images.unsplash.com/photo-1765850261645-69a4734ae89e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWxsb29uJTIwZGVjb3JhdGlvbiUyMGV2ZW50fGVufDF8fHx8MTc3NDM0ODc0OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      img={balloonDecorCardImg}
                       color="bg-orange-500"
                       delay={0.6}
                       isLanded={isLanded}
@@ -465,7 +481,7 @@ export const LandingPage = () => {
                    <ServiceCard 
                       id="strolling"
                       title="Strolling Entertainment"
-                      img="https://images.unsplash.com/photo-1658950453954-c5b0a3964b52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHJvbGxpbmclMjBwZXJmb3JtZXIlMjBlbnRlcnRhaW5lcnxlbnwxfHx8fDE3NzQzNDg3NDl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      img={strollingCardImg}
                       color="bg-red-600"
                       delay={0.8}
                       isLanded={isLanded}
@@ -473,7 +489,7 @@ export const LandingPage = () => {
                    <ServiceCard 
                       id="magic"
                       title="Magic"
-                      img={magicImg}
+                      img={magicCardImg}
                       color="bg-teal-500"
                       delay={1.0}
                       isLanded={isLanded}
@@ -481,7 +497,7 @@ export const LandingPage = () => {
                    <ServiceCard 
                       id="casino-gameshow"
                       title="Casino & Gameshow"
-                      img={gameshowImg}
+                      img={casinoCardImg}
                       color="bg-purple-700"
                       delay={1.2}
                       isLanded={isLanded}
