@@ -26,7 +26,7 @@ export default function BalloonDecor() {
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-center max-w-4xl mx-auto">
             <p className="text-sage font-semibold tracking-[0.3em] uppercase text-sm mb-4">Balloons of Aloha</p>
             <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-sage via-cream to-coral bg-clip-text text-transparent">Balloon D&eacute;cor</span>
+              <span className="bg-gradient-to-r from-sage via-cream to-coral bg-clip-text text-transparent">Maui Balloon D&eacute;cor</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
               Balloon garland, balloon arches, balloon columns, numbered birthday balloon arrangements, balloon bouquets, surprise balloon deliveries, and balloon centerpieces. It totally transforms any space into a party!

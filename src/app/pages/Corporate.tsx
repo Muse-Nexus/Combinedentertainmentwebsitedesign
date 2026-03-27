@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { motion, useScroll, useTransform, useInView } from 'motion/react';
-import { Building2, Dice5, Tv, Music, Sparkles, Users, Star, CheckCircle } from 'lucide-react';
+import { Building2, Dice5, Tv, Music, Sparkles, Users, Star, CheckCircle, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
@@ -76,8 +76,8 @@ export default function Corporate() {
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Raining Entertainment</p>
             <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Corporate Events</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Entertainment That Delivers</span>
+              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Maui Corporate Entertainment</span>
+              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Event Entertainment That Delivers</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
               From casino nights to live game shows, strolling performers to full DJ production &mdash; we make your corporate event the one everyone talks about.
@@ -184,23 +184,53 @@ export default function Corporate() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">In Action</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Corporate Events Gallery</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">Maui Corporate Events Gallery</h2>
           </FadeInSection>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { src: '/media/Casino-Night-32-1030x579.jpg', label: 'Casino Night' },
-              { src: '/media/casino-gameshow/gameshow-podium-street.jpg', label: 'Live Game Show' },
+              { src: '/media/515925879_10164201867303825_1352723102744150605_n.jpg', label: 'Corporate Game Show' },
               { src: '/media/strolling/fire-dancing.jpg', label: 'Fire Dancing' },
-              { src: '/media/casino-gameshow/casino-group-photo.jpg', label: 'Team Celebration' },
-              { src: '/media/strolling/silver-white-stilt.jpg', label: 'Stilt Performers' },
-              { src: '/media/casino-gameshow/gameshow-outdoor-fullset.jpg', label: 'Full Stage Production' },
+              { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', label: 'Casino Team' },
+              { src: '/media/472753445_1039860624823457_3993024156608406927_n.jpg', label: 'Stilt & Magic Duo' },
+              { src: '/media/503698188_1245363894258003_1463121886193686301_n.jpg', label: 'Resort Game Show Setup' },
             ].map((img, i) => (
               <FadeInSection key={img.label} delay={i * 0.08}>
                 <div className="relative group rounded-2xl overflow-hidden aspect-[4/3]">
                   <img src={img.src} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 left-4 text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">{img.label}</div>
+                </div>
+              </FadeInSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Client Feedback</p>
+            <h2 className="text-4xl md:text-5xl font-bold">What Event Organizers Say</h2>
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {[
+              { quote: 'Brenton is a complete natural and knows how to keep the audience on their toes and entertained! Gameshow Fanatics are fantastic to work with. Brenton really cares about the success of each event and is constantly working to create the most fun and memorable experience for the guests.', name: 'Josh Desilva', role: 'Desilva Meeting Consultants' },
+              { quote: "As an event organizer, I LOVED IT \u2013 we didn\u2019t have to do anything in preparation! It was a FRESH & FUN CHANGE for a team-building social event.", name: 'Jennifer Rappenecker', role: 'Regional Leader, Edward Jones' },
+              { quote: "I'm not sure who had a better time, the people playing or the people watching!", name: 'Matt Lane', role: 'Outreach Coordinator, Community Work Day Program' },
+              { quote: 'Absolutely hilarious!', name: 'Bryant Neal', role: 'Executive Director, Arts & Education for Children Group' },
+            ].map((testimonial, i) => (
+              <FadeInSection key={i} delay={i * 0.1}>
+                <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-8 flex flex-col h-full">
+                  <Quote className="w-8 h-8 text-coral/30 mb-4 shrink-0" />
+                  <p className="text-gray-300 leading-relaxed italic mb-6 flex-1">&ldquo;{testimonial.quote}&rdquo;</p>
+                  <div>
+                    <p className="text-white font-bold">{testimonial.name}</p>
+                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  </div>
                 </div>
               </FadeInSection>
             ))}

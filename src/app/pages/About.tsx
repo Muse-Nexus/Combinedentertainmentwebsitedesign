@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { motion, useInView } from 'motion/react';
-import { Heart, Star, MapPin, Users } from 'lucide-react';
+import { Heart, Star, MapPin, Users, Award, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
@@ -23,7 +23,7 @@ export function About() {
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-center max-w-4xl mx-auto">
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Raining Entertainment</p>
             <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-coral via-lavender to-sage bg-clip-text text-transparent">The Duo Behind the Magic</span>
+              <span className="bg-gradient-to-r from-coral via-lavender to-sage bg-clip-text text-transparent">Maui&rsquo;s Entertainment Duo</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
               Husband &amp; wife team Brenton Keith and Jolie Strickland have been entertaining Maui for over two decades. Three brands. One mission: make your event unforgettable.
@@ -98,6 +98,22 @@ export function About() {
         </div>
       </section>
 
+      {/* BRENT & JOLIE TOGETHER */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="rounded-3xl overflow-hidden shadow-2xl shadow-coral/10">
+                <img src="/media/472753445_1039860624823457_3993024156608406927_n.jpg" alt="Brenton Keith and Jolie Strickland performing together at oceanfront Maui 4th of July event" className="w-full aspect-[4/5] object-cover" />
+              </div>
+              <div className="rounded-3xl overflow-hidden shadow-2xl shadow-lavender/10">
+                <img src="/media/598419647_1413764607417930_4065430168744957782_n.jpg" alt="Raining Entertainment casino night crew posing with holiday balloon decor at Maui venue" className="w-full aspect-[4/5] object-cover" />
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
       {/* THE THREE BRANDS */}
       <section className="py-24 bg-slate-950">
         <div className="container mx-auto px-4">
@@ -140,6 +156,51 @@ export function About() {
                   <div className="flex items-center gap-2"><Heart className="w-5 h-5 text-coral" /><span>Family owned &amp; operated</span></div>
                 </div>
               </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* RECOGNITION & SOCIAL PROOF */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Recognition</p>
+            <h2 className="text-4xl md:text-5xl font-bold">A Track Record That Speaks</h2>
+          </FadeInSection>
+
+          <FadeInSection>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
+              {[
+                { icon: <Award className="w-8 h-8" />, label: 'Best Comedian on Maui', sub: 'Maui Time Weekly 2019' },
+                { icon: <Star className="w-8 h-8" />, label: 'Gameshow Fanatics', sub: 'Established 2010' },
+                { icon: <Heart className="w-8 h-8" />, label: 'Cirque Jolie', sub: 'Entertaining Since 2003' },
+                { icon: <Users className="w-8 h-8" />, label: 'Balloons of Aloha', sub: 'Community Giving Program' },
+              ].map((cred, i) => (
+                <div key={i} className="text-center bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6">
+                  <div className="text-coral mb-3 flex justify-center">{cred.icon}</div>
+                  <p className="font-bold text-white text-sm mb-1">{cred.label}</p>
+                  <p className="text-gray-500 text-xs">{cred.sub}</p>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
+
+          <FadeInSection delay={0.2}>
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {[
+                { quote: "As an event organizer, I LOVED IT \u2013 we didn\u2019t have to do anything in preparation! It was a FRESH & FUN CHANGE for a team-building social event.", name: 'Jennifer Rappenecker', role: 'Regional Leader, Edward Jones' },
+                { quote: "I'm not sure who had a better time, the people playing or the people watching!", name: 'Matt Lane', role: 'Outreach Coordinator, Community Work Day Program' },
+              ].map((testimonial, i) => (
+                <div key={i} className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-8 flex flex-col">
+                  <Quote className="w-8 h-8 text-coral/30 mb-4 shrink-0" />
+                  <p className="text-gray-300 leading-relaxed italic mb-6 flex-1">&ldquo;{testimonial.quote}&rdquo;</p>
+                  <div>
+                    <p className="text-white font-bold">{testimonial.name}</p>
+                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </FadeInSection>
         </div>

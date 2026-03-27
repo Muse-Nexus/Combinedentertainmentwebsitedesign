@@ -27,7 +27,7 @@ export default function StrollingEntertainment() {
           <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-center max-w-4xl mx-auto">
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie &amp; Magic Brent</p>
             <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Strolling Entertainment</span>
+              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Maui Strolling Entertainment</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
               Stilt walking captures the imagination and inspires awe from children and adults alike. It&rsquo;s breathtaking and exciting to see a 9-foot tall creature stroll into sight. Fire-dancers, stilt-walkers, jugglers, and strolling characters can add an exciting edge to your event.
@@ -58,14 +58,14 @@ export default function StrollingEntertainment() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Our Specialties</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Strolling Acts</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">Maui Stilt Walkers, Fire Dancers &amp; More</h2>
           </FadeInSection>
           <div className="grid md:grid-cols-2 gap-8">
             {[
-              { icon: <Crown className="w-8 h-8" />, title: 'Stilt Walking', desc: 'Towering 9-foot characters in any costume theme — superheroes, tropical goddesses, holiday characters, elegant angels, or your custom creation. Our stilt walkers interact with guests, pose for photos, and create unforgettable visual impact.', img: '/media/strolling/superhero-stilt.jpg', imgAlt: 'Supergirl stilt walker entertaining crowd' },
-              { icon: <Flame className="w-8 h-8" />, title: 'Fire Dancing', desc: 'Mesmerizing Polynesian-inspired fire performances for evening events. Fire spinning, poi, and flame manipulation that commands attention and creates dramatic moments your guests will never forget.', img: '/media/strolling/fire-dancing.jpg', imgAlt: 'Jolie performing fire dancing at night' },
-              { icon: <Sparkles className="w-8 h-8" />, title: 'Strolling Magic', desc: 'Brent roams your event performing close-up magic right in guests\' hands — cards, coins, mind-reading. Perfect for cocktail hours, receptions, and corporate mixers where conversation and amazement blend seamlessly.', img: '/media/strolling/clown-stilt-rainbow.jpg', imgAlt: 'Colorful rainbow clown stilt walkers with kids' },
-              { icon: <Eye className="w-8 h-8" />, title: 'Costumed Characters', desc: 'Custom character appearances for any theme — seasonal mascots, branded characters, fantasy creatures. Our performers stay in character, interact naturally with guests, and elevate the atmosphere.', img: '/media/strolling/jolie-portrait.jpg', imgAlt: 'Jolie in costume ready for event' },
+              { icon: <Crown className="w-8 h-8" />, title: 'Stilt Walking', desc: 'Towering 9-foot characters in any costume theme — superheroes, tropical goddesses, holiday characters, elegant angels, or your custom creation. Our Maui stilt walkers interact with guests, pose for photos, and create unforgettable visual impact.', img: '/media/strolling/superhero-stilt.jpg', imgAlt: 'Supergirl stilt walker entertaining crowd at Maui event' },
+              { icon: <Flame className="w-8 h-8" />, title: 'Fire Dancing', desc: 'Mesmerizing Polynesian-inspired fire performances for evening events on Maui. Fire spinning, poi, and flame manipulation that commands attention and creates dramatic moments your guests will never forget.', img: '/media/strolling/fire-dancing.jpg', imgAlt: 'Jolie performing Maui fire dancing at night event' },
+              { icon: <Sparkles className="w-8 h-8" />, title: 'Strolling Magic', desc: 'Brent roams your event performing close-up magic right in guests\' hands — cards, coins, mind-reading. Perfect for Maui cocktail hours, wedding receptions, and corporate mixers where conversation and amazement blend seamlessly.', img: '/media/strolling/clown-stilt-rainbow.jpg', imgAlt: 'Colorful rainbow clown stilt walkers with kids at Maui party' },
+              { icon: <Eye className="w-8 h-8" />, title: 'Costumed Characters', desc: 'Custom character appearances for any theme — seasonal mascots, branded characters, fantasy creatures. Our Maui performers stay in character, interact naturally with guests, and elevate the atmosphere.', img: '/media/strolling/jolie-portrait.jpg', imgAlt: 'Jolie Strickland Cirque Jolie costumed character Maui entertainer' },
             ].map((act, i) => (
               <FadeInSection key={i} delay={i * 0.1}>
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-coral/20 transition-all group h-full">
@@ -108,6 +108,32 @@ export default function StrollingEntertainment() {
               </div>
             </div>
           </FadeInSection>
+        </div>
+      </section>
+
+      {/* PHOTO GALLERY */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Cirque Jolie &amp; Magic Brent</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Maui Strolling Entertainment Gallery</h2>
+          </FadeInSection>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { src: '/media/472753445_1039860624823457_3993024156608406927_n.jpg', alt: 'Brenton Keith and Jolie Strickland 4th of July stilt walking and magic on Maui oceanfront' },
+              { src: '/media/482068829_1083133110496208_3977465986213867213_n.jpg', alt: 'Cirque Jolie stilt walkers with giant balloon dragons at Maui community festival' },
+              { src: '/media/firedancing-cirque-jolie.jpg', alt: 'Cirque Jolie fire dancing performance Maui event entertainment' },
+              { src: '/media/super-hero-stilt-walkers.jpg', alt: 'Superhero themed stilt walkers for hire on Maui' },
+              { src: '/media/clown-stilt-walkers.jpg', alt: 'Clown stilt walkers at Maui kids party entertainment' },
+              { src: '/media/cirque-jolie-2.jpg', alt: 'Cirque Jolie Maui strolling entertainer face painting and balloons' },
+            ].map((photo, i) => (
+              <FadeInSection key={i} delay={i * 0.08}>
+                <div className="rounded-2xl overflow-hidden group aspect-[4/3]">
+                  <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+              </FadeInSection>
+            ))}
+          </div>
         </div>
       </section>
 

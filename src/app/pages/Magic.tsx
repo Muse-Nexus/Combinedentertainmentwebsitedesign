@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { motion, useScroll, useTransform, useInView } from 'motion/react';
-import { Wand2, Sparkles, Users, Star, Heart, MapPin, Clock } from 'lucide-react';
+import { Wand2, Sparkles, Users, Star, Heart, MapPin, Clock, Award, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
@@ -37,8 +37,8 @@ export default function Magic() {
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Brenton Keith &amp; His Bag O&rsquo; Tricks</p>
             <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Comedy Magic</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Maui-Based Magician for Hire</span>
+              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Maui Magician</span>
+              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Comedy Magic &amp; Entertainment for Hire</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">Hawaii magician astonishing the islands for over 25 years. Shows that are big on comedy, high on energy, and large on interaction &mdash; with family-friendly jokes and laughs for all ages.</p>
             <div className="flex flex-wrap gap-4">
@@ -83,13 +83,13 @@ export default function Magic() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">What&rsquo;s in the Bag of Tricks?</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Performance Styles</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">Maui Magic Show Styles</h2>
           </FadeInSection>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: <Sparkles className="w-8 h-8" />, title: 'Live Magic Shows', desc: 'Professional magic shows on Maui — high-energy comedy & magic with tons of laughs and interaction, perfect for all ages. You\'ll see live goldfish. You\'ll see fire. You\'ll see your friends, coworkers, or the birthday boy or girl on stage! Whether indoor or outdoor, Brent brings everything you need for a great time.', img: '/media/magic/brent-library-show.jpg', imgAlt: 'Brenton Keith performing live magic show on Maui' },
-              { icon: <Wand2 className="w-8 h-8" />, title: 'Walk-Around Magic', desc: 'Strolling and close-up tableside magic that happens right in your guests\' hands. Cards, coins, and mind-reading — perfect for cocktail hours, receptions, and corporate mixers where conversation and amazement blend seamlessly.', img: '/media/magic/brent-kids-bag-of-tricks.jpg', imgAlt: 'Brenton Keith performing close-up magic' },
-              { icon: <Heart className="w-8 h-8" />, title: 'Birthdays & 1st Birthdays', desc: 'The best choice for 1st birthday parties on Maui. Brent has amused & amazed at thousands of Maui magic shows and 1st Birthday Luaus. Age-appropriate comedy magic with family-friendly jokes that keep little ones laughing.', img: '/media/magic/brent-jolie-stage.jpg', imgAlt: 'Brenton and Jolie performing on stage' },
+              { icon: <Sparkles className="w-8 h-8" />, title: 'Live Magic Shows', desc: 'Professional magic shows on Maui — high-energy comedy & magic with tons of laughs and interaction, perfect for all ages. You\'ll see live goldfish. You\'ll see fire. You\'ll see your friends, coworkers, or the birthday boy or girl on stage! Whether indoor or outdoor, Brent brings everything you need for a great time.', img: '/media/magic/brent-library-show.jpg', imgAlt: 'Brenton Keith performing live comedy magic show on Maui' },
+              { icon: <Wand2 className="w-8 h-8" />, title: 'Walk-Around Magic', desc: 'Strolling and close-up tableside magic that happens right in your guests\' hands. Cards, coins, and mind-reading — perfect for cocktail hours, receptions, and corporate mixers where conversation and amazement blend seamlessly.', img: '/media/487409844_1105269438282575_227576139539312597_n.jpg', imgAlt: 'Brenton Keith performing tableside close-up magic at Mulligan\'s on the Blue Wailea' },
+              { icon: <Heart className="w-8 h-8" />, title: 'Birthdays & 1st Birthdays', desc: 'The best choice for 1st birthday parties on Maui. Brent has amused & amazed at thousands of Maui magic shows and 1st Birthday Luaus. Age-appropriate comedy magic with family-friendly jokes that keep little ones laughing.', img: '/media/481701426_1083132873829565_1351071441168869141_n.jpg', imgAlt: 'Maui magician Brenton Keith performing for kids with Rubik\'s cubes at outdoor festival' },
             ].map((style, i) => (
               <FadeInSection key={i} delay={i * 0.15}>
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-coral/20 transition-all group h-full">
@@ -139,8 +139,34 @@ export default function Magic() {
         </div>
       </section>
 
-      {/* PERFECT FOR */}
+      {/* IN ACTION GALLERY */}
       <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Magic Brent in Action</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Maui Magic Show Gallery</h2>
+          </FadeInSection>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { src: '/media/491891009_1120029950139857_7465676599821462116_n.jpg', alt: 'Brenton Keith performing Bag O Tricks magic with fire at Maui resort luau event' },
+              { src: '/media/481909733_1083133077162878_8928208770247349769_n.jpg', alt: 'Maui magician Brenton Keith surrounded by amazed children at outdoor festival' },
+              { src: '/media/612882638_1340946144714902_8080228191261112022_n.jpg', alt: 'Magic Brent post-show group photo with audience holding Aloha sign at Mulligan\'s Wailea' },
+              { src: '/media/481786657_1083132067162979_5746383137781139010_n.jpg', alt: 'Brenton Keith performing magic for kids with Bag O Tricks at Maui community event' },
+              { src: '/media/magic/brent-kids-bag-of-tricks.jpg', alt: 'Brenton Keith kids birthday magic show on Maui' },
+              { src: '/media/magic/brent-jolie-stage.jpg', alt: 'Brenton Keith and Jolie Strickland performing live on stage in Maui' },
+            ].map((photo, i) => (
+              <FadeInSection key={i} delay={i * 0.08}>
+                <div className="rounded-2xl overflow-hidden group aspect-[4/3]">
+                  <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+              </FadeInSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PERFECT FOR */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Perfect For</h2>
@@ -151,6 +177,46 @@ export default function Magic() {
               {['Birthdays', '1st Birthday Luaus', 'Corporate Events', 'Maui Weddings', 'Walk-Around Magic', 'Cocktail Hours', 'Resort Entertainment', 'Private Luaus', 'Holiday Parties', 'Fundraisers', 'School Events', 'Restaurant Shows'].map((event, i) => (
                 <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-5 py-2.5 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all duration-300 cursor-default">{event}</span>
               ))}
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Recognition &amp; Credentials</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Trusted Across Hawaii</h2>
+          </FadeInSection>
+
+          {/* Credential badges */}
+          <FadeInSection>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
+              {[
+                { icon: <Award className="w-8 h-8" />, label: 'Best Comedian on Maui', sub: 'Maui Time Weekly 2019' },
+                { icon: <Star className="w-8 h-8" />, label: 'Magic Castle Alum', sub: 'Hollywood, CA' },
+                { icon: <Users className="w-8 h-8" />, label: 'Thousands of Shows', sub: 'Across All Islands' },
+                { icon: <Wand2 className="w-8 h-8" />, label: 'Longest-Running', sub: 'Live Magic Show on Maui' },
+              ].map((cred, i) => (
+                <div key={i} className="text-center bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6">
+                  <div className="text-coral mb-3 flex justify-center">{cred.icon}</div>
+                  <p className="font-bold text-white text-sm mb-1">{cred.label}</p>
+                  <p className="text-gray-500 text-xs">{cred.sub}</p>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
+
+          {/* Pull quote */}
+          <FadeInSection delay={0.2}>
+            <div className="max-w-3xl mx-auto text-center">
+              <Quote className="w-10 h-10 text-coral/30 mx-auto mb-6" />
+              <p className="text-2xl md:text-3xl text-gray-300 italic leading-relaxed mb-6">&ldquo;Brenton is a complete natural and knows how to keep the audience on their toes and entertained! He really cares about the success of each event.&rdquo;</p>
+              <div>
+                <p className="text-coral font-bold">Josh Desilva</p>
+                <p className="text-gray-500 text-sm">Desilva Meeting Consultants</p>
+              </div>
             </div>
           </FadeInSection>
         </div>

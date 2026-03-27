@@ -40,8 +40,8 @@ export default function BalloonTwisting() {
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-lavender font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie &mdash; Children&rsquo;s Entertainment</p>
             <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-lavender via-coral to-sage bg-clip-text text-transparent">Kids Party Entertainment</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Magic</span>
+              <span className="bg-gradient-to-r from-lavender via-coral to-sage bg-clip-text text-transparent">Maui Kids Party Entertainment</span>
+              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Children&rsquo;s Magic</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
               Cirque Jolie&rsquo;s 30-minute interactive children&rsquo;s magic show, professional face painting, and balloon twisting &mdash; keeping young children delighted and entertained at parties across Maui.
@@ -166,6 +166,32 @@ export default function BalloonTwisting() {
               </div>
             </div>
           </FadeInSection>
+        </div>
+      </section>
+
+      {/* GALLERY */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">Cirque Jolie in Action</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Maui Kids Entertainment Gallery</h2>
+          </FadeInSection>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { src: '/media/480712819_1155376403052671_6432676726575521199_n.jpg', alt: 'Cirque Jolie custom purple cat balloon arch for Maui birthday party' },
+              { src: '/media/balloons/dragon-facepainting.jpg', alt: 'Dragon face painting design for kids at Maui party by Cirque Jolie' },
+              { src: '/media/balloons/minecraft-balloon-sculpture.jpg', alt: 'Minecraft Creeper balloon sculpture by Maui balloon artist Cirque Jolie' },
+              { src: '/media/balloons/octopus-balloon-sculpture.jpg', alt: 'Giant octopus balloon sculpture by Cirque Jolie Maui balloon twister' },
+              { src: '/media/balloons/kid-panda-facepainting.jpg', alt: 'Happy child with panda balloon and face painting at Maui kids party' },
+              { src: '/media/cirque-jolie-2.jpg', alt: 'Jolie Strickland Cirque Jolie Maui children entertainer' },
+            ].map((photo, i) => (
+              <FadeInSection key={i} delay={i * 0.08}>
+                <div className="rounded-2xl overflow-hidden group aspect-[4/3]">
+                  <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+              </FadeInSection>
+            ))}
+          </div>
         </div>
       </section>
 

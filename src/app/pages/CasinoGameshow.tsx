@@ -42,7 +42,7 @@ export default function CasinoGameshow() {
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Gameshow Fanatics &mdash; Where We Put You in the Game!</p>
             <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Casino &amp; Game Shows</span>
+              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Maui Casino Night &amp; Game Shows</span>
               <br /><span className="text-white/90 text-4xl md:text-5xl font-light">The Best in Maui Party Entertainment</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
@@ -233,16 +233,24 @@ export default function CasinoGameshow() {
       <section className="py-24 bg-slate-950">
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">In Action</h2>
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Photos &amp; Events</p>
+            <h2 className="text-4xl font-bold mb-4">Maui Game Show &amp; Casino Night Gallery</h2>
           </FadeInSection>
           <FadeInSection delay={0.2}>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
-                { src: '/media/cirque-jolie-gameshow-fanatics-1.jpg', alt: 'Brent and Jolie as Gameshow Fanatics hosts' },
-                { src: '/media/casino-gameshow/gameshow-outdoor-fullset.jpg', alt: 'Full outdoor game show production at night' },
+                { src: '/media/486560996_1186362480158145_5148907381347692652_n.jpg', alt: 'Gameshow Fanatics full outdoor set with Brent and Jolie at Maui wedding entertainment event' },
+                { src: '/media/486526077_1186074590186934_4650330950892672874_n.jpg', alt: 'Brenton Keith hosting live game show at Maui corporate event with teams at podiums' },
+                { src: '/media/499547445_1232949328832793_5242943925623788269_n.jpg', alt: 'Brenton Keith as casino night dealer at craps table with LED lighting Maui event' },
+                { src: '/media/500194188_1237146738413052_2903309702033879195_n.jpg', alt: 'Casino night blackjack poker table with guests at outdoor Maui tent event' },
+                { src: '/media/500304533_1237146601746399_8139464562412602121_n.jpg', alt: 'Maui casino night party group photo at craps table with purple lighting and balloons' },
+                { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', alt: 'Casino night crew in matching vests posing with holiday balloon arch at Maui venue' },
+                { src: '/media/503698188_1245363894258003_1463121886193686301_n.jpg', alt: 'Gameshow Fanatics luxury resort set with tropical flowers and lit podiums at Maui venue' },
+                { src: '/media/515925879_10164201867303825_1352723102744150605_n.jpg', alt: 'Brenton Keith hosting Maui corporate game show in resort ballroom with contestants' },
+                { src: '/media/579339660_1390588656402192_687487444146696782_n.jpg', alt: 'Casino night setup at Maui home event with blackjack craps tables and balloon arch' },
               ].map((img, i) => (
-                <div key={i} className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div key={i} className="rounded-2xl overflow-hidden group aspect-[4/3]">
+                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
               ))}
             </div>

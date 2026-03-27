@@ -16,50 +16,55 @@ const services = [
     title: 'Balloon Twisting & Facepainting',
     shortTitle: 'Balloon Twisting',
     icon: Palette,
-    desc: 'Colorful balloon creations and beautiful facepainting that delight kids and adults alike.',
+    desc: 'Maui balloon artist and face painter for kids parties — custom balloon sculptures and creative designs by Cirque Jolie.',
     color: 'bg-pink-700',
     link: '/balloon-twisting',
-    image: balloonTwistingImg
+    image: balloonTwistingImg,
+    alt: 'Maui balloon twisting and face painting for kids birthday party by Cirque Jolie'
   },
   {
     id: 'balloon-decor',
     title: 'Balloon Decor',
     shortTitle: 'Balloon Decor',
     icon: Tent,
-    desc: 'Stunning balloon installations and decor that transform any venue into a celebration.',
+    desc: 'Stunning Maui balloon installations — arches, garlands, columns, and custom decorations that transform any venue.',
     color: 'bg-orange-500',
     link: '/balloon-decor',
-    image: balloonDecorImg
+    image: balloonDecorImg,
+    alt: 'Tropical balloon arch decoration at Maui resort event by Cirque Jolie'
   },
   {
     id: 'strolling',
     title: 'Strolling Entertainment',
     shortTitle: 'Strolling Entertainment',
     icon: Trophy,
-    desc: 'Roaming performers who mingle with your guests, bringing magic and wonder up close.',
+    desc: 'Maui stilt walkers, fire dancers, and roaming performers who mingle with your guests and bring magic up close.',
     color: 'bg-red-600',
     link: '/strolling',
-    image: strollingImg
+    image: strollingImg,
+    alt: 'Maui stilt walker in moth costume performing at night event by Cirque Jolie'
   },
   {
     id: 'magic',
     title: 'Magic',
     shortTitle: 'Magic',
     icon: Wand2,
-    desc: 'Mind-blowing close-up and stage magic that breaks the ice and leaves guests wondering "How?"',
+    desc: 'Maui comedy magician Brenton Keith — mind-blowing close-up and stage magic for parties, corporate events, and luaus.',
     color: 'bg-teal-500',
     link: '/magic',
-    image: magicImg
+    image: magicImg,
+    alt: 'Maui magician Brenton Keith performing comedy magic with Bag O Tricks on the beach'
   },
   {
     id: 'casino-gameshow',
     title: 'Casino & Gameshow',
     shortTitle: 'Casino & Gameshow',
     icon: Briefcase,
-    desc: 'Casino nights and high-energy game shows that get everyone involved. Perfect for team building.',
+    desc: 'Maui casino nights and live Family Feud-style game shows — perfect for corporate team building and celebrations.',
     color: 'bg-purple-700',
     link: '/casino-gameshow',
-    image: casinoImg
+    image: casinoImg,
+    alt: 'Maui casino night and Family Feud game show entertainment by Gameshow Fanatics'
   }
 ];
 
@@ -126,7 +131,7 @@ export function ServiceCards() {
                             <div className="absolute inset-0">
                                 <img 
                                     src={service.image} 
-                                    alt={service.title}
+                                    alt={service.alt || service.title}
                                     className="w-full h-full object-cover"
                                 />
                                 {/* Dark overlay for text readability */}
