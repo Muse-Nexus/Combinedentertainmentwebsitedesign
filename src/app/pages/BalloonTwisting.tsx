@@ -1,231 +1,210 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
-import { PartyPopper, Heart, Star, Sparkles, Users, Zap } from 'lucide-react';
-import balloonDogProgress from 'figma:asset/fb1ebbf50f47fa6b088f6f3ed5da3ae0fa9a9b46.png';
-import balloonFlowerHat from 'figma:asset/efc57f37ee80130d6e1dfa4d2ae34dcbb82a5ab6.png';
-import balloonCrownGirl from 'figma:asset/ded7aef06ce25cfc18ba621dd35d00c34bfaf7c0.png';
-import balloonCreationsCollage from 'figma:asset/20db05c30d4e86821f4abc07f6e7bb696e40a59f.png';
-import luxuryHomeMagic from 'figma:asset/4df0031d524a794aa6c2097056f4f573bff41120.png';
-import minecraftBalloons from 'figma:asset/d3d8507140584e73d68ae6a028809919546d2892.png';
-import facePaintingKids from 'figma:asset/d054e91c672567338884e40d756bc206ce87b4db.png';
-import dragonFacePaint from 'figma:asset/25703605805d4ca7b44fa122e97e3064385cabaf.png';
-import pandaBalloonFacePaint from 'figma:asset/c2277d433baf079d8c32190c0e228485e3b83152.png';
-import octopusBalloon from 'figma:asset/dd84290466707aeeba8d254a8ffbf53ce4e41ee5.png';
-import catFacePaint from 'figma:asset/b069b32879e7f6b77ccba151ecc2199ad44fb385.png';
-import frozenBalloonWand from 'figma:asset/7d75aff22c26de6a453df895bdef026cdbfe9336.png';
-import princessBalloonFrame from 'figma:asset/c117f457f672dcea347ac85186925743927f40a8.png';
-import rainbowButterflyDuo from 'figma:asset/f0b5279ca3d5a0c0c4bdc34ff27cdd453528b236.png';
-import pikachuBalloon from 'figma:asset/c397137cd8ed7c8667afec41b2fe7555a9c2266c.png';
-import superheroDuo from 'figma:asset/29a5e33c505a55517fc754291fd4a0823f649044.png';
-import orangeCatFacePaint from 'figma:asset/e84e1b07b9076b72ed9cfc6ff20962b8645cc9d5.png';
-import sugarSkullFacePaint from 'figma:asset/6a904f81a91afc5c2cb4ec9389ff9e1e2662cbda.png';
-import turquoiseCatFacePaint from 'figma:asset/55f1fe1868bd3ccc07f40d3fa047fa268c549997.png';
-import customCharacterCenterpiece from 'figma:asset/554101518f1ebe9442aeb8fb54535aa5c9f4c9e3.png';
+import { motion, useScroll, useTransform, useInView } from 'motion/react';
+import { Palette, Sparkles, Heart, Star, Wand2, Music } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { PromoVideo } from '../components/PromoVideo';
+
+const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay, ease: 'easeOut' }} className={className}>
+      {children}
+    </motion.div>
+  );
+};
 
 export default function BalloonTwisting() {
-  const creations = [
-    { icon: Star, name: 'Animals', description: 'Puppies, giraffes, monkeys, and more!' },
-    { icon: Zap, name: 'Swords & Shields', description: 'Perfect for little knights and warriors' },
-    { icon: Heart, name: 'Crowns & Tiaras', description: 'Make every child feel like royalty' },
-    { icon: Sparkles, name: 'Hearts & Flowers', description: 'Sweet designs for special moments' },
-    { icon: Users, name: 'Custom Requests', description: 'We love a creative challenge!' },
-    { icon: PartyPopper, name: 'Party Favors', description: 'Every guest leaves with a smile' }
-  ];
-
-  const circusSkills = [
-    { icon: Star, name: 'Stilt Walking', description: 'Towering characters that wow your guests' },
-    { icon: Zap, name: 'Juggling', description: 'Mesmerizing skill displays' },
-    { icon: Sparkles, name: 'Comedy Magic', description: 'Interactive tricks that get kids laughing' }
-  ];
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
-    <Layout title="Balloon Twisting & Face Painting">
-      <div className="max-w-5xl mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-black mb-6 bg-gradient-to-r from-burgundy via-pink-500 to-lavender bg-clip-text text-transparent">
-            Kids & Circus Entertainment
-          </h1>
-          <p className="text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Whimsical characters, breathtaking circus skills, and vibrant balloon creations 
-            that bring magic to every celebration
-          </p>
+    <Layout title="Kids Entertainment">
+      {/* HERO — full-width image background matching Magic/Casino pattern */}
+      <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
+        <motion.div style={{ y: heroY }} className="absolute inset-0">
+          <img
+            src="/media/balloons/kid-panda-facepainting.jpg"
+            alt="Happy child with panda balloon and face painting by Cirque Jolie"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+        </motion.div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div className="absolute top-[15%] left-[5%] text-lavender/10 text-[12rem] select-none" animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>&#127880;</motion.div>
+          <motion.div className="absolute top-[10%] right-[8%] text-coral/10 text-[10rem] select-none" animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}>&#127879;</motion.div>
         </div>
-
-        {/* Photo Gallery - Real Work */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={balloonDogProgress} alt="Orange and white balloon fish creations" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={balloonCreationsCollage} alt="Group party with balloon animals and face painting" className="w-full h-full object-cover" />
-          </div>
+        <div className="relative z-10 container mx-auto px-4 pb-20">
+          <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
+            <p className="text-lavender font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie &mdash; Children&rsquo;s Entertainment</p>
+            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+              <span className="bg-gradient-to-r from-lavender via-coral to-sage bg-clip-text text-transparent">Kids Party Entertainment</span>
+              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Magic</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
+              Cirque Jolie&rsquo;s 30-minute interactive children&rsquo;s magic show, professional face painting, and balloon twisting &mdash; keeping young children delighted and entertained at parties across Maui.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/contact" className="px-8 py-4 bg-lavender hover:bg-lavender/80 text-white font-bold rounded-full transition-all shadow-lg shadow-lavender/25 hover:shadow-lavender/40 hover:scale-105">Book Kids Entertainment</Link>
+              <a href="#about" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Meet Jolie</a>
+            </div>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div>
-            <h2 className="text-4xl font-bold mb-6 text-burgundy">Balloon Twisting</h2>
-            <p className="text-lg text-gray-300 mb-6">
-              Watch in amazement as ordinary balloons transform into extraordinary creations! 
-              From adorable animals to superhero accessories, each twist brings smiles and wonder 
-              to children of all ages.
-            </p>
-            <p className="text-lg text-gray-300">
-              Perfect for birthday parties, festivals, corporate family days, and any event 
-              where you want to add a splash of colorful fun.
-            </p>
-          </div>
-
-          <div>
-            <h2 className="text-4xl font-bold mb-6 text-pink-600">Face Painting</h2>
-            <p className="text-lg text-gray-700 mb-6">
-              Professional face painting that transforms kids into their favorite characters! 
-              Using only skin-safe, hypoallergenic paints, we create stunning designs from 
-              fierce tigers to magical fairies.
-            </p>
-            <p className="text-lg text-gray-700">
-              Each design is customized to make your little one feel special, with options 
-              ranging from quick cheek art to full-face masterpieces. Glitter tattoos also available!
-            </p>
-          </div>
+      {/* PROMO VIDEO */}
+      <section className="py-20 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="max-w-4xl mx-auto">
+            <PromoVideo source={{ type: 'vimeo', videoId: '334597801' }} className="shadow-2xl shadow-lavender/10" />
+          </FadeInSection>
         </div>
+      </section>
 
-        {/* Circus Skills Section */}
-        <div className="bg-gradient-to-br from-orange-50 to-pink-50 rounded-3xl p-12 mb-16">
-          <h2 className="text-4xl font-bold text-center mb-4 text-orange-600">Circus Skills & Characters</h2>
-          <p className="text-center text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
-            Add wow factor with our professional circus entertainers! From elegant stilt walkers 
-            to skilled jugglers, we bring the wonder of the circus to your event.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            {circusSkills.map((skill, index) => {
-              const Icon = skill.icon;
-              return (
-                <div 
-                  key={index}
-                  className="bg-white rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  <Icon className="w-16 h-16 mx-auto mb-4 text-orange-500" />
-                  <h3 className="text-xl font-bold mb-2">{skill.name}</h3>
-                  <p className="text-gray-600">{skill.description}</p>
+      {/* ABOUT JOLIE */}
+      <section id="about" className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <FadeInSection>
+              <div className="relative">
+                <img src="/media/strolling/jolie-portrait.jpg" alt="Jolie Strickland — Cirque Jolie" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover aspect-[4/5]" />
+                <div className="absolute -bottom-6 -right-6 bg-lavender text-white px-6 py-4 rounded-2xl shadow-xl">
+                  <div className="text-3xl font-black">20+</div>
+                  <div className="text-sm font-medium opacity-90">Years Performing</div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Popular Creations Grid */}
-        <h2 className="text-4xl font-bold text-center mb-12">Popular Balloon Creations</h2>
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {creations.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <div 
-                key={index}
-                className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 text-center hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                <Icon className="w-16 h-16 mx-auto mb-4 text-purple-500" />
-                <h3 className="text-xl font-bold mb-2">{item.name}</h3>
-                <p className="text-gray-600">{item.description}</p>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Face Painting Gallery */}
-        <h2 className="text-4xl font-bold text-center mb-12 text-pink-600">Face Painting Gallery</h2>
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={balloonFlowerHat} alt="Child with colorful flower face painting design" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={balloonCrownGirl} alt="Adults with full face designs at party" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={luxuryHomeMagic} alt="Cherry blossom tree body art on shoulder" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={facePaintingKids} alt="Kids with face painting designs" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={dragonFacePaint} alt="Dragon face painting" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={pandaBalloonFacePaint} alt="Panda balloon face painting" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={octopusBalloon} alt="Octopus balloon" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={catFacePaint} alt="Cat face painting" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={frozenBalloonWand} alt="Frozen balloon wand" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={princessBalloonFrame} alt="Princess balloon frame" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={rainbowButterflyDuo} alt="Rainbow butterfly duo" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={pikachuBalloon} alt="Pikachu balloon" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={superheroDuo} alt="Superhero duo" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={orangeCatFacePaint} alt="Orange cat face painting" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={sugarSkullFacePaint} alt="Sugar skull face painting" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={turquoiseCatFacePaint} alt="Turquoise cat face painting" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={customCharacterCenterpiece} alt="Custom character centerpiece" className="w-full h-full object-cover" />
+            </FadeInSection>
+            <FadeInSection delay={0.2}>
+              <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">About Cirque Jolie</p>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Jolie<span className="text-lavender"> Strickland</span></h2>
+              <p className="text-lg text-gray-300 leading-relaxed mb-6">
+                Cirque Jolie&rsquo;s beginnings lie in Jolie&rsquo;s youth. Growing up mostly on Maui, she was part of a group trained as &ldquo;clowns&rdquo; in 2000 by Una the Clown, and they volunteered all over the island at places like Hale Makua and Kula Hospital. Una the Clown left Maui in 2004, leaving her legacy behind in &ldquo;Jolie the Clown,&rdquo; who continued to entertain at events and parties with her balloon-making, face-painting, and magic.
+              </p>
+              <p className="text-gray-400 leading-relaxed mb-4">
+                As the years passed and her skills expanded, Jolie the Clown evolved into Cirque Jolie. She will still wear a clown costume if requested, but enjoys the freedom to bring a diverse and colorful array of characters to events and parties. Her skills now include stilt walking and fire dancing, and she&rsquo;s thrilled to add &ldquo;prize girl&rdquo; to her ever-growing list of talents with <Link to="/casino-gameshow" className="text-lavender hover:underline">Gameshow Fanatics</Link>.
+              </p>
+              <p className="text-gray-400 leading-relaxed mb-8">
+                She lives in Haiku with her partner Brenton Keith and her son Jet, and performs throughout Maui and the Hawaiian islands.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Entertaining Since 2000</span>
+                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Live Bunny Show</span>
+                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Maui &amp; Hawaiian Islands</span>
+              </div>
+            </FadeInSection>
           </div>
         </div>
+      </section>
 
-        {/* Perfect For Section */}
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-12 mb-16">
-          <h2 className="text-4xl font-bold text-center mb-8">Perfect For</h2>
-          <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+      {/* SERVICES */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">Everything for Your Party</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Three Shows in One</h2>
+          </FadeInSection>
+          <div className="grid md:grid-cols-3 gap-8">
             {[
-              'Birthday Parties',
-              'School Events & Carnivals',
-              'Corporate Family Days',
-              'Community Festivals',
-              'Holiday Parties',
-              'Grand Openings',
-              'Daycare & Preschool Events',
-              'Church & Charity Functions'
-            ].map((event, i) => (
-              <div key={i} className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-md">
-                <Sparkles className="w-5 h-5 text-purple-500 flex-shrink-0" />
-                <span className="font-semibold text-gray-700">{event}</span>
-              </div>
+              { icon: <Wand2 className="w-8 h-8" />, title: 'Live Magic Show', desc: 'A 30-minute interactive comedy magic show with a LIVE bunny rabbit! Designed for ages 2–9, every child gets to pet the bunny and be part of the magic.', img: '/media/balloons/kid-panda-facepainting.jpg', imgAlt: 'Child with panda balloon and face painting' },
+              { icon: <Palette className="w-8 h-8" />, title: 'Face Painting', desc: 'Professional face painting using skin-safe, hypoallergenic paints. From fierce dragons to sparkly butterflies — each design is a mini masterpiece.', img: '/media/balloons/dragon-facepainting.jpg', imgAlt: 'Child with dragon face painting design' },
+              { icon: <Sparkles className="w-8 h-8" />, title: 'Balloon Twisting', desc: 'Swords, puppies, crowns, flowers — you name it, Jolie twists it. Every child at the party goes home with a custom balloon creation.', img: '/media/balloons/minecraft-balloon-sculpture.jpg', imgAlt: 'Minecraft Creeper balloon sculpture' },
+            ].map((service, i) => (
+              <FadeInSection key={i} delay={i * 0.15}>
+                <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-lavender/20 transition-all group h-full">
+                  <div className="aspect-[3/2] overflow-hidden">
+                    <img src={service.img} alt={service.imgAlt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  <div className="p-8">
+                    <div className="text-lavender mb-4">{service.icon}</div>
+                    <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+                    <p className="text-gray-400 leading-relaxed">{service.desc}</p>
+                  </div>
+                </div>
+              </FadeInSection>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Booking Info */}
-        <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-3xl p-12 text-center">
-          <h2 className="text-4xl font-bold mb-6">Book Your Party Entertainment</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Available for parties of all sizes! We bring all supplies and can entertain 
-            for as long as you need. Packages can include balloon twisting only, face painting 
-            only, circus skills, or any combination!
-          </p>
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl px-10 py-6 inline-block">
-            <div className="text-sm uppercase tracking-wider opacity-90 mb-2">Pricing</div>
-            <div className="text-3xl font-bold mb-2">Contact for Quote</div>
-            <div className="text-sm opacity-90">Custom packages available</div>
-          </div>
+      {/* FEATURED SCULPTURE */}
+      <section className="py-16 bg-slate-950">
+        <div className="container mx-auto px-4 max-w-md">
+          <FadeInSection>
+            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl shadow-lavender/10 group">
+              <img src="/media/balloons/octopus-balloon-sculpture.jpg" alt="Octopus balloon sculpture by Cirque Jolie" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+            <p className="text-center text-gray-400 mt-4 text-sm">If a kid can dream it, Jolie can twist it</p>
+          </FadeInSection>
         </div>
-      </div>
+      </section>
+
+      {/* WHAT'S INCLUDED */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="relative bg-gradient-to-br from-lavender/10 via-slate-800/80 to-coral/10 rounded-[2rem] p-12 md:p-16 border border-lavender/20 overflow-hidden">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-lavender/5 rounded-full blur-3xl" />
+              <div className="relative z-10">
+                <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center">What&rsquo;s Included</h2>
+                <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                  {[
+                    { icon: <Wand2 className="w-6 h-6" />, text: '30-minute live magic show with LIVE bunny' },
+                    { icon: <Sparkles className="w-6 h-6" />, text: 'Balloon twisting for every child' },
+                    { icon: <Palette className="w-6 h-6" />, text: 'Professional face painting (skin-safe paints)' },
+                    { icon: <Music className="w-6 h-6" />, text: 'Fun music and kid-friendly MC' },
+                    { icon: <Heart className="w-6 h-6" />, text: 'Up to 25 kids per session' },
+                    { icon: <Star className="w-6 h-6" />, text: 'Custom themes available' },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-start gap-4">
+                      <div className="text-lavender mt-1 shrink-0">{item.icon}</div>
+                      <p className="text-gray-300 text-lg">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* PERFECT FOR */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Perfect For</h2>
+            <p className="text-gray-400 text-lg">Keiki celebrations of every kind</p>
+          </FadeInSection>
+          <FadeInSection delay={0.2}>
+            <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+              {['Birthday Parties', '1st Birthday Luaus', 'School Events', 'Daycare Programs', 'Luaus', 'Holiday Parties', 'Church Events', 'Community Festivals', 'Resort Kids Clubs', 'Library Programs', 'Grand Openings', 'Family Reunions'].map((event, i) => (
+                <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-5 py-2.5 rounded-full text-gray-300 text-sm font-medium hover:border-lavender/40 hover:text-lavender transition-all duration-300 cursor-default">{event}</span>
+              ))}
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="relative bg-gradient-to-r from-lavender via-coral to-sage rounded-[2rem] p-12 md:p-16 text-center overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_70%)]" />
+              <div className="relative z-10">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Make Their Party Magical</h2>
+                <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">Magic show, face painting &amp; balloon twisting &mdash; all in one booking. If you want magic for ALL ages (2&ndash;102 years old), check out <Link to="/magic" className="underline font-bold">Brenton Keith &amp; His Bag O&rsquo; Tricks</Link>. Book both together for an amazing discount!</p>
+                <p className="text-white/70 mb-10">Entertainers based on the island of Maui &amp; willing to travel to outer island events</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/contact" className="px-10 py-4 bg-white text-lavender font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Kids Entertainment</Link>
+                  <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
+                </div>
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
     </Layout>
   );
 }

@@ -18,8 +18,8 @@ export function CloudReveal() {
 
   // Using the composite image focused on the woman (Jolie) on stilts
   // The composite has her on the right side.
-  const jolieImage = "figma:asset/d9c1966853c8781ad896bb5eaa3341c81158cebf.png"; 
-  const cloudImage = "https://images.unsplash.com/photo-1613132272712-011be2fe6677?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGZsdWZmeSUyMGNsb3VkcyUyMGJsdWUlMjBza3l8ZW58MXx8fHwxNzcwMzIwMTc3fDA&ixlib=rb-4.1.0&q=80&w=1080";
+  const jolieImage = "/media/strolling/silver-white-stilt.jpg"; 
+  const cloudImage = "/media/clouds-wipe.png";
 
   return (
     <div ref={containerRef} className="relative h-[150vh] overflow-hidden bg-sky-300">

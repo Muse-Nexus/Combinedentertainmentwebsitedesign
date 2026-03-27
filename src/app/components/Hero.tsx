@@ -20,16 +20,29 @@ export function Hero() {
   const textOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
   
   // Background Image - Using the provided composite which matches the "When it rains, it plays" theme
-  const bgImage = "figma:asset/d9c1966853c8781ad896bb5eaa3341c81158cebf.png";
+  const bgImage = "/media/magic/brent-umbrella-beach.jpg";
+
+  // The umbrella canopy bottom sits at roughly 58% of the image height (596/1024).
+  // We position the B&W→color dividing line to align with that.
+  const canopyBottomPct = '58%';
 
   return (
     <div ref={containerRef} className="relative h-[150vh] w-full">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-slate-900">
         
-        {/* Grayscale Background Layer */}
+        {/* Color Background Layer (bottom half — below umbrella) */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center brightness-75"
+          style={{ backgroundImage: `url(${bgImage})` }}
+        />
+
+        {/* Grayscale Background Layer (top half — raining zone) */}
         <div 
           className="absolute inset-0 bg-cover bg-center filter grayscale contrast-125 brightness-50"
-          style={{ backgroundImage: `url(${bgImage})` }}
+          style={{ 
+            backgroundImage: `url(${bgImage})`,
+            clipPath: `inset(0 0 ${100 - 58}% 0)`,
+          }}
         />
         
         {/* Rain Effect (fades out as umbrella covers) */}
@@ -41,17 +54,8 @@ export function Hero() {
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
             <motion.div 
                 style={{ scale: umbrellaScale }}
-                className="w-full max-w-5xl relative"
+                className="w-full max-w-7xl relative"
             >
-                 {/* 
-                    We render the UmbrellaNav. 
-                    However, to get the "Color Reveal" effect inside the umbrella, 
-                    we might need to modify UmbrellaNav or composition here.
-                    For now, let's use the UmbrellaNav component which has colored segments.
-                    To reveal the *photo* inside, we would need the image inside the SVG.
-                    Let's stick to the Colored Segments as the "Cover" for now as per the prototype prompt which says "saturated color inside".
-                    The colored segments (Teal, Red, Orange, Blue) ARE the color.
-                 */}
                  <UmbrellaNav />
             </motion.div>
 

@@ -4,21 +4,22 @@ import { RainEffect } from './RainEffect';
 import { UmbrellaNav } from './UmbrellaNav';
 import { ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import heroImg from 'figma:asset/d9c1966853c8781ad896bb5eaa3341c81158cebf.png'; 
-import logo from 'figma:asset/d014f5138d817a3579192f9a8fe97bd75cf23bdd.png';
+
+const heroImg = '/media/magic/brent-umbrella-beach.jpg';
+const logo = '/media/logos/White Primary Logo Raining Entertainment.png';
 
 // Assets
-import magicImg from 'figma:asset/be7b6e1191f7f1fa1b41afb8e3162781d96fe5c8.png';
-import circusImg from 'figma:asset/3c9be9ef73fc66abe4a14bc8212a5e7646bb489c.png';
-import gameshowImg from 'figma:asset/b587c1e163734b07d9864abf0c7580ed29a6a47f.png';
-import cloudTexture from 'figma:asset/a4d5b9382b0fb1113c06693396a4b58d8adf4b36.png';
+const magicImg = '/media/magic/brent-library-show.jpg';
+const circusImg = '/media/strolling/clown-stilt-rainbow.jpg';
+const gameshowImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
+const cloudTexture = '';
 
 // Service Card Images
-import balloonTwistingCardImg from 'figma:asset/f0b5279ca3d5a0c0c4bdc34ff27cdd453528b236.png'; // Rainbow butterfly face painting duo
-import balloonDecorCardImg from 'figma:asset/53d9d3524104146dff3c3a3fdf5e34a4b2297974.png'; // Halloween spider arch
-import strollingCardImg from 'figma:asset/8daf5f5cc3bd5bf23f90d4e0c90aed9a69af4c50.png'; // Strolling performers
-import magicCardImg from 'figma:asset/dc7c79a57bdb0cc560f00e95f1ab7e039868e3db.png'; // Magic card performance
-import casinoCardImg from 'figma:asset/a2cd29b03be5bb9a9ac72d8b8aaf9e5d1c5da4b0.png'; // Casino event
+const balloonTwistingCardImg = '/media/balloons/kid-panda-facepainting.jpg';
+const balloonDecorCardImg = '/media/balloon-decor/pastel-rainbow-arch.jpg';
+const strollingCardImg = '/media/strolling/moth-stilt-costume.jpg';
+const magicCardImg = '/media/magic/brent-umbrella-beach.jpg';
+const casinoCardImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
 
 // --- SUB-COMPONENTS ---
 

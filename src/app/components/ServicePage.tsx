@@ -5,26 +5,26 @@ import { ArrowLeft, Sparkles, ChevronDown, ChevronUp, CheckCircle, Music, Camera
 import { RainEffect } from './RainEffect';
 import { UmbrellaNav } from './UmbrellaNav';
 
-// Import assets
-import imgStiltWalkers from 'figma:asset/c4244769e5c8f6bbaa968eab7b485f18ac88624a.png';
-import imgFireDancer from 'figma:asset/b10f94a69870c5178d2a8a0fa76e6c62ec82edc5.png';
-import imgClown from 'figma:asset/cc0d666f820324c4227e6e553ba5da59ed6d0f3c.png';
-import imgBalloonArch from 'figma:asset/447461bf6d38624b33c25c2c5bf93f8325ba68fc.png';
+// Real media paths
+const imgStiltWalkers = '/media/strolling/silver-white-stilt.jpg';
+const imgFireDancer = '/media/strolling/fire-dancing.jpg';
+const imgClown = '/media/strolling/clown-stilt-rainbow.jpg';
+const imgBalloonArch = '/media/balloon-decor/tropical-arch-resort.jpg';
 
-import imgGameshowHero from 'figma:asset/96943c1ddde3a165ed171bfd566eb957928fd72c.png'; 
-import imgGameShowNite from 'figma:asset/81f623fba227bb2baa7c6c09013c7dc5991e35c3.png';
-import imgCasinoNight from 'figma:asset/b201bf598f86ab7db2539d448a9a234c2ec299a5.png';
-import imgCasinoGroup from 'figma:asset/c608bc54a14ef4e5e831b7117baeb3ee536002b8.png';
-import imgClientsGrid from 'figma:asset/56bdfc36c44fafa1f8d3c7fbd51f3205ab914367.png';
+const imgGameshowHero = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
+const imgGameShowNite = '/media/casino-gameshow/gameshow-set-duo.jpg';
+const imgCasinoNight = '/media/casino-gameshow/casino-craps-table.jpg';
+const imgCasinoGroup = '/media/casino-gameshow/casino-group-photo.jpg';
+const imgClientsGrid = '/media/casino-gameshow/gameshow-indoor-teams.jpg';
 
-import imgTrevorTech from 'figma:asset/548a1564652ebff57bfdc1c523f56ecc381ff267.png';
-import imgBrentonHost from 'figma:asset/660eecd14d6b1502a6e1778cdf07ba1e21019742.png';
-import imgJoliePrize from 'figma:asset/8c48e321175a835e93c5c0af0af03558673743ee.png';
-import imgWeddingHero from 'figma:asset/24993b6ddb5411d9c0653f41217e3da97d792b7d.png';
-import imgDjService from 'figma:asset/9853e4f0a05ad26628c601bf3267262ee082d67d.png';
+const imgTrevorTech = '/media/casino-gameshow/gameshow-podium-street.jpg';
+const imgBrentonHost = '/media/magic/brent-library-show.jpg';
+const imgJoliePrize = '/media/strolling/jolie-portrait.jpg';
+const imgWeddingHero = '/media/casino-gameshow/casino-team-balloons.jpg';
+const imgDjService = '/media/casino-gameshow/gameshow-indoor-teams.jpg';
 
 // Cloud Texture for Transition
-import cloudTexture from 'figma:asset/a4d5b9382b0fb1113c06693396a4b58d8adf4b36.png';
+const cloudTexture = '';
 
 // Fallbacks
 const imgFaqBanner = "https://images.unsplash.com/photo-1624811072711-3e3481f355fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxxdWVzdGlvbiUyMG1hcmslMjBuZW9uJTIwc2lnbnxlbnwxfHx8fDE3NzAzNzU1OTV8MA&ixlib=rb-4.1.0&q=80&w=1080";
@@ -90,7 +90,7 @@ export const ServicePage = () => {
       title: 'Magic Brent',
       subtitle: 'Hawaii Magician Astonishing the Islands for Over 25 Years!',
       description: 'My shows are big on comedy, high on energy, and large on interaction with family-friendly jokes and laughs for all ages. This is Hawaii Comedy Magic at its finest. Brenton Keith & His Bag O\' Tricks is The Best Choice for 1st birthday parties and has amused & amazed at thousands of Maui magic shows.',
-      img: 'figma:asset/abbba35f6419ca1567aa30124ae788184973bfc6.png', 
+      img: '/media/magic/brent-umbrella-beach.jpg', 
       color: 'bg-teal-900',
       accent: 'text-teal-600',
       sections: [
@@ -104,7 +104,7 @@ export const ServicePage = () => {
         {
             title: "Comedy Stage Show",
             body: "A high-energy 30-60 minute show that combines astonishing illusions with side-splitting comedy. Brenton invites audience members on stage to become the stars of the show. It's clean, corporate-friendly, and guaranteed to leave your guests wondering 'How did he do that?' while wiping tears of laughter from their eyes.",
-            image: "figma:asset/be7b6e1191f7f1fa1b41afb8e3162781d96fe5c8.png", 
+            image: "/media/magic/brent-library-show.jpg", 
             reverse: true,
             bullets: ["Full Stage Production", "Audience Participation", "Clean Comedy"]
         }
@@ -247,7 +247,7 @@ export const ServicePage = () => {
       title: 'Cirque Jolie',
       subtitle: 'Children\'s & All-Age Entertainment',
       description: 'Entertainers based on the island of Maui & willing to travel to outer island events. We feature stilt walkers, jugglers, face painting, balloon decor, and interactive hula hoop shows. Our performers bring color, joy, and spectacle to any event.',
-      img: 'figma:asset/3c9be9ef73fc66abe4a14bc8212a5e7646bb489c.png',
+      img: '/media/strolling/clown-stilt-rainbow.jpg',
       color: 'bg-pink-700',
       accent: 'text-pink-600',
       sections: [
@@ -281,7 +281,7 @@ export const ServicePage = () => {
       title: 'Corporate Events',
       subtitle: 'Professional, Scalable, Unforgettable',
       description: 'Elevate your brand with entertainment that means business. We specialize in galas, product launches, and team-building events that leave a lasting impression on your clients and employees. From high-end magic to casino nights, we have the perfect fit for your corporate culture.',
-      img: 'figma:asset/be7b6e1191f7f1fa1b41afb8e3162781d96fe5c8.png', 
+      img: '/media/magic/brent-library-show.jpg', 
       color: 'bg-slate-800',
       accent: 'text-yellow-600',
       sections: [

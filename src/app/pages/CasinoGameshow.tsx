@@ -1,351 +1,291 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
-import { Dices, Trophy, Users, Sparkles, Star, Zap } from 'lucide-react';
-import ballroomCasino from 'figma:asset/24ad8c66a3cfd04cd61f0c44c0c2bb6dc14fc2a0.png';
-import corporateGameshow from 'figma:asset/c1b98de9fbd82c23f32614cc9cd89c3e039c62fb.png';
-import outdoorSetup from 'figma:asset/8d5c6c9f74b6c65b9fec8b2d7c13e4a25f8f3b1a.png';
-import dealerAction from 'figma:asset/5f6e8c9d74b6c65b9fec8b2d7c13e4a25f8f3b1b.png';
-import intimateParty from 'figma:asset/7e9d8c6f74b6c65b9fec8b2d7c13e4a25f8f3b1c.png';
-import casinoWheelAction from 'figma:asset/e2d3c4f74b6c65b9fec8b2d7c13e4a25f8f3b1d.png';
-import rouletteTableGuests from 'figma:asset/f4d5e6a74b6c65b9fec8b2d7c13e4a25f8f3b1e.png';
-import blackjackTableSetup from 'figma:asset/a6b7c8d74b6c65b9fec8b2d7c13e4a25f8f3b1f.png';
-import gameshowHost from 'figma:asset/b8c9d0e74b6c65b9fec8b2d7c13e4a25f8f3b20.png';
-import tropicalGameshow from 'figma:asset/c0d1e2f74b6c65b9fec8b2d7c13e4a25f8f3b21.png';
-import outdoorTrex from 'figma:asset/d2e3f4a74b6c65b9fec8b2d7c13e4a25f8f3b22.png';
-import casinoTableGuests from 'figma:asset/e4f5a6b74b6c65b9fec8b2d7c13e4a25f8f3b23.png';
-import blackjackDealer from 'figma:asset/f6a7b8c74b6c65b9fec8b2d7c13e4a25f8f3b24.png';
-import crapsTableAction from 'figma:asset/a8b9c0d74b6c65b9fec8b2d7c13e4a25f8f3b25.png';
-import rouletteSpinAction from 'figma:asset/b0c1d2e74b6c65b9fec8b2d7c13e4a25f8f3b26.png';
-import tropicalTableSetup from 'figma:asset/c2d3e4f74b6c65b9fec8b2d7c13e4a25f8f3b27.png';
-import gameshowPrizes from 'figma:asset/d4e5f6a74b6c65b9fec8b2d7c13e4a25f8f3b28.png';
-import outdoorCasinoNight from 'figma:asset/e6f7a8b74b6c65b9fec8b2d7c13e4a25f8f3b29.png';
-import elegantCasinoSetup from 'figma:asset/f8a9b0c74b6c65b9fec8b2d7c13e4a25f8f3b30.png';
-import wheelOfFortuneAction from 'figma:asset/a0b1c2d74b6c65b9fec8b2d7c13e4a25f8f3b31.png';
-import corporateCasinoNight from 'figma:asset/b2c3d4e74b6c65b9fec8b2d7c13e4a25f8f3b32.png';
-import pokerTablePlayers from 'figma:asset/c4d5e6f74b6c65b9fec8b2d7c13e4a25f8f3b33.png';
-import themeCasinoSetup from 'figma:asset/d6e7f8a74b6c65b9fec8b2d7c13e4a25f8f3b34.png';
-import collegePartyGames from 'figma:asset/14e812112ff360281f02c5046f64c7606efdd378.png';
-import massiveCorporateGameshow from 'figma:asset/7f634e7ebf4efb018feeae726711b40a0472a721.png';
-import neonCasinoDealer from 'figma:asset/5e37cc4d8d4b5396467bb847a2d9f5de82dc6969.png';
-import holidayPartyGameshow from 'figma:asset/7067297d09123351e23a8bf7ad950d57d4cf7564.png';
-import graduationCrapsTable from 'figma:asset/fd51049a18badf7e9e95f1823a82b44940de77b1.png';
-import outdoorEveningGameshow from 'figma:asset/d0c4a766c53348b81a2388194820651e40c05be5.png';
+import { motion, useScroll, useTransform, useInView } from 'motion/react';
+import { Dice5, Trophy, Users, Tv, Music, Star, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { PromoVideo } from '../components/PromoVideo';
+
+const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay, ease: 'easeOut' }} className={className}>
+      {children}
+    </motion.div>
+  );
+};
 
 export default function CasinoGameshow() {
-  const casinoGames = [
-    { name: 'Blackjack', icon: Dices, description: 'Classic 21 with professional dealers' },
-    { name: 'Poker', icon: Sparkles, description: 'Texas Hold\'em tournaments' },
-    { name: 'Roulette', icon: Star, description: 'Spin the wheel and feel the excitement' },
-    { name: 'Craps', icon: Dices, description: 'High-energy dice rolling action' }
-  ];
-
-  const gameShowFormats = [
-    { 
-      name: 'Trivia Challenge', 
-      icon: Trophy, 
-      description: 'Buzzers, podiums, and customizable questions',
-      popular: true 
-    },
-    { 
-      name: 'Survey Says!', 
-      icon: Users, 
-      description: 'Family Feud style audience participation' 
-    },
-    { 
-      name: 'Minute to Win It', 
-      icon: Zap, 
-      description: 'Fast-paced physical challenges' 
-    },
-    { 
-      name: 'Price is Right', 
-      icon: Star, 
-      description: 'Guess the prices, win the prizes' 
-    }
-  ];
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
-    <Layout title="Casino & Gameshow">
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-7xl font-black mb-6 bg-gradient-to-r from-lavender via-purple-400 to-fuchsia-500 bg-clip-text text-transparent">
-            Casino & Gameshow Entertainment
-          </h1>
-          <p className="text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Bring the excitement of Vegas to your event! Professional casino tables and 
-            interactive gameshow experiences that turn any gathering into an unforgettable night.
-          </p>
+    <Layout title="Casino & Game Show">
+      {/* HERO — full-width video background, same pattern as Magic */}
+      <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
+        <motion.div style={{ y: heroY }} className="absolute inset-0">
+          <iframe
+            src="https://player.vimeo.com/video/654838191?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&dnt=1"
+            className="absolute inset-0 w-full h-full"
+            style={{ border: 'none', transform: 'scale(1.2)' }}
+            allow="autoplay; fullscreen"
+            title="Gameshow Fanatics promo"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+        </motion.div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div className="absolute top-[15%] left-[5%] text-coral/10 text-[10rem] font-serif select-none" animate={{ rotate: [0, 10, -10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}>&#9830;</motion.div>
+          <motion.div className="absolute top-[10%] right-[10%] text-burgundy/10 text-[8rem] font-serif select-none" animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>&#9827;</motion.div>
         </div>
-
-        {/* Photo Gallery - Real Events */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={ballroomCasino} alt="Ballroom casino setup with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={corporateGameshow} alt="Corporate gameshow setup with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={outdoorSetup} alt="Outdoor casino setup with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={dealerAction} alt="Casino dealer in action" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={intimateParty} alt="Intimate casino party setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={casinoWheelAction} alt="Casino wheel in action" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={rouletteTableGuests} alt="Roulette table with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={blackjackTableSetup} alt="Blackjack table setup with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={gameshowHost} alt="Game show host in action" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={tropicalGameshow} alt="Tropical gameshow setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={outdoorTrex} alt="Outdoor Trex gameshow setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={casinoTableGuests} alt="Casino table with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={blackjackDealer} alt="Blackjack dealer in action" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={crapsTableAction} alt="Craps table action with guests" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={rouletteSpinAction} alt="Roulette spin action" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={tropicalTableSetup} alt="Tropical table setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={gameshowPrizes} alt="Game show prizes" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={outdoorCasinoNight} alt="Outdoor casino night setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={elegantCasinoSetup} alt="Elegant casino setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={wheelOfFortuneAction} alt="Wheel of fortune action" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={corporateCasinoNight} alt="Corporate casino night setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={pokerTablePlayers} alt="Poker table with players" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={themeCasinoSetup} alt="Themed casino setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={collegePartyGames} alt="College party games setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={massiveCorporateGameshow} alt="Massive corporate gameshow setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={neonCasinoDealer} alt="Neon casino dealer" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={holidayPartyGameshow} alt="Holiday party gameshow setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={graduationCrapsTable} alt="Graduation craps table setup" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={outdoorEveningGameshow} alt="Outdoor evening gameshow setup" className="w-full h-full object-cover" />
-          </div>
-        </div>
-
-        {/* Two Column Split */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* Casino Side */}
-          <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl p-10">
-            <div className="flex items-center gap-3 mb-6">
-              <Dices className="w-12 h-12 text-red-500" />
-              <h2 className="text-4xl font-bold text-red-600">Casino Night</h2>
-            </div>
-            <p className="text-lg text-gray-700 mb-8">
-              Bring the excitement of Las Vegas to your event! Professional dealers, authentic casino 
-              equipment, and all the glamour of a night on the Strip—without the risk.
+        <div className="relative z-10 container mx-auto px-4 pb-20">
+          <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
+            <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Gameshow Fanatics &mdash; Where We Put You in the Game!</p>
+            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+              <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Casino &amp; Game Shows</span>
+              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">The Best in Maui Party Entertainment</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
+              Interactive game show experiences for parties, weddings, anniversaries, birthdays, graduations, and events of all sizes. Las Vegas-style casino parties like never before!
             </p>
-            
-            <h3 className="text-2xl font-bold mb-4">Popular Games</h3>
-            <div className="space-y-4 mb-8">
-              {casinoGames.map((game, index) => {
-                const Icon = game.icon;
-                return (
-                  <div key={index} className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-md">
-                    <Icon className="w-6 h-6 text-red-500 mt-1" />
-                    <div>
-                      <h4 className="font-bold text-lg">{game.name}</h4>
-                      <p className="text-gray-600">{game.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="flex flex-wrap gap-4">
+              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Your Event</Link>
+              <a href="#gameshow" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">See What We Do</a>
             </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h4 className="font-bold text-lg mb-2">What's Included:</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-red-500" />
-                  Professional dealers in casino attire
-                </li>
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-red-500" />
-                  Authentic casino-grade tables and equipment
-                </li>
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-red-500" />
-                  Play money and chips for guests
-                </li>
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-red-500" />
-                  Prize packages for top winners
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Game Show Side */}
-          <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl p-10">
-            <div className="flex items-center gap-3 mb-6">
-              <Trophy className="w-12 h-12 text-orange-500" />
-              <h2 className="text-4xl font-bold text-orange-600">Game Show</h2>
-            </div>
-            <p className="text-lg text-gray-700 mb-8">
-              Your guests become the contestants! Interactive game show entertainment with authentic 
-              equipment, professional hosting, and non-stop excitement that gets everyone involved.
-            </p>
-            
-            <h3 className="text-2xl font-bold mb-4">Game Show Formats</h3>
-            <div className="space-y-4 mb-8">
-              {gameShowFormats.map((format, index) => {
-                const Icon = format.icon;
-                return (
-                  <div 
-                    key={index} 
-                    className={`flex items-start gap-3 bg-white rounded-xl p-4 shadow-md ${
-                      format.popular ? 'ring-2 ring-orange-500' : ''
-                    }`}
-                  >
-                    <Icon className="w-6 h-6 text-orange-500 mt-1" />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-lg">{format.name}</h4>
-                        {format.popular && (
-                          <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded-full">POPULAR</span>
-                        )}
-                      </div>
-                      <p className="text-gray-600">{format.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg">
-              <h4 className="font-bold text-lg mb-2">What's Included:</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-orange-500" />
-                  Professional game show host
-                </li>
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-orange-500" />
-                  Authentic podiums, buzzers, and equipment
-                </li>
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-orange-500" />
-                  Sound effects and lighting
-                </li>
-                <li className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-orange-500" />
-                  Customizable content for your audience
-                </li>
-              </ul>
-            </div>
-          </div>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Perfect For Section */}
-        <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-12 mb-16">
-          <h2 className="text-4xl font-bold text-center mb-8">Perfect For</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { title: 'Corporate Events', desc: 'Team building, holiday parties, conferences' },
-              { title: 'Fundraisers', desc: 'Casino nights that raise money for your cause' },
-              { title: 'Private Parties', desc: 'Milestone birthdays, bachelor/bachelorette parties' },
-              { title: 'Trade Shows', desc: 'Attract crowds and engage attendees' },
-              { title: 'Company Picnics', desc: 'Add excitement to your annual gathering' },
-              { title: 'Grad Nights', desc: 'Safe, supervised fun for students' }
-            ].map((item, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-                <h3 className="font-bold text-xl mb-2 text-red-600">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+      {/* GAME SHOW SECTION */}
+      <section id="gameshow" className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Gameshow Fanatics</p>
+            <h2 className="text-4xl md:text-5xl font-bold">What Is Game Show Nite?</h2>
+            <p className="text-xl text-gray-400 mt-4 max-w-3xl mx-auto">The idea is simple. We re-created the Family Feud, and then some. We have a professional set with all the bells &amp; whistles. Answers &ldquo;flipping&rdquo; with the DING! just like in the show years ago!</p>
+          </FadeInSection>
+
+          {/* Gameshow Promo Video */}
+          <FadeInSection className="max-w-4xl mx-auto mb-16">
+            <PromoVideo source={{ type: 'vimeo', videoId: '654838191' }} className="shadow-2xl shadow-coral/10" />
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-16">
+            <FadeInSection>
+              <img src="/media/casino-gameshow/gameshow-outdoor-fullset.jpg" alt="Full outdoor game show set at night" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
+            </FadeInSection>
+            <FadeInSection delay={0.2}>
+              <h3 className="text-3xl font-bold mb-6">The Full Game Show Experience</h3>
+              <p className="text-lg text-gray-300 leading-relaxed mb-6">
+                Our flagship game is a parody version of the old Family Feud shows from the 70&rsquo;s. Unlike Family Feud, our show is personalized to the event, group, or guest of honor. Imagine the energy of a live, TV game show customized to you &mdash; with jokes, deep thoughts, aloha trivia, and more! Contestants from your party approach the podium to the music to face-off and ring the buzzer &mdash; it&rsquo;s hilarious!
+              </p>
+              <p className="text-gray-400 leading-relaxed mb-6">
+                Game Show Nite gets people on the edges of their seats. Laughs, interaction, and fun are guaranteed! It&rsquo;s Maui party entertainment that brings people together and gets them laughing and interacting. From team building to just plain having fun &mdash; it&rsquo;s something your guests won&rsquo;t stop talking about&hellip; for years!
+              </p>
+              <div className="space-y-4 mb-8">
+                {[
+                  { label: 'Format', value: 'Family Feud parody — 4 teams of 5, 20 players total' },
+                  { label: 'Duration', value: '90 minutes of non-stop competition' },
+                  { label: 'Includes', value: 'Comic host, prize girl on roller skates, full-size set, lit-up podiums, buzzers, sound system & lighting' },
+                  { label: 'Custom', value: 'Give us 15 fun facts about your group or celebrant — we turn them into game show questions' },
+                  { label: 'Climax', value: 'Win It in a Minute physical challenges with funny props & high-energy music' },
+                ].map((detail, i) => (
+                  <div key={i} className="flex gap-3">
+                    <span className="text-coral font-semibold shrink-0 w-24">{detail.label}</span>
+                    <span className="text-gray-300">{detail.value}</span>
+                  </div>
+                ))}
               </div>
+            </FadeInSection>
+          </div>
+
+          {/* Game Show Lite */}
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <FadeInSection delay={0.2} className="md:order-2">
+              <img src="/media/casino-gameshow/gameshow-podium-street.jpg" alt="Game Show Lite mobile podium on street" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
+            </FadeInSection>
+            <FadeInSection className="md:order-1">
+              <h3 className="text-3xl font-bold mb-6">Game Show Lite</h3>
+              <p className="text-lg text-gray-300 leading-relaxed mb-6">
+                We offer seamless Maui party entertainment with custom lit-up podiums, contestant panels, and a live interactive Family Feud style game board. This unique game show comes to life at corporate events, holiday parties, graduation, and milestone birthday parties. A mobile, compact version perfect for festivals, restaurants, and smaller events.
+              </p>
+              <p className="text-gray-400 leading-relaxed">
+                What sends it completely over-the-top is how we custom-tailor it to the group or celebrant. No stage or special setup needed &mdash; just space, guests, and a willingness to laugh.
+              </p>
+            </FadeInSection>
+          </div>
+        </div>
+      </section>
+
+      {/* CASINO NIGHT SECTION */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-burgundy font-semibold tracking-widest uppercase text-sm mb-3">Las Vegas-Style Casino Parties Like Never Before!</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Casino Night</h2>
+          </FadeInSection>
+
+          {/* Casino Promo Video */}
+          <FadeInSection className="max-w-4xl mx-auto mb-16">
+            <PromoVideo source={{ type: 'vimeo', videoId: '1058065790' }} className="shadow-2xl shadow-burgundy/10" />
+          </FadeInSection>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            {[
+              { src: '/media/casino-gameshow/casino-craps-table.jpg', alt: 'Casino craps table at event', title: 'Craps' },
+              { src: '/media/casino-gameshow/casino-blackjack-table.jpg', alt: 'Casino blackjack table setup', title: 'Blackjack' },
+              { src: '/media/casino-gameshow/casino-group-photo.jpg', alt: 'Casino night group photo', title: 'Full Events' },
+            ].map((img, i) => (
+              <FadeInSection key={i} delay={i * 0.1}>
+                <div className="aspect-[4/3] rounded-2xl overflow-hidden group relative">
+                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                    <span className="text-white text-xl font-bold">{img.title}</span>
+                  </div>
+                </div>
+              </FadeInSection>
+            ))}
+          </div>
+
+          <FadeInSection>
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              <div>
+                <h3 className="text-3xl font-bold mb-6">More Than Just a Casino &mdash; We Bring the Show!</h3>
+                <p className="text-lg text-gray-300 leading-relaxed mb-6">
+                  Imagine a lively friend at your party who brings the thrill of Las Vegas to each guest. We host engaging casino nights with custom Blackjack, Poker, and Craps tables, staffed by our engaging and knowledgeable, fun-loving dealers. We don&rsquo;t just run games &mdash; we deliver a full-scale entertainment experience.
+                </p>
+                <p className="text-gray-400 leading-relaxed mb-4">
+                  Every guest starts with an equal amount of chips, making the competition fierce and exciting. Top players win amazing prizes! Professional sound &amp; lighting with vibrant music, dynamic lighting, and stunning decor create a thrilling casino ambiance.
+                </p>
+                <p className="text-gray-400 leading-relaxed mb-8">
+                  Whether you&rsquo;re a seasoned player or a first-timer, our casino nights guarantee non-stop excitement and memories to last a lifetime. We don&rsquo;t just bring the casino &mdash; we bring the show!
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="bg-burgundy/10 text-burgundy px-4 py-2 rounded-full text-sm font-medium">Blackjack</span>
+                  <span className="bg-burgundy/10 text-burgundy px-4 py-2 rounded-full text-sm font-medium">Poker</span>
+                  <span className="bg-burgundy/10 text-burgundy px-4 py-2 rounded-full text-sm font-medium">Craps</span>
+                  <span className="bg-burgundy/10 text-burgundy px-4 py-2 rounded-full text-sm font-medium">DJ Included</span>
+                </div>
+              </div>
+              <div className="rounded-2xl overflow-hidden">
+                <img src="/media/Casino-Night-92-1030x579.jpg" alt="Casino night crew with balloon decor backdrop" className="w-full h-full object-cover rounded-2xl" />
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* MORE SERVICES */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Beyond the Tables</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Additional Services</h2>
+          </FadeInSection>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: <Heart className="w-8 h-8" />, title: 'Wedding Game Shows', desc: 'The Newlywed Game, trivia about the couple, and interactive challenges that get your reception guests laughing and bonding. Where We Put Weddings in the Game!' },
+              { icon: <Music className="w-8 h-8" />, title: 'DJ & MC Services', desc: 'Professional DJ and MC with curated playlists, wireless mic, sound system, and the ability to read any room. Brent keeps the dance floor packed — from cocktail hour through the final dance.' },
+              { icon: <Tv className="w-8 h-8" />, title: 'Aloha Trivia Nights', desc: 'Weekly or one-off pub-style trivia events for restaurants, corporate teams, and private parties. A plethora of ridiculously fun questions with custom categories, team scoring, and prizes.' },
+            ].map((service, i) => (
+              <FadeInSection key={i} delay={i * 0.15}>
+                <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 hover:border-coral/20 transition-all h-full">
+                  <div className="text-coral mb-6">{service.icon}</div>
+                  <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+                  <p className="text-gray-400 leading-relaxed">{service.desc}</p>
+                </div>
+              </FadeInSection>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Combination Package */}
-        <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white rounded-3xl p-12 text-center mb-16">
-          <Sparkles className="w-16 h-16 mx-auto mb-6" />
-          <h2 className="text-4xl font-bold mb-6">Ultimate Entertainment Package</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Why choose? Combine Casino and Game Show entertainment for the ultimate event experience! 
-            Perfect for larger events or multi-room venues.
-          </p>
-          <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6">
-              <Sparkles className="w-8 h-8 mx-auto mb-2" />
-              <h3 className="font-bold mb-2">Full Production</h3>
-              <p className="text-sm opacity-90">Sound, lighting, and MC services</p>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6">
-              <Users className="w-8 h-8 mx-auto mb-2" />
-              <h3 className="font-bold mb-2">Professional Staff</h3>
-              <p className="text-sm opacity-90">Dealers, hosts, and support crew</p>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6">
-              <Trophy className="w-8 h-8 mx-auto mb-2" />
-              <h3 className="font-bold mb-2">Prize Coordination</h3>
-              <p className="text-sm opacity-90">We can help source and manage prizes</p>
-            </div>
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">What People Are Saying</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Testimonials</h2>
+          </FadeInSection>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {[
+              { quote: 'Brenton is a complete natural and knows how to keep the audience on their toes and entertained! Gameshow Fanatics are fantastic to work with. Brenton really cares about the success of each event and is constantly working to create the most fun and memorable experience for the guests.', name: 'Josh Desilva', role: 'Desilva Meeting Consultants' },
+              { quote: "As an event organizer, I LOVED IT \u2013 we didn\u2019t have to do anything in preparation! It was a FRESH & FUN CHANGE for a team-building social event.", name: 'Jennifer Rappenecker', role: 'Regional Leader, Edward Jones' },
+              { quote: "I'm not sure who had a better time, the people playing or the people watching!", name: 'Matt Lane', role: 'Outreach Coordinator, Community Work Day Program' },
+              { quote: 'Absolutely hilarious!', name: 'Bryant Neal', role: 'Executive Director, Arts & Education for Children Group' },
+            ].map((testimonial, i) => (
+              <FadeInSection key={i} delay={i * 0.1}>
+                <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50 h-full flex flex-col">
+                  <Star className="w-6 h-6 text-coral mb-4 shrink-0" />
+                  <p className="text-gray-300 leading-relaxed italic mb-6 flex-1">&ldquo;{testimonial.quote}&rdquo;</p>
+                  <div>
+                    <p className="text-white font-bold">{testimonial.name}</p>
+                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+              </FadeInSection>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Pricing */}
-        <div className="text-center">
-          <h2 className="text-4xl font-bold mb-8">Investment</h2>
-          <div className="bg-gradient-to-br from-purple-50 to-orange-50 rounded-2xl p-10 max-w-2xl mx-auto shadow-lg">
-            <div className="bg-white/80 backdrop-blur-sm rounded-xl px-10 py-8">
-              <div className="text-sm uppercase tracking-wider text-gray-500 mb-2">Pricing</div>
-              <div className="text-4xl font-black text-gray-800 mb-3">Contact for Quote</div>
-              <p className="text-gray-600 text-lg">
-                Casino nights, game shows, and custom packages available
-              </p>
+      {/* GAME SHOW GALLERY */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">In Action</h2>
+          </FadeInSection>
+          <FadeInSection delay={0.2}>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                { src: '/media/cirque-jolie-gameshow-fanatics-1.jpg', alt: 'Brent and Jolie as Gameshow Fanatics hosts' },
+                { src: '/media/casino-gameshow/gameshow-outdoor-fullset.jpg', alt: 'Full outdoor game show production at night' },
+              ].map((img, i) => (
+                <div key={i} className="aspect-[4/3] rounded-2xl overflow-hidden group">
+                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                </div>
+              ))}
             </div>
-          </div>
-          <p className="text-gray-500 mt-8 max-w-2xl mx-auto">
-            Contact us for custom packages combining both services, multi-day events, or special requests. 
-            We work with all budgets and can create the perfect entertainment solution for your needs.
-          </p>
+          </FadeInSection>
         </div>
-      </div>
+      </section>
+
+      {/* PERFECT FOR */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Perfect For</h2>
+            <p className="text-gray-400 text-lg">High energy entertainment for any crowd</p>
+          </FadeInSection>
+          <FadeInSection delay={0.2}>
+            <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+              {['Corporate Team Building', 'Holiday Parties', 'Fundraiser Galas', 'Wedding Receptions', 'Birthday Celebrations', 'Resort Events', 'Anniversaries', 'Graduations', 'Rehearsal Dinners', 'Themed Nights', 'Private Parties', 'Milestone Celebrations'].map((event, i) => (
+                <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-5 py-2.5 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all duration-300 cursor-default">{event}</span>
+              ))}
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="relative bg-gradient-to-r from-coral via-burgundy to-lavender rounded-[2rem] p-12 md:p-16 text-center overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_70%)]" />
+              <div className="relative z-10">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Ready to Raise the Stakes?</h2>
+                <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">We are a premier Maui party entertainment company. We guarantee that we&rsquo;ll create unforgettable memories at your party or event. Game show, casino night, or both &mdash; tell us what you&rsquo;re planning!</p>
+                <p className="text-white/70 mb-10">Based on Maui &bull; Available on Oahu, Kauai &amp; Big Island</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/contact" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Get a Custom Quote</Link>
+                  <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
+                </div>
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
     </Layout>
   );
 }

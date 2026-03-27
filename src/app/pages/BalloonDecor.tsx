@@ -1,222 +1,187 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
-import { Sparkles, Heart, Star, PartyPopper, Palette, Zap, Gift, Crown } from 'lucide-react';
-import garlandStaircase from 'figma:asset/cfad026c1b14df88e3d33dd5ea34e1abf0aa8c22.png';
-import organicGarland from 'figma:asset/45d4b8ad97ecb436654d54b36d42aa34fdc7f1ba.png';
-import elegantArch from 'figma:asset/e7aca62e80cb2e5bdc8c2d0d789dffc28b4c1f27.png';
-import photoBackdrop from 'figma:asset/31f6d5d9faaa7ae3c867ee62a47ed91c2f5d76d1.png';
-import tropicalArch from 'figma:asset/df5aaeaae97dde3becea43f7e9ca3f49f0f8f57a.png';
-import rainbowArch from 'figma:asset/a7ec7c1e3d2a7c13c96e22afce9a46ddea37d90b.png';
-import birthdayBackdrop from 'figma:asset/e8fe76ca2eba1b34ecefe40ba1f16fe74f39a23d.png';
-import desertGarland from 'figma:asset/a2d6d742ce54f7e3e313a51a40e7a2e0c6edaa70.png';
-import underTheSeaArch from 'figma:asset/b20cc27130218882e0937d9d06dc030cfdf0ccb8.png';
-import rainbowGreenhouseArch from 'figma:asset/36aad1f671f3d081af09db68a63d89e2ce68cfbc.png';
-import sageGoldBirthdayArch from 'figma:asset/ee48b5c56e382ad42c6d9663b15701b044cb5385.png';
-import rockStarBackdrop from 'figma:asset/a778b0b401e25269250b27cc2814bd0f6fed7ae8.png';
-import elegantBlackSilverBackdrop from 'figma:asset/4b390fe7e9c362b3219d33e791bc33bc17a123b4.png';
-import patrioticResortArch from 'figma:asset/01e8a8f997ef1ea6bf9e10e9d79921ad71b63602.png';
-import halloweenSpiderArch from 'figma:asset/53d9d3524104146dff3c3a3fdf5e34a4b2297974.png';
-import beerBrewingGarland from 'figma:asset/336bbd8b818b3bc658eb41c106f2b39deb287867.png';
-import redWhiteArch from 'figma:asset/e165c4baf96fce8072e80da0d708a8460f1a433e.png';
-import stPatricksRainbowArch from 'figma:asset/2a25f16720e3727ca36cb35dc9eeb7e3350cb6dd.png';
-import goldSilverFloralArch from 'figma:asset/ddf305ab228a7ed7866ccd998b68d3c753c23a91.png';
-import easterBunnyArch from 'figma:asset/294dad54946a75b4a2b85d4558449cf5fc808167.png';
+import { motion, useInView } from 'motion/react';
+import { Flower2, Gift, Heart, Sparkles, Star, Trophy } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay, ease: 'easeOut' }} className={className}>
+      {children}
+    </motion.div>
+  );
+};
 
 export default function BalloonDecor() {
-  const services = [
-    {
-      icon: PartyPopper,
-      title: 'Balloon Arches',
-      description: 'Stunning entrance pieces and photo backdrops in any color scheme',
-      popular: true
-    },
-    {
-      icon: Star,
-      title: 'Columns & Pillars',
-      description: 'Frame your event space with elegant balloon columns',
-      popular: false
-    },
-    {
-      icon: Heart,
-      title: 'Centerpieces',
-      description: 'Table decorations that wow your guests',
-      popular: false
-    },
-    {
-      icon: Gift,
-      title: 'Specialty Sculptures',
-      description: 'Custom balloon art from numbers to characters',
-      popular: true
-    },
-    {
-      icon: Palette,
-      title: 'Corporate Branding',
-      description: 'Match your company colors and logo perfectly',
-      popular: false
-    },
-    {
-      icon: Sparkles,
-      title: 'Full Venue Transformations',
-      description: 'Complete event design from floor to ceiling',
-      popular: true
-    }
-  ];
-
   return (
-    <Layout title="Balloon Decor">
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-7xl font-black mb-6 bg-gradient-to-r from-coral via-orange-400 to-yellow-500 bg-clip-text text-transparent">
-            Balloon Decor & Installations
-          </h1>
-          <p className="text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Transform your event space with breathtaking balloon artistry. From elegant arches 
-            to immersive installations, we create unforgettable atmospheres.
-          </p>
+    <Layout title="Balloon Décor">
+      {/* HERO */}
+      <section className="relative py-32 bg-gradient-to-b from-sage/20 via-slate-900 to-slate-900 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div className="absolute top-16 right-[12%] text-sage/10 text-[10rem] select-none" animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>&#127880;</motion.div>
         </div>
-
-        {/* Featured Gallery - Real Work */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={garlandStaircase} alt="Garland staircase" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={organicGarland} alt="Organic garland" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={elegantArch} alt="Elegant arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={photoBackdrop} alt="Photo backdrop" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={tropicalArch} alt="Tropical arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={rainbowArch} alt="Rainbow arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={birthdayBackdrop} alt="Birthday backdrop" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={desertGarland} alt="Desert garland" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={underTheSeaArch} alt="Under the sea arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={rainbowGreenhouseArch} alt="Rainbow greenhouse arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={sageGoldBirthdayArch} alt="Sage gold birthday arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={rockStarBackdrop} alt="Rock star backdrop" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={elegantBlackSilverBackdrop} alt="Elegant black silver backdrop" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={patrioticResortArch} alt="Patriotic resort arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={halloweenSpiderArch} alt="Halloween spider arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={beerBrewingGarland} alt="Beer brewing garland" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={redWhiteArch} alt="Red white arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={stPatricksRainbowArch} alt="St patricks rainbow arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={goldSilverFloralArch} alt="Gold silver floral arch" className="w-full h-full object-cover" />
-          </div>
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={easterBunnyArch} alt="Easter bunny arch" className="w-full h-full object-cover" />
-          </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-center max-w-4xl mx-auto">
+            <p className="text-sage font-semibold tracking-[0.3em] uppercase text-sm mb-4">Balloons of Aloha</p>
+            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+              <span className="bg-gradient-to-r from-sage via-cream to-coral bg-clip-text text-transparent">Balloon D&eacute;cor</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
+              Balloon garland, balloon arches, balloon columns, numbered birthday balloon arrangements, balloon bouquets, surprise balloon deliveries, and balloon centerpieces. It totally transforms any space into a party!
+            </p>
+            <Link to="/contact" className="inline-block px-8 py-4 bg-sage hover:bg-sage/80 text-white font-bold rounded-full transition-all shadow-lg shadow-sage/25 hover:shadow-sage/40 hover:scale-105">Get a Free Quote</Link>
+          </motion.div>
         </div>
+      </section>
 
-        {/* Services Grid */}
-        <h2 className="text-4xl font-bold text-center mb-12">Our Balloon Decor Services</h2>
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <div 
-                key={index}
-                className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 relative ${
-                  service.popular ? 'ring-2 ring-purple-500' : ''
-                }`}
-              >
-                {service.popular && (
-                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase">
-                    Popular
-                  </div>
-                )}
-                <Icon className="w-12 h-12 mb-4 text-purple-500" />
-                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                <p className="text-gray-600">{service.description}</p>
+      {/* FEATURED GALLERY */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-sage font-semibold tracking-widest uppercase text-sm mb-3">Our Work</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Recent Installations</h2>
+          </FadeInSection>
+          <FadeInSection delay={0.15}>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/tropical-arch-resort.jpg" alt="Tropical balloon arch at Maui resort" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
-            );
-          })}
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/pastel-rainbow-arch.jpg" alt="Pastel rainbow balloon arch for birthday" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-6">
+              <div className="aspect-square rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/arch-red-gold-black.jpg" alt="Red, gold, and black balloon arch" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div className="aspect-square rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/gold-silver-column.jpg" alt="Gold and silver balloon column" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div className="aspect-square rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/rainbow-store-install.jpg" alt="Rainbow balloon installation at storefront" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+            </div>
+          </FadeInSection>
         </div>
+      </section>
 
-        {/* Process Section */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-12 mb-16">
-          <h2 className="text-4xl font-bold text-center mb-12">How It Works</h2>
-          <div className="grid md:grid-cols-4 gap-8">
+      {/* SERVICES */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-16">
+            <p className="text-sage font-semibold tracking-widest uppercase text-sm mb-3">What We Create</p>
+            <h2 className="text-4xl md:text-5xl font-bold">D&eacute;cor Services</h2>
+          </FadeInSection>
+          <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: '01', title: 'Consultation', desc: 'Share your vision and event details' },
-              { step: '02', title: 'Design', desc: 'We create a custom proposal and quote' },
-              { step: '03', title: 'Setup', desc: 'Professional installation on your event day' },
-              { step: '04', title: 'Wow!', desc: 'Your guests are amazed by the transformation' }
-            ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="text-6xl font-black text-purple-200 mb-4">{item.step}</div>
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
-              </div>
+              { icon: <Flower2 className="w-8 h-8" />, title: 'Organic Garlands', desc: 'Flowing, natural-looking balloon garlands in any color palette. Perfect for staircases, doorways, and table runners. Jolie strives to make all her balloon decor high quality and unique.' },
+              { icon: <Star className="w-8 h-8" />, title: 'Arches & Columns', desc: 'Classic and contemporary balloon arches and columns that frame entrances, stages, and photo areas beautifully. Numbered birthday balloon arrangements and balloon bouquets also available.' },
+              { icon: <Sparkles className="w-8 h-8" />, title: 'Custom Installations', desc: 'Full-scale custom designs \u2014 wall backdrops, ceiling installations, themed centerpieces, and more. Surprise balloon deliveries and balloon candy cups bring joy to any recipient.' },
+            ].map((service, i) => (
+              <FadeInSection key={i} delay={i * 0.15}>
+                <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 hover:border-sage/20 transition-all h-full">
+                  <div className="text-sage mb-6">{service.icon}</div>
+                  <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+                  <p className="text-gray-400 leading-relaxed">{service.desc}</p>
+                </div>
+              </FadeInSection>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Event Types */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-8">Perfect For Any Occasion</h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {[
-              'Weddings', 'Birthday Parties', 'Baby Showers', 'Corporate Events',
-              'Grand Openings', 'Graduations', 'Anniversaries', 'Holiday Parties',
-              'Photo Shoots', 'Sweet 16s', 'Bar/Bat Mitzvahs', 'Quinceañeras'
-            ].map((event, i) => (
-              <span 
-                key={i}
-                className="bg-white px-6 py-3 rounded-full shadow-md text-gray-700 font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200"
-              >
-                {event}
-              </span>
-            ))}
-          </div>
+      {/* MORE GALLERY */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/easter-bunny-wreath.jpg" alt="Easter bunny balloon wreath" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
+                <img src="/media/balloon-decor/tropical-arch-resort-2.jpg" alt="Tropical balloon arch at resort entrance" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+            </div>
+          </FadeInSection>
         </div>
+      </section>
 
-        {/* CTA */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-3xl p-12 text-center">
-          <h2 className="text-4xl font-bold mb-6">Ready to Transform Your Event?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Let's discuss your vision! We offer free consultations and can work with any budget, 
-            color scheme, or theme. Delivery, setup, and takedown included.
-          </p>
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl px-10 py-6 inline-block">
-            <div className="text-sm uppercase tracking-wider opacity-90 mb-2">Pricing</div>
-            <div className="text-3xl font-bold mb-2">Contact for Quote</div>
-            <div className="text-sm opacity-90">Custom packages available</div>
-          </div>
+      {/* OCCASIONS */}
+      <section className="py-24 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">Perfect For Every Occasion</h2>
+            <p className="text-gray-400 text-lg">From intimate gatherings to resort-scale events</p>
+          </FadeInSection>
+          <FadeInSection delay={0.2}>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+              {[
+                { icon: <Heart className="w-5 h-5" />, events: ['Weddings', 'Anniversaries', 'Proposals'] },
+                { icon: <Gift className="w-5 h-5" />, events: ['Birthdays', 'Baby Showers', 'Gender Reveals'] },
+                { icon: <Trophy className="w-5 h-5" />, events: ['Corporate Events', 'Grand Openings', 'Conferences'] },
+                { icon: <Star className="w-5 h-5" />, events: ['Holiday Parties', 'Graduations', 'Luaus'] },
+              ].map((group, i) => (
+                <div key={i} className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
+                  <div className="text-sage mb-4">{group.icon}</div>
+                  <ul className="space-y-2">
+                    {group.events.map((event, j) => (
+                      <li key={j} className="text-gray-300 font-medium">{event}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
         </div>
-      </div>
+      </section>
+
+      {/* BALLOONS OF ALOHA */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="relative bg-gradient-to-br from-sage/10 via-slate-800/80 to-lavender/10 rounded-[2rem] p-12 md:p-16 border border-sage/20 overflow-hidden">
+              <div className="absolute top-0 left-0 w-96 h-96 bg-sage/5 rounded-full blur-3xl" />
+              <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                  <p className="text-sage font-semibold tracking-widest uppercase text-sm mb-3">Community Program</p>
+                  <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Balloons of<span className="text-sage"> Aloha</span></h2>
+                  <p className="text-lg text-gray-300 leading-relaxed mb-6">
+                    Cirque Jolie is excited to announce a project called Balloons of Aloha. We donate a balloon delivery to a non-profit or well-deserving business on the 3rd Wednesday of every month. These are crazy times, and we really wanted to do something to give back to our community and spread some joy.
+                  </p>
+                  <p className="text-gray-400 leading-relaxed">
+                    If you would like to show some gratitude to an individual, organization, or business, you or your business can sponsor a Balloons of Aloha delivery. Prices start at $35 plus delivery fees and include a personalized card that recognizes you, or your business, as the sponsor.
+                  </p>
+                </div>
+                <div className="rounded-2xl overflow-hidden">
+                  <img src="/media/balloon-decor/balloons-of-aloha.jpg" alt="Balloons of Aloha delivery bouquet" className="w-full h-full object-cover" />
+                </div>
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <div className="relative bg-gradient-to-r from-sage via-cream/80 to-coral rounded-[2rem] p-12 md:p-16 text-center overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_70%)]" />
+              <div className="relative z-10">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Let&rsquo;s Design Something Beautiful</h2>
+                <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">Cirque Jolie took her already-existing balloon skills and learned to apply them to making larger balloon art and decorations. She has been thrilled with how fun and satisfying the work has been. Send us your event details, color palette, and vision!</p>
+                <p className="text-white/70 mb-10">Entertainers based on the island of Maui &amp; willing to travel to outer island events</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/contact" className="px-10 py-4 bg-white text-sage font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Get a Free Quote</Link>
+                  <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
+                </div>
+              </div>
+            </div>
+          </FadeInSection>
+        </div>
+      </section>
     </Layout>
   );
 }

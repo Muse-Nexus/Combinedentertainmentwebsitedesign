@@ -31,12 +31,8 @@ export function Navbar() {
       <div className="container mx-auto px-4 flex items-center justify-between">
         
         {/* Logo */}
-        <Link to="/" className="text-white font-bold text-xl md:text-2xl flex items-center gap-2 z-50 drop-shadow-lg">
-           {/* Maybe a small umbrella icon? */}
-           <span className="text-2xl">☂️</span>
-           <span className="transition-opacity opacity-100">
-             Raining Entertainment
-           </span>
+        <Link to="/" className="flex items-center gap-2 z-50 drop-shadow-lg">
+           <img src="/media/logos/Horizontal White Raining Entertainment Secondary Logo.png" alt="Raining Entertainment" className="h-8 md:h-10 w-auto" />
         </Link>
 
         {/* Desktop Nav - Using Compact UmbrellaNav if scrolled or not home */}
@@ -50,6 +46,7 @@ export function Navbar() {
 
         {/* Desktop Utility Links */}
         <div className="hidden md:flex items-center gap-6 text-white">
+          <Link to="/corporate" className="hover:text-coral transition-colors font-medium drop-shadow-md">Corporate</Link>
           <Link to="/upcoming-shows" className="hover:text-coral transition-colors font-medium drop-shadow-md">Shows</Link>
           <Link to="/about" className="hover:text-coral transition-colors font-medium drop-shadow-md">About</Link>
           <Link to="/contact" className="px-4 py-2 bg-coral hover:bg-coral/80 rounded-full font-bold transition-colors shadow-lg">
@@ -88,6 +85,9 @@ export function Navbar() {
                     </Link>
                     <Link to="/casino-gameshow" onClick={() => setIsOpen(false)} className="p-3 bg-lavender/20 text-purple-300 rounded-lg text-center font-bold border border-lavender/50">
                         Casino & Gameshow
+                    </Link>
+                    <Link to="/corporate" onClick={() => setIsOpen(false)} className="p-3 bg-amber-500/20 text-amber-300 rounded-lg text-center font-bold border border-amber-500/50">
+                        Corporate Events
                     </Link>
                     
                     <div className="h-px bg-slate-700 my-2" />

@@ -3,12 +3,12 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Wand2, Trophy, Tent, Briefcase, Palette } from 'lucide-react';
 
-// Import actual performance photos
-import balloonTwistingImg from 'figma:asset/2d7c73d4755e1fac69d1e3d3e0a5c0f4f0ab4b3a.png'; // Face painting black and white
-import balloonDecorImg from 'figma:asset/6b4c34e54104146dff3c3a3fdf5e34a4b2297974.png'; // White balloon installations
-import strollingImg from 'figma:asset/3b2a1f5cc3bd5bf23f90d4e0c90aed9a69af4c50.png'; // Dark strolling performance
-import magicImg from 'figma:asset/f4e5d6c79a57bdb0cc560f00e95f1ab7e039868e3db.png'; // Magic performance
-import casinoImg from 'figma:asset/a2cd29b03be5bb9a9ac72d8b8aaf9e5d1c5da4b0.png'; // Casino crowd event
+// Real performance photos from media folder
+const balloonTwistingImg = '/media/balloons/kid-panda-facepainting.jpg';
+const balloonDecorImg = '/media/balloon-decor/tropical-arch-resort.jpg';
+const strollingImg = '/media/strolling/moth-stilt-costume.jpg';
+const magicImg = '/media/magic/brent-umbrella-beach.jpg';
+const casinoImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
 
 const services = [
   {
