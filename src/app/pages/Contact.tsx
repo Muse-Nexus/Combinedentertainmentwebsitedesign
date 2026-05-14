@@ -27,18 +27,76 @@ interface FormData {
   date: string;
   type: string;
   guests: string;
+  location: string;
   message: string;
+}
+
+// Map form event type values → Airtable "Type of Event" single-select names
+const EVENT_TYPE_MAP: Record<string, string> = {
+  'kids-party': 'Birthday Party',
+  'magic': 'Other',
+  'gameshow': 'Other',
+  'casino': 'Private Party',
+  'strolling': 'Other',
+  'balloon-decor': 'Other',
+  'corporate': 'Corporate',
+  'wedding': 'Wedding',
+  'combo': 'Other',
+};
+
+async function submitToAirtable(data: FormData): Promise<void> {
+  const pat = import.meta.env.VITE_AIRTABLE_PAT;
+  const baseId = 'appNVP7Dg4vkNxKql';
+  const tableId = 'tbl3pJLojwWLX9bRF';
+
+  const fields: Record<string, unknown> = {
+    'Client / Contact Name': data.name,
+    'Email': data.email,
+    'Lead Status': 'New',
+    'Source / Found Us Through': 'Website',
+  };
+
+  if (data.phone) fields['Phone'] = data.phone;
+  if (data.date) fields['Event Date'] = data.date + 'T00:00:00.000Z';
+  if (data.type && EVENT_TYPE_MAP[data.type]) fields['Type of Event'] = EVENT_TYPE_MAP[data.type];
+  if (data.guests) fields['Estimated Guest Count / PAX'] = parseInt(data.guests, 10) || undefined;
+  if (data.location) fields['Event Location'] = data.location;
+  if (data.message) fields['Message / Inquiry Notes'] = data.message;
+
+  const res = await fetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${pat}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ fields }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error((err as { error?: { message?: string } })?.error?.message || 'Airtable error');
+  }
 }
 
 export function Contact() {
   const { register, handleSubmit, reset } = useForm<FormData>();
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 5000);
+  const onSubmit = async (data: FormData) => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      await submitToAirtable(data);
+      setSubmitted(true);
+      reset();
+      setTimeout(() => setSubmitted(false), 6000);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again or call us directly.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -177,9 +235,19 @@ export function Contact() {
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-6 p-4 rounded-xl bg-sage/20 border border-sage/40 text-sage"
+                        className="mb-6 p-4 rounded-xl bg-green-900/30 border border-green-500/40 text-green-300"
                       >
-                        Thanks for reaching out! We'll get back to you within 24 hours.
+                        🎉 Thanks for reaching out! We'll get back to you within 24 hours.
+                      </motion.div>
+                    )}
+
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 rounded-xl bg-red-900/30 border border-red-500/40 text-red-300"
+                      >
+                        ⚠️ {error}
                       </motion.div>
                     )}
 
@@ -254,25 +322,40 @@ export function Contact() {
                       </div>
 
                       <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-300">Event Location / Venue</label>
+                        <input
+                          {...register('location')}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                          placeholder="Venue name or area (e.g. Kaanapali, Wailea)"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-300">Tell Us About Your Event</label>
                         <textarea
                           {...register('message')}
                           rows={5}
                           className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all resize-none"
-                          placeholder="Date, venue, theme, entertainment ideas — the more detail, the better!"
+                          placeholder="Tell us about your vision, special requests, or anything we should know..."
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-4 bg-coral hover:bg-coral/85 text-white font-bold rounded-xl text-lg transition-colors shadow-lg shadow-coral/20"
+                        disabled={submitting}
+                        className="w-full py-4 px-8 rounded-xl bg-coral hover:bg-coral/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                       >
-                        Send Inquiry
+                        {submitting ? 'Sending...' : 'Send Request'}
                       </button>
+
+                      <p className="text-center text-slate-500 text-xs">
+                        We'll never share your info. Response within 24 hours guaranteed.
+                      </p>
                     </form>
                   </div>
                 </FadeInSection>
               </div>
+
             </div>
           </div>
         </section>
