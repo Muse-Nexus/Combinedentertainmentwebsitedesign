@@ -8,8 +8,11 @@ import StrollingEntertainment from './pages/StrollingEntertainment';
 import Magic from './pages/Magic';
 import CasinoGameshow from './pages/CasinoGameshow';
 import Corporate from './pages/Corporate';
+import KidsCircus from './pages/KidsCircus';
+import GameShow from './pages/GameShow';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
+import { UpcomingShows } from './pages/UpcomingShows';
 import { ScrollToTop } from './components/ScrollToTop';
 
 function App() {
@@ -18,7 +21,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        
+
         {/* Service Pages */}
         <Route path="/balloon-twisting" element={<BalloonTwisting />} />
         <Route path="/balloon-decor" element={<BalloonDecor />} />
@@ -26,11 +29,14 @@ function App() {
         <Route path="/magic" element={<Magic />} />
         <Route path="/casino-gameshow" element={<CasinoGameshow />} />
         <Route path="/corporate" element={<Corporate />} />
-        
+        <Route path="/kids-circus" element={<KidsCircus />} />
+        <Route path="/game-show" element={<GameShow />} />
+
         {/* Info Pages */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        
+        <Route path="/upcoming-shows" element={<UpcomingShows />} />
+
         {/* Legacy routes for backward compatibility */}
         <Route path="/service/:serviceId" element={<ServicePage />} />
         <Route path="/:serviceId" element={<ServicePage />} />
