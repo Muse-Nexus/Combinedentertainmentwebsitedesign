@@ -27,18 +27,30 @@ interface FormData {
   date: string;
   type: string;
   guests: string;
+  venue: string;
   message: string;
 }
 
 export function Contact() {
   const { register, handleSubmit, reset } = useForm<FormData>();
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 5000);
+  const onSubmit = async (data: FormData) => {
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Server error');
+      setStatus('success');
+      reset();
+      setTimeout(() => setStatus('idle'), 6000);
+    } catch {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 6000);
+    }
   };
 
   const contactInfo = [
@@ -173,13 +185,23 @@ export function Contact() {
                       Tell us about your event and we'll put together a custom entertainment package.
                     </p>
 
-                    {submitted && (
+                    {status === 'success' && (
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-6 p-4 rounded-xl bg-sage/20 border border-sage/40 text-sage"
+                        className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/40 text-green-400"
                       >
-                        Thanks for reaching out! We'll get back to you within 24 hours.
+                        ✅ Thanks for reaching out! We'll get back to you within 24 hours.
+                      </motion.div>
+                    )}
+
+                    {status === 'error' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/40 text-red-400"
+                      >
+                        ❌ Something went wrong. Please try again or call us directly.
                       </motion.div>
                     )}
 
@@ -254,20 +276,30 @@ export function Contact() {
                       </div>
 
                       <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-300">Venue / Location</label>
+                        <input
+                          {...register('venue')}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                          placeholder="Hotel, private residence, park..."
+                        />
+                      </div>
+
+                      <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-300">Tell Us About Your Event</label>
                         <textarea
                           {...register('message')}
                           rows={5}
                           className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all resize-none"
-                          placeholder="Date, venue, theme, entertainment ideas — the more detail, the better!"
+                          placeholder="Tell us what you're envisioning..."
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-4 bg-coral hover:bg-coral/85 text-white font-bold rounded-xl text-lg transition-colors shadow-lg shadow-coral/20"
+                        disabled={status === 'sending'}
+                        className="w-full py-4 rounded-xl bg-coral hover:bg-coral/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-lg transition-all"
                       >
-                        Send Inquiry
+                        {status === 'sending' ? 'Sending...' : 'Send My Request'}
                       </button>
                     </form>
                   </div>
