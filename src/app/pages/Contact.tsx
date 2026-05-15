@@ -2,7 +2,7 @@ import { Layout } from '../components/Layout';
 import { useForm } from 'react-hook-form';
 import { motion, useInView } from 'motion/react';
 import { useRef, useState } from 'react';
-import { Mail, Phone, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Facebook, Youtube, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 function FadeInSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const ref = useRef(null);
@@ -27,39 +27,36 @@ interface FormData {
   date: string;
   type: string;
   guests: string;
+  venue: string;
   message: string;
 }
 
 export function Contact() {
-  const { register, handleSubmit, reset } = useForm<FormData>();
-  const [submitted, setSubmitted] = useState(false);
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>();
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 5000);
+  const onSubmit = async (data: FormData) => {
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed');
+      setStatus('success');
+      reset();
+      setTimeout(() => setStatus('idle'), 6000);
+    } catch {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 6000);
+    }
   };
 
   const contactInfo = [
-    {
-      icon: Phone,
-      label: 'Call or Text',
-      value: '(808) 283-7469',
-      href: 'tel:+18082837469',
-    },
-    {
-      icon: Mail,
-      label: 'Email',
-      value: 'info@rainingentertainment.com',
-      href: 'mailto:info@rainingentertainment.com',
-    },
-    {
-      icon: MapPin,
-      label: 'Based In',
-      value: 'Maui, Hawai\u02BBi',
-      href: null,
-    },
+    { icon: Phone, label: 'Call or Text', value: '(808) 283-7469', href: 'tel:+18082837469' },
+    { icon: Mail, label: 'Email', value: 'info@rainingentertainment.com', href: 'mailto:info@rainingentertainment.com' },
+    { icon: MapPin, label: 'Based In', value: 'Maui, Hawai\u02BBi', href: null },
   ];
 
   const socials = [
@@ -78,10 +75,10 @@ export function Contact() {
           <div className="container mx-auto px-4 relative z-10 text-center">
             <FadeInSection>
               <h1 className="text-5xl md:text-6xl font-display font-bold text-white mb-6">
-                Let's Plan Your Event
+                Let\u2019s Plan Your Event
               </h1>
               <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-                From intimate birthday parties to large corporate galas, we'll create
+                From intimate birthday parties to large corporate galas, we\u2019ll create
                 the perfect entertainment experience for your Maui event.
               </p>
             </FadeInSection>
@@ -105,10 +102,7 @@ export function Contact() {
                         <div>
                           <p className="text-sm text-slate-400 mb-1">{item.label}</p>
                           {item.href ? (
-                            <a
-                              href={item.href}
-                              className="text-white font-semibold hover:text-coral transition-colors"
-                            >
+                            <a href={item.href} className="text-white font-semibold hover:text-coral transition-colors">
                               {item.value}
                             </a>
                           ) : (
@@ -141,23 +135,24 @@ export function Contact() {
                 </FadeInSection>
 
                 <FadeInSection>
-                  <div className="border-t border-slate-800 pt-8">
-                    <h3 className="text-white font-bold mb-3">Service Areas</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                      Based on Maui, we serve all Hawaiian Islands and are available
-                      for mainland travel. Corporate & destination event packages include
-                      travel coordination.
-                    </p>
-                  </div>
-                </FadeInSection>
-
-                <FadeInSection>
-                  <div className="border-t border-slate-800 pt-8">
-                    <h3 className="text-white font-bold mb-3">Response Time</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                      We typically respond within 24 hours. For events within 48 hours,
-                      please call or text directly.
-                    </p>
+                  <div className="rounded-2xl overflow-hidden border border-slate-800">
+                    <div className="bg-slate-800/40 px-6 py-4 border-b border-slate-800">
+                      <h3 className="text-white font-bold">Response Time</h3>
+                    </div>
+                    <div className="p-6 space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <p className="text-slate-300 text-sm">We typically respond within 24 hours</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-coral" />
+                        <p className="text-slate-300 text-sm">Available for events across all of Maui</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-blue-400" />
+                        <p className="text-slate-300 text-sm">Book 2\u2013 weeks ahead for best availability</p>
+                      </div>
+                    </div>
                   </div>
                 </FadeInSection>
               </div>
@@ -165,21 +160,28 @@ export function Contact() {
               {/* Form */}
               <div className="lg:col-span-3">
                 <FadeInSection>
-                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 md:p-10">
-                    <h2 className="text-2xl font-display font-bold text-white mb-2">
-                      Request a Quote
-                    </h2>
-                    <p className="text-slate-400 mb-8">
-                      Tell us about your event and we'll put together a custom entertainment package.
-                    </p>
+                  <div className="bg-slate-900/60 rounded-3xl border border-slate-800 p-8">
+                    <h2 className="text-2xl font-display font-bold text-white mb-6">Book Your Event</h2>
 
-                    {submitted && (
+                    {/* Status banners */}
+                    {status === 'success' && (
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-6 p-4 rounded-xl bg-sage/20 border border-sage/40 text-sage"
+                        className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-green-500/15 border border-green-500/30 text-green-400"
                       >
-                        Thanks for reaching out! We'll get back to you within 24 hours.
+                        <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                        <span className="font-medium">Request sent! We\u2019ll be in touch within 24 hours. \uD83C\uDF08</span>
+                      </motion.div>
+                    )}
+                    {status === 'error' && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-red-500/15 border border-red-500/30 text-red-400"
+                      >
+                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                        <span className="font-medium">Something went wrong. Please try calling us at (808) 283-7469.</span>
                       </motion.div>
                     )}
 
@@ -189,18 +191,24 @@ export function Contact() {
                           <label className="text-sm font-semibold text-slate-300">Name *</label>
                           <input
                             {...register('name', { required: true })}
-                            className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                            className={`w-full px-4 py-3 rounded-xl bg-slate-800 border ${
+                              errors.name ? 'border-red-500' : 'border-slate-700'
+                            } text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all`}
                             placeholder="Your name"
                           />
+                          {errors.name && <p className="text-red-400 text-xs">Name is required</p>}
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-semibold text-slate-300">Email *</label>
                           <input
                             type="email"
                             {...register('email', { required: true })}
-                            className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                            className={`w-full px-4 py-3 rounded-xl bg-slate-800 border ${
+                              errors.email ? 'border-red-500' : 'border-slate-700'
+                            } text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all`}
                             placeholder="you@example.com"
                           />
+                          {errors.email && <p className="text-red-400 text-xs">Email is required</p>}
                         </div>
                       </div>
 
@@ -254,20 +262,34 @@ export function Contact() {
                       </div>
 
                       <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-300">Venue / Location</label>
+                        <input
+                          {...register('venue')}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                          placeholder="e.g. Wailea Beach Resort, private residence, Kihei..."
+                        />
+                      </div>
+
+                      <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-300">Tell Us About Your Event</label>
                         <textarea
                           {...register('message')}
-                          rows={5}
+                          rows={4}
                           className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all resize-none"
-                          placeholder="Date, venue, theme, entertainment ideas — the more detail, the better!"
+                          placeholder="Any details that will help us make it perfect..."
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-4 bg-coral hover:bg-coral/85 text-white font-bold rounded-xl text-lg transition-colors shadow-lg shadow-coral/20"
+                        disabled={status === 'sending'}
+                        className="w-full py-4 rounded-xl bg-coral hover:bg-coral/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-lg transition-all flex items-center justify-center gap-2"
                       >
-                        Send Inquiry
+                        {status === 'sending' ? (
+                          <><Loader2 className="w-5 h-5 animate-spin" /> Sending...</>
+                        ) : (
+                          'Send My Request \u2192'
+                        )}
                       </button>
                     </form>
                   </div>
