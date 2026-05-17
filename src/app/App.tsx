@@ -7,6 +7,8 @@ import BalloonDecor from './pages/BalloonDecor';
 import StrollingEntertainment from './pages/StrollingEntertainment';
 import Magic from './pages/Magic';
 import CasinoGameshow from './pages/CasinoGameshow';
+import Casino from './pages/Casino';
+import GameShow from './pages/GameShow';
 import Corporate from './pages/Corporate';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
@@ -25,6 +27,8 @@ function App() {
         <Route path="/strolling" element={<StrollingEntertainment />} />
         <Route path="/magic" element={<Magic />} />
         <Route path="/casino-gameshow" element={<CasinoGameshow />} />
+        <Route path="/casino" element={<Casino />} />
+        <Route path="/game-show" element={<GameShow />} />
         <Route path="/corporate" element={<Corporate />} />
         
         {/* Info Pages */}
