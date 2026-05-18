@@ -1,15 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { AlphaVideoPlayer } from '../components/AlphaVideoPlayer';
 import { Layout } from '../components/Layout';
-import { motion, useInView } from 'motion/react';
+import { motion, useInView, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 
-// ── Variant switch — easy rollback ──────────────────────────────────────────
-// 'float-center' → girl floats over the whole page (current)
-// 'hero-bg'      → girl is a background in the hero section only
 const ACTIVE_VARIANT: 'float-center' | 'hero-bg' = 'float-center';
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
 const FadeInSection = ({
   children,
   className = '',
@@ -34,6 +30,56 @@ const FadeInSection = ({
   );
 };
 
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handler);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="lightbox-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+        onClick={onClose}
+      >
+        <motion.div
+          key="lightbox-img"
+          initial={{ scale: 0.88, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.88, opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="relative max-w-[92vw] max-h-[92vh]"
+          onClick={e => e.stopPropagation()}
+        >
+          <img
+            src={src}
+            alt={alt}
+            className="max-w-full max-h-[88vh] rounded-2xl shadow-2xl object-contain"
+          />
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-black/60 hover:bg-black/90 text-white rounded-full text-xl font-bold transition-all"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+// ── Photo — no forced crop, clickable ────────────────────────────────────────
 function Photo({
   src,
   alt,
@@ -44,21 +90,40 @@ function Photo({
   className?: string;
 }) {
   const [errored, setErrored] = React.useState(false);
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+
   if (errored) {
     return (
-      <div className={`flex flex-col items-center justify-center bg-slate-800/60 border-2 border-dashed border-slate-600 rounded-2xl text-slate-500 text-xs text-center p-4 ${className}`}>
+      <div className={`flex flex-col items-center justify-center bg-slate-800/60 border-2 border-dashed border-slate-600 rounded-2xl text-slate-500 text-xs text-center p-4 min-h-[200px] ${className}`}>
         <span className="text-2xl mb-1">📸</span>
         <span className="font-mono opacity-60">{src.split('/').pop()}</span>
       </div>
     );
   }
+
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      onError={() => setErrored(true)}
-    />
+    <>
+      <div
+        className={`relative group cursor-zoom-in overflow-hidden rounded-2xl shadow-xl ${className}`}
+        onClick={() => setLightboxOpen(true)}
+      >
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.03]"
+          onError={() => setErrored(true)}
+        />
+        {/* hover overlay hint */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 text-white text-sm px-3 py-1.5 rounded-full font-medium">
+            View full photo
+          </span>
+        </div>
+      </div>
+      {lightboxOpen && (
+        <Lightbox src={src} alt={alt} onClose={() => setLightboxOpen(false)} />
+      )}
+    </>
   );
 }
 
@@ -82,7 +147,6 @@ function FloatingGirl() {
   );
 }
 
-// ── Page ─────────────────────────────────────────────────────────────────────
 export default function StrollingEntertainment() {
   return (
     <>
@@ -150,57 +214,59 @@ export default function StrollingEntertainment() {
               </p>
             </FadeInSection>
 
-            {/* Wide crowd gameshow shot — full bleed hero */}
+            {/* Wide crowd gameshow shot */}
             <FadeInSection className="mb-6">
               <Photo
                 src="/media/brenton/gameshow-crowd.jpg"
                 alt="Brenton running walk-around gameshow in a packed Lahaina street crowd"
-                className="w-full h-[480px] object-cover object-center rounded-3xl shadow-2xl"
               />
             </FadeInSection>
 
-            {/* 3-col grid — magic in action */}
+            {/* 3-col grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <FadeInSection delay={0.1}>
+                <Photo
+                  src="/media/brenton/patriotic-stilt.jpg"
+                  alt="Brenton and Jolie in patriotic costumes at a resort event"
+                />
+              </FadeInSection>
+              <FadeInSection delay={0.2}>
+                <Photo
+                  src="/media/brenton/gameshow-crowd.jpg"
+                  alt="Brenton doing fire magic at an outdoor lawn event"
+                />
+              </FadeInSection>
+              <FadeInSection delay={0.3}>
+                <Photo
+                  src="/media/brenton/fourth-of-july.jpg"
+                  alt="Brenton with Jolie on stilts at a 4th of July celebration"
+                />
+              </FadeInSection>
+            </div>
+
+            {/* 2-col */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <FadeInSection delay={0.1}>
                 <Photo
                   src="/media/brenton/table-magic.jpg"
                   alt="Brenton performing close-up table magic at a restaurant"
-                  className="w-full h-72 object-cover object-center rounded-2xl shadow-xl"
                 />
               </FadeInSection>
               <FadeInSection delay={0.2}>
                 <Photo
                   src="/media/brenton/lawn-magic.jpg"
-                  alt="Brenton doing fire magic at an outdoor lawn event"
-                  className="w-full h-72 object-cover object-center rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.3}>
-                <Photo
-                  src="/media/brenton/balloon-crew.jpg"
-                  alt="Brenton with stilt walkers and giant balloon sculptures at a festival"
-                  className="w-full h-72 object-cover object-center rounded-2xl shadow-xl"
+                  alt="Brenton doing fire magic at an outdoor lawn gala"
                 />
               </FadeInSection>
             </div>
 
-            {/* 2-col — patriotic/costume events */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-              <FadeInSection delay={0.1}>
-                <Photo
-                  src="/media/brenton/patriotic-stilt.jpg"
-                  alt="Brenton and Jolie in patriotic costumes at a resort event"
-                  className="w-full h-80 object-cover object-top rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.2}>
-                <Photo
-                  src="/media/brenton/fourth-of-july.jpg"
-                  alt="Brenton with Jolie on stilts at a 4th of July celebration"
-                  className="w-full h-80 object-cover object-top rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-            </div>
+            {/* balloon crew full width */}
+            <FadeInSection className="mb-12">
+              <Photo
+                src="/media/brenton/balloon-crew.jpg"
+                alt="Brenton with stilt walkers and giant balloon sculptures at a festival"
+              />
+            </FadeInSection>
 
             {/* Pull quote */}
             <FadeInSection className="text-center max-w-3xl mx-auto">
@@ -226,18 +292,14 @@ export default function StrollingEntertainment() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {[
                 { src: '/media/strolling/rainbow-clown-stilts.jpg', alt: 'Rainbow clown stilt performer with kids' },
-                { src: '/media/strolling/jolie-portrait.jpg', alt: 'Jolie portrait in costume' },
-                { src: '/media/strolling/superhero-stilts.jpg', alt: 'Superhero stilt performer at event' },
-                { src: '/media/strolling/fire-dancing.jpg', alt: 'Fire dancing at Maui event' },
-                { src: '/media/strolling/moth-stilt-costume.jpg', alt: 'Elegant moth stilt costume' },
-                { src: '/media/strolling/silver-white-stilt.jpg', alt: 'Silver and white elegant stilt performer' },
+                { src: '/media/strolling/fire-dancer-night.jpg', alt: 'Fire dancer performing at night event' },
+                { src: '/media/strolling/jolie-stilts-resort.jpg', alt: 'Jolie on stilts at a Maui resort' },
+                { src: '/media/strolling/aerial-performer.jpg', alt: 'Aerial performer in costume' },
+                { src: '/media/strolling/costume-character.jpg', alt: 'Elaborate costume character greeting guests' },
+                { src: '/media/strolling/stilt-duo.jpg', alt: 'Stilt duo performing at a gala' },
               ].map(({ src, alt }, i) => (
                 <FadeInSection key={src} delay={i * 0.08}>
-                  <Photo
-                    src={src}
-                    alt={alt}
-                    className="w-full h-56 md:h-72 object-cover object-top rounded-2xl shadow-xl"
-                  />
+                  <Photo src={src} alt={alt} />
                 </FadeInSection>
               ))}
             </div>
