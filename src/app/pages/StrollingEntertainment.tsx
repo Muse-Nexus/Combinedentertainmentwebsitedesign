@@ -4,8 +4,12 @@ import { Layout } from '../components/Layout';
 import { motion, useInView } from 'motion/react';
 import { Link } from 'react-router-dom';
 
+// ── Variant switch — easy rollback ──────────────────────────────────────────
+// 'float-center' → girl floats over the whole page (current)
+// 'hero-bg'      → girl is a background in the hero section only
 const ACTIVE_VARIANT: 'float-center' | 'hero-bg' = 'float-center';
 
+// ── Helpers ─────────────────────────────────────────────────────────────────
 const FadeInSection = ({
   children,
   className = '',
@@ -29,26 +33,6 @@ const FadeInSection = ({
     </motion.div>
   );
 };
-
-function FloatingGirl() {
-  if (ACTIVE_VARIANT !== 'float-center') return null;
-  return (
-    <div
-      className="fixed inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 10 }}
-      aria-hidden="true"
-    >
-      <AlphaVideoPlayer
-        frameCount={96}
-        fps={12}
-        width={720}
-        height={1280}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{ height: '92vh', width: 'auto', opacity: 0.9 }}
-      />
-    </div>
-  );
-}
 
 function Photo({
   src,
@@ -78,6 +62,27 @@ function Photo({
   );
 }
 
+function FloatingGirl() {
+  if (ACTIVE_VARIANT !== 'float-center') return null;
+  return (
+    <div
+      className="fixed inset-0 pointer-events-none overflow-hidden"
+      style={{ zIndex: 10 }}
+      aria-hidden="true"
+    >
+      <AlphaVideoPlayer
+        frameCount={96}
+        fps={12}
+        width={720}
+        height={1280}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        style={{ height: '92vh', width: 'auto', opacity: 0.9 }}
+      />
+    </div>
+  );
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
 export default function StrollingEntertainment() {
   return (
     <>
@@ -145,131 +150,96 @@ export default function StrollingEntertainment() {
               </p>
             </FadeInSection>
 
-            {/* Main hero shot — crowd wide */}
+            {/* Wide crowd gameshow shot — full bleed hero */}
             <FadeInSection className="mb-6">
               <Photo
-                src="/media/brenton/crowd-1.jpg"
-                alt="Brenton performing walk-around magic for a large crowd"
-                className="w-full h-[480px] object-cover rounded-3xl shadow-2xl"
+                src="/media/brenton/gameshow-crowd.jpg"
+                alt="Brenton running walk-around gameshow in a packed Lahaina street crowd"
+                className="w-full h-[480px] object-cover object-center rounded-3xl shadow-2xl"
               />
             </FadeInSection>
 
-            {/* 3-up grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* 3-col grid — magic in action */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <FadeInSection delay={0.1}>
                 <Photo
-                  src="/media/brenton/magic-1.jpg"
-                  alt="Close-up magic reaction shot"
-                  className="w-full h-72 object-cover rounded-2xl shadow-xl"
+                  src="/media/brenton/table-magic.jpg"
+                  alt="Brenton performing close-up table magic at a restaurant"
+                  className="w-full h-72 object-cover object-center rounded-2xl shadow-xl"
                 />
               </FadeInSection>
               <FadeInSection delay={0.2}>
                 <Photo
-                  src="/media/brenton/crowd-2.jpg"
-                  alt="Brenton in crowd at large event"
-                  className="w-full h-72 object-cover rounded-2xl shadow-xl"
+                  src="/media/brenton/lawn-magic.jpg"
+                  alt="Brenton doing fire magic at an outdoor lawn event"
+                  className="w-full h-72 object-cover object-center rounded-2xl shadow-xl"
                 />
               </FadeInSection>
               <FadeInSection delay={0.3}>
                 <Photo
-                  src="/media/brenton/gameshow-1.jpg"
-                  alt="Walk-around gameshow with costumed guests"
-                  className="w-full h-72 object-cover rounded-2xl shadow-xl"
+                  src="/media/brenton/balloon-crew.jpg"
+                  alt="Brenton with stilt walkers and giant balloon sculptures at a festival"
+                  className="w-full h-72 object-cover object-center rounded-2xl shadow-xl"
                 />
               </FadeInSection>
             </div>
 
-            {/* 2-up bottom row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* 2-col — patriotic/costume events */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
               <FadeInSection delay={0.1}>
                 <Photo
-                  src="/media/brenton/magic-2.jpg"
-                  alt="Brenton performing magic up close"
-                  className="w-full h-64 object-cover rounded-2xl shadow-xl"
+                  src="/media/brenton/patriotic-stilt.jpg"
+                  alt="Brenton and Jolie in patriotic costumes at a resort event"
+                  className="w-full h-80 object-cover object-top rounded-2xl shadow-xl"
                 />
               </FadeInSection>
               <FadeInSection delay={0.2}>
                 <Photo
-                  src="/media/brenton/crowd-3.jpg"
-                  alt="Crowd enjoying walk-around entertainment"
-                  className="w-full h-64 object-cover rounded-2xl shadow-xl"
+                  src="/media/brenton/fourth-of-july.jpg"
+                  alt="Brenton with Jolie on stilts at a 4th of July celebration"
+                  className="w-full h-80 object-cover object-top rounded-2xl shadow-xl"
                 />
               </FadeInSection>
             </div>
 
-            {/* Gameshow callout */}
-            <FadeInSection delay={0.2} className="mt-10">
-              <div className="bg-slate-800/60 border border-slate-700/40 rounded-3xl p-8 md:p-12 text-center">
-                <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Also runs</p>
-                <h3 className="text-3xl font-bold mb-3">Gameshow Fanatics</h3>
-                <p className="text-gray-400 max-w-xl mx-auto mb-6">
-                  A fully portable, crowd-interactive gameshow that Brenton &amp; Jolie bring right to your venue — no stage required.
-                </p>
-                <Link
-                  to="/game-show"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-coral text-white font-bold rounded-full hover:bg-coral/90 transition-all hover:scale-105"
-                >
-                  See Gameshow Fanatics →
-                </Link>
-              </div>
+            {/* Pull quote */}
+            <FadeInSection className="text-center max-w-3xl mx-auto">
+              <blockquote className="text-2xl md:text-3xl font-light text-white/80 italic leading-relaxed">
+                "He had the whole crowd in the palm of his hand before they even knew what hit them."
+              </blockquote>
+              <p className="text-coral mt-4 font-semibold tracking-wider uppercase text-sm">— Maui Wedding Client</p>
             </FadeInSection>
           </div>
         </section>
 
-        {/* ── JOLIE & STROLLING PERFORMERS ── */}
+        {/* ── JOLIE — Cirque & Stilt Performers ── */}
         <section className="py-24 bg-slate-900 relative z-20">
           <div className="container mx-auto px-4">
             <FadeInSection className="text-center mb-16">
-              <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-3">Cirque Jolie</p>
-              <h2 className="text-5xl font-black mb-4">Stilt Walkers, Fire &amp; More</h2>
+              <p className="text-lavender font-semibold tracking-[0.3em] uppercase text-sm mb-3">Cirque Jolie</p>
+              <h2 className="text-5xl font-black mb-4">Stilt Walkers, Fire &amp; Aerial</h2>
               <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                From rainbow clown stilts to elegant moth costumes — Jolie and her performers transform any venue into a spectacle.
+                Towering stilt performers, fire dancing, costume characters, and aerial arts that transform any event into a full-scale spectacle.
               </p>
             </FadeInSection>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-              <FadeInSection delay={0.0}>
-                <Photo
-                  src="/media/strolling/clown-stilt-rainbow.jpg"
-                  alt="Rainbow clown stilt walker at Maui event"
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.1}>
-                <Photo
-                  src="/media/strolling/jolie-portrait.jpg"
-                  alt="Cirque Jolie portrait"
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.2}>
-                <Photo
-                  src="/media/strolling/superhero-stilt.jpg"
-                  alt="Superhero stilt walker at kids event"
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.1}>
-                <Photo
-                  src="/media/strolling/fire-dancing.jpg"
-                  alt="Fire dancing at Maui event"
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.2}>
-                <Photo
-                  src="/media/strolling/moth-stilt-costume.jpg"
-                  alt="Elegant moth stilt costume"
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
-              <FadeInSection delay={0.3}>
-                <Photo
-                  src="/media/strolling/silver-white-stilt.jpg"
-                  alt="Silver and white elegant stilt performer"
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
-                />
-              </FadeInSection>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {[
+                { src: '/media/strolling/rainbow-clown-stilts.jpg', alt: 'Rainbow clown stilt performer with kids' },
+                { src: '/media/strolling/jolie-portrait.jpg', alt: 'Jolie portrait in costume' },
+                { src: '/media/strolling/superhero-stilts.jpg', alt: 'Superhero stilt performer at event' },
+                { src: '/media/strolling/fire-dancing.jpg', alt: 'Fire dancing at Maui event' },
+                { src: '/media/strolling/moth-stilt-costume.jpg', alt: 'Elegant moth stilt costume' },
+                { src: '/media/strolling/silver-white-stilt.jpg', alt: 'Silver and white elegant stilt performer' },
+              ].map(({ src, alt }, i) => (
+                <FadeInSection key={src} delay={i * 0.08}>
+                  <Photo
+                    src={src}
+                    alt={alt}
+                    className="w-full h-56 md:h-72 object-cover object-top rounded-2xl shadow-xl"
+                  />
+                </FadeInSection>
+              ))}
             </div>
           </div>
         </section>
