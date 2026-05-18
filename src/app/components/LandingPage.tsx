@@ -5,14 +5,14 @@ import { UmbrellaNav } from './UmbrellaNav';
 import { ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const heroImg = '/media/magic/brent-umbrella-beach.jpg';
+const heroImg = '/media/hero-fairy-luau.jpg';
 const logo = '/media/logos/White Primary Logo Raining Entertainment.png';
 
 // Assets
 const magicImg = '/media/magic/brent-library-show.jpg';
 const circusImg = '/media/strolling/clown-stilt-rainbow.jpg';
 const gameshowImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
-const cloudTexture = '';
+const cloudTexture = '/media/clouds-wipe.png';
 
 // Service Card Images
 const balloonTwistingCardImg = '/media/balloons/kid-panda-facepainting.jpg';
@@ -123,11 +123,13 @@ const Clouds = ({ scrollProgress }: { scrollProgress: any }) => {
   
   const scale = useTransform(scrollProgress, [0.1, 0.5, 0.9], [1, 1.2, 1]);
 
-  // Feathering Mask - Extremely Soft
-  // Using radial-gradient from black at 0% to transparent at 80% creates a very large soft edge
+  // Feathering Mask - Extra Heavy Soft Edges
+  // Pushed feather further: solid only at very center, gradual transparent fade out
+  const featherMaskGradient = 'radial-gradient(ellipse closest-side, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.2) 80%, transparent 100%)';
   const featherMask = {
-    maskImage: 'radial-gradient(closest-side, black 0%, transparent 80%)',
-    WebkitMaskImage: 'radial-gradient(closest-side, black 0%, transparent 80%)'
+    maskImage: featherMaskGradient,
+    WebkitMaskImage: featherMaskGradient,
+    filter: 'blur(8px)'
   };
 
   return (
@@ -222,8 +224,8 @@ export const LandingPage = () => {
   // --- SCROLL TIMELINE ---
   
   const STORM_END = 1500;
-  const MIRACLE_END = 2500;
-  const TRANSITION_END = 4500;
+  const MIRACLE_END = 3800;
+  const TRANSITION_END = 5800;
   
   // Extra buffer prevents the "end of page" from blocking the animation completion
   const TOTAL_SCROLL_HEIGHT = TRANSITION_END + 1500; 
@@ -339,13 +341,12 @@ export const LandingPage = () => {
         </motion.div>
 
         {/* HERO IMAGE */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center p-4">
+        <div className="absolute inset-0 z-20">
             <motion.div 
-              className="relative w-full max-w-5xl aspect-[16/10] shadow-2xl overflow-hidden rounded-sm bg-black"
+              className="relative w-full h-full overflow-hidden bg-black"
               initial={{ scale: 1 }}
               animate={{ 
                 scale: isMiracle ? 1.02 : 1,
-                boxShadow: isMiracle ? '0 0 100px rgba(255,200,100,0.5)' : '0 0 50px rgba(0,0,0,0.5)'
               }}
               transition={{ duration: 2 }}
             >

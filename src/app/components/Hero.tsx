@@ -18,51 +18,25 @@ export function Hero() {
   const umbrellaScale = useTransform(scrollYProgress, [0, 0.3], [0.8, 1]);
   const textOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
 
-  // Cinemagraph: slow Ken Burns-style scale on bg, subtle drift
   const bgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.18]);
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '-8%']);
-  // Vignette darkens as you scroll — deepens the cinematic feel
   const vignetteOpacity = useTransform(scrollYProgress, [0, 0.6], [0.45, 0.75]);
-
-  const bgImage = "/media/magic/brent-umbrella-beach.jpg";
 
   return (
     <div ref={containerRef} className="relative h-[150vh] w-full">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-slate-900">
 
-        {/* Cinemagraph: Color background with breathing scale + parallax drift */}
+        {/* Hero background image */}
         <motion.div
-          className="absolute inset-0 bg-cover bg-center brightness-75"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            scale: bgScale,
-            y: bgY,
-          }}
-          // Gentle idle breathing — kept very subtle so it reads as atmosphere
-          animate={{
-            filter: [
-              'brightness(0.72) saturate(1.0)',
-              'brightness(0.78) saturate(1.08)',
-              'brightness(0.72) saturate(1.0)',
-            ],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        {/* Grayscale layer — top half where it's raining */}
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center filter grayscale contrast-125 brightness-50"
-          style={{
-            backgroundImage: `url(${bgImage})`,
-            clipPath: `inset(0 0 ${100 - 58}% 0)`,
-            scale: bgScale,
-            y: bgY,
-          }}
-        />
+          className="absolute inset-0 overflow-hidden"
+          style={{ scale: bgScale, y: bgY }}
+        >
+          <img
+            src="/media/hero-fairy-luau.jpg"
+            alt="Sunset luau performance with stilt-walking fairy and casino tables"
+            className="absolute inset-0 w-full h-full object-cover brightness-90"
+          />
+        </motion.div>
 
         {/* Rain Effect */}
         <motion.div style={{ opacity: rainOpacity }} className="absolute inset-0 z-10">
@@ -79,7 +53,7 @@ export function Hero() {
           }}
         />
 
-        {/* Soft warm rim light — glow under the umbrella */}
+        {/* Soft warm rim light */}
         <div
           className="absolute inset-0 z-[12] pointer-events-none"
           style={{
@@ -93,7 +67,6 @@ export function Hero() {
           <motion.div
             style={{ scale: umbrellaScale }}
             className="w-full max-w-7xl relative"
-            // Very subtle sway — cinemagraph motion on the umbrella itself
             animate={{ rotate: [-0.4, 0.4, -0.4] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           >

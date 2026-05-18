@@ -24,8 +24,18 @@ export default function Magic() {
       {/* HERO with video background */}
       <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
-          <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
-            <source src="https://video.wixstatic.com/video/786ca7_ab5822b51f864540a16e455d368a2a0a/480p/mp4/file.mp4?fileUsed=false" type="video/mp4" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            disablePictureInPicture
+            controls={false}
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          >
+            <source src="/media/video/girl-moving-balloons-source.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
         </motion.div>

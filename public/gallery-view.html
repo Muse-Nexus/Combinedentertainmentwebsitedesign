@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body style="background: #222; color: white; font-family: sans-serif; padding: 20px;">
+  <h2>Brenton Photos</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px;" id="brenton"></div>
+  <h2>Strolling Photos</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px;" id="strolling"></div>
+  <script>
+    const brentonFiles = ['crowd-1.jpg', 'crowd-2.jpg', 'crowd-3.jpg', 'magic-1.jpg', 'magic-2.jpg', 'gameshow-1.jpg', 'gameshow-2.jpg'];
+    const strollingFiles = ['rainbow-clown-stilts.jpg', 'portrait.jpg', 'superhero-stilts.jpg', 'fire-dancing.jpg', 'moth-costume.jpg', 'silver-white-stilt.jpg'];
+    
+    brentonFiles.forEach(f => {
+      document.getElementById('brenton').innerHTML += `<div style="text-align:center"><img src="/media/brenton/${f}" style="height:250px; object-fit:contain; background:#000;" /><br/><small>${f}</small></div>`;
+    });
+    strollingFiles.forEach(f => {
+      document.getElementById('strolling').innerHTML += `<div style="text-align:center"><img src="/media/strolling/${f}" style="height:250px; object-fit:contain; background:#000;" /><br/><small>${f}</small></div>`;
+    });
+  </script>
+</body>
+</html>

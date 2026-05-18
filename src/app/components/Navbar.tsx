@@ -35,14 +35,8 @@ export function Navbar() {
            <img src="/media/logos/Horizontal White Raining Entertainment Secondary Logo.png" alt="Raining Entertainment" className="h-8 md:h-10 w-auto" />
         </Link>
 
-        {/* Desktop Nav - Using Compact UmbrellaNav if scrolled or not home */}
-        <div className="hidden md:flex flex-1 justify-center">
-            {(!isHome || scrolled) && (
-                <div className="w-[600px]">
-                    <UmbrellaNav compact />
-                </div>
-            )}
-        </div>
+        {/* Desktop Nav - hidden: persistent UmbrellaNav from App.tsx replaces the inline menu */}
+        <div className="hidden md:flex flex-1 justify-center" />
 
         {/* Desktop Utility Links */}
         <div className="hidden md:flex items-center gap-6 text-white">

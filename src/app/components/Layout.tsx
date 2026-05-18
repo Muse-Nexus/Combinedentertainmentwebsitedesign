@@ -9,9 +9,11 @@ interface LayoutProps {
 
 export function Layout({ children, title }: LayoutProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-900 text-white font-sans">
+    <div className="flex flex-col min-h-screen text-white font-sans">
       <Navbar />
-      <main className="flex-grow pt-48">
+      {/* Transparent spacer so persistent umbrella has clear air at top */}
+      <div className="pt-48" aria-hidden="true" />
+      <main className="flex-grow bg-slate-900">
         {children}
       </main>
       <Footer />
