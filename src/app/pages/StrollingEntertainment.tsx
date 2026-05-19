@@ -288,7 +288,7 @@ function FloatingGirl() {
   if (ACTIVE_VARIANT !== 'float-center') return null;
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 10 }} aria-hidden="true">
-      <AlphaVideoPlayer frameCount={96} fps={12} width={720} height={1280} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ height: '92vh', width: 'auto', opacity: 0.9 }} />
+      <AlphaVideoPlayer src="/media/video/girl-moving-balloons-alpha.webm" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ height: '92vh', width: 'auto', opacity: 0.9 }} />
     </div>
   );
 }
