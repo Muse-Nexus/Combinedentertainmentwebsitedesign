@@ -285,10 +285,26 @@ function EditToolbar({ editMode, onToggle, onReset }: { editMode: boolean; onTog
 
 // ── Floating girl ──────────────────────────────────────────────────────────
 function FloatingGirl() {
-  if (ACTIVE_VARIANT !== 'float-center') return null;
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 10 }} aria-hidden="true">
-      <AlphaVideoPlayer src="/media/video/girl-moving-balloons-alpha.webm" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ height: '92vh', width: 'auto', opacity: 0.9 }} />
+    <div
+      className="fixed inset-0 pointer-events-none overflow-hidden flex items-start justify-center"
+      style={{ zIndex: 9999 }}
+      aria-hidden="true"
+    >
+      <video
+        src="/media/video/girl-moving-balloons-source.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100vh',
+          width: 'auto',
+          height: 'auto',
+          display: 'block',
+        }}
+      />
     </div>
   );
 }
