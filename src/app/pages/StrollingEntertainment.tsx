@@ -292,7 +292,7 @@ function FloatingGirl() {
       aria-hidden="true"
     >
       <video
-        src="/media/video/girl-moving-balloons-source.mp4"
+        src="/media/video/jolie-balloons-alpha.webm"
         autoPlay
         loop
         muted
