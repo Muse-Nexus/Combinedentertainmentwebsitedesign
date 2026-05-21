@@ -172,14 +172,19 @@ export const UmbrellaNav = ({ className = '', compact = false, displayWidth = UM
           {sections.map((s) => {
             const midDeg = 180 - (s.panelIdx + 0.5) * (180 / 7);
             const rad = (midDeg * Math.PI) / 180;
+            // Labels follow a *dome* arc (apex up at the center) instead of
+            // the canopy's bottom rim, which would read as a U. Same
+            // horizontal span as the canopy, but inverted vertically so
+            // STROLLING/MAGIC sit higher than CORPORATE/GAMESHOW.
+            const LABEL_CY = 360;
+            const LABEL_RY = -170; // negative → midpoint lifted upward
             const F = 0.86;
             const x = CX + F * RX * Math.cos(rad);
-            const y = CY + F * RY * Math.sin(rad);
-            // Rotate each label so its baseline is tangent to the canopy
-            // arc at this point. Tangent (left→right reading direction) is
-            // (RX·sin d, −RY·cos d), so the angle is atan2(−RY·cos, RX·sin).
+            const y = LABEL_CY + F * LABEL_RY * Math.sin(rad);
+            // Tangent to the dome arc in left→right reading direction:
+            // d/d(-θ) of (RX cosθ, LABEL_RY sinθ) = (RX sinθ, −LABEL_RY cosθ).
             const tangentDeg =
-              (Math.atan2(-RY * Math.cos(rad), RX * Math.sin(rad)) * 180) /
+              (Math.atan2(-LABEL_RY * Math.cos(rad), RX * Math.sin(rad)) * 180) /
               Math.PI;
             const isHover = hoveredId === s.id;
             return (
