@@ -77,7 +77,10 @@ const sections: Section[] = [
 ];
 
 // Shared label font size (px in SVG user units; SVG scales with the umbrella).
-const LABEL_FONT_SIZE = 36;
+// Tuned down from a chunkier original so the words read clearly at every
+// responsive width without overrunning their wedge.
+const LABEL_FONT_SIZE = 28;
+const LABEL_LETTER_SPACING = 2;
 
 export const UmbrellaNav = ({ className = '', compact = false, displayWidth = UMBRELLA_DISPLAY_WIDTH, revealText = false }: UmbrellaNavProps) => {
   const navigate = useNavigate();
@@ -148,30 +151,48 @@ export const UmbrellaNav = ({ className = '', compact = false, displayWidth = UM
             />
           )}
         </AnimatePresence>
-      </svg>
 
-      {/* Animated text overlay. Umbrella_text.png is the curved arc of
-          labels (white on transparent), authored at the same width as
-          the umbrella photo so it overlays 1:1. Fades + rises in once
-          `revealText` flips true — typically once the umbrella has
-          arrived at the top of the page. */}
-      <motion.img
-        src="/media/umbrella-text.png"
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute left-0 top-0 w-full h-auto select-none"
-        initial={false}
-        animate={
-          revealText
-            ? { opacity: 1, y: 0, scale: 1 }
-            : { opacity: 0, y: -12, scale: 0.99 }
-        }
-        transition={{
-          opacity: { duration: 0.9, ease: 'easeOut' },
-          y:       { duration: 1.0, ease: [0.2, 0.8, 0.2, 1] },
-          scale:   { duration: 1.0, ease: [0.2, 0.8, 0.2, 1] },
-        }}
-      />
+        {/* Inline-SVG text overlay. Replaces the old raster umbrella-text.png:
+            stays crisp at any size, lighter weight, and the wording matches
+            the 7 wedge hit boxes exactly. Fades + rises in once `revealText`
+            flips true (typically when the umbrella has arrived). */}
+        <motion.g
+          initial={false}
+          animate={
+            revealText
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: -14 }
+          }
+          transition={{
+            opacity: { duration: 0.9, ease: 'easeOut' },
+            y:       { duration: 1.0, ease: [0.2, 0.8, 0.2, 1] },
+          }}
+          style={{ pointerEvents: 'none' }}
+        >
+          {sections.map((s, i) => {
+            const p = labelAt(s.panelIdx, 0.86);
+            const isHover = hoveredId === s.id;
+            return (
+              <text
+                key={s.id}
+                x={p.x}
+                y={p.y}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="#ffffff"
+                fontSize={LABEL_FONT_SIZE}
+                fontWeight={800}
+                letterSpacing={LABEL_LETTER_SPACING}
+                fontFamily="'Inter','Helvetica Neue',Arial,sans-serif"
+                filter="url(#umbrella-label-shadow)"
+                style={{ opacity: isHover ? 1 : 0.92, transition: 'opacity 180ms ease' }}
+              >
+                {s.label}
+              </text>
+            );
+          })}
+        </motion.g>
+      </svg>
     </div>
   );
 };
