@@ -51,20 +51,16 @@ const DEFAULT_CONFIG: PageConfig = {
   subheadJolie: 'Rainbow stilts, fire fans, costumed characters — Jolie transforms any venue into a spectacle people talk about for years.',
   brentonPhotos: [
     { id: 'b1', src: '/media/brenton/gameshow-crowd.jpg', alt: 'Brenton running walk-around gameshow for huge Lahaina street crowd' },
-    { id: 'b2', src: '/media/brenton/gameshow-1.jpg', alt: 'Brenton hosting Halloween street gameshow with costumed crowd in Lahaina' },
-    { id: 'b3', src: '/media/brenton/crowd-2.jpg', alt: 'Brenton with crowd at outdoor event' },
-    { id: 'b4', src: '/media/brenton/magic-1.jpg', alt: 'Brenton performing close-up magic for a family at a restaurant table' },
-    { id: 'b5', src: '/media/brenton/table-magic.jpg', alt: 'Brenton performing close-up magic at restaurant table' },
-    { id: 'b6', src: '/media/brenton/lawn-magic.jpg', alt: 'Brenton producing fire at outdoor gala' },
-    { id: 'b7', src: '/media/brenton/balloon-crew.jpg', alt: 'Full crew with giant balloon sculptures on stilts' },
+    { id: 'b2', src: '/media/brenton/patriotic-stilt.jpg', alt: 'Jolie on stilts in patriotic stars & stripes costume at Maui resort' },
+    { id: 'b3', src: '/media/brenton/lawn-magic.jpg', alt: 'Brenton producing fire at outdoor gala' },
+    { id: 'b4', src: '/media/brenton/brent-fire-portrait.png', alt: 'Magic Brent fire portrait' },
   ],
   joliePhotos: [
     { id: 'j1', src: '/media/strolling/clown-stilt-rainbow.jpg', alt: 'Rainbow clown stilt performer with kids' },
-    { id: 'j2', src: '/media/brenton/patriotic-stilt.jpg', alt: 'Jolie on stilts in patriotic stars & stripes costume at Maui resort' },
-    { id: 'j3', src: '/media/strolling/superhero-stilt.jpg', alt: 'Superhero stilt costume at corporate event' },
-    { id: 'j4', src: '/media/strolling/fire-dancing.jpg', alt: 'Fire dancer performing at luau' },
-    { id: 'j5', src: '/media/strolling/moth-stilt-costume.jpg', alt: 'Moth fairy stilt costume at festival' },
-    { id: 'j6', src: '/media/strolling/silver-white-stilt.jpg', alt: 'Elegant silver stilt costume at wedding' },
+    { id: 'j2', src: '/media/strolling/fire-dancing.jpg', alt: 'Fire dancer performing at luau' },
+    { id: 'j3', src: '/media/strolling/moth-stilt-costume.jpg', alt: 'Moth fairy stilt costume at festival' },
+    { id: 'j4', src: '/media/strolling/silver-white-stilt.jpg', alt: 'Elegant silver stilt costume at wedding' },
+    { id: 'j5', src: '/media/brenton/table-magic.jpg', alt: 'Brenton performing close-up magic at restaurant table' },
   ],
 };
 
