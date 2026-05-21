@@ -40,12 +40,14 @@ const labelAt = (i: number, factor = 0.78) => {
 };
 
 const labelRotation = (i: number) => {
-  // Tangent to the dome arc at the wedge midpoint.
+  // Tangent to the dome arc at the wedge midpoint, oriented left→right
+  // (the direction text is read), so labels sit upright along the curve.
   const midDeg = 180 - (i + 0.5) * (180 / 7);
   const rad = (midDeg * Math.PI) / 180;
-  // d/dθ of (RX cosθ, LABEL_RY sinθ) = (-RX sinθ, LABEL_RY cosθ)
-  const tx = -RX * Math.sin(rad);
-  const ty = LABEL_RY * Math.cos(rad);
+  // As we sweep θ from π → 0, x increases. d/d(-θ) of (RX cosθ, LABEL_RY sinθ)
+  // = (RX sinθ, -LABEL_RY cosθ).
+  const tx = RX * Math.sin(rad);
+  const ty = -LABEL_RY * Math.cos(rad);
   return (Math.atan2(ty, tx) * 180) / Math.PI;
 };
 
