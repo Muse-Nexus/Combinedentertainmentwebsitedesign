@@ -68,7 +68,13 @@ const DEFAULT_CONFIG: PageConfig = {
   ],
 };
 
+// Edit mode + localStorage persistence are dev-only.
+// In production we always render DEFAULT_CONFIG so the source code is the
+// single source of truth — no stale per-browser overrides leaking through.
+const EDIT_ENABLED = import.meta.env.DEV;
+
 function loadConfig(): PageConfig {
+  if (!EDIT_ENABLED) return DEFAULT_CONFIG;
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) return { ...DEFAULT_CONFIG, ...JSON.parse(raw) };
@@ -77,6 +83,7 @@ function loadConfig(): PageConfig {
 }
 
 function saveConfig(cfg: PageConfig) {
+  if (!EDIT_ENABLED) return;
   try { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); } catch {}
 }
 
@@ -669,7 +676,7 @@ export default function StrollingEntertainment() {
   return (
     <>
       <FloatingGirl />
-      <EditToolbar editMode={editMode} onToggle={toggleEdit} onReset={resetConfig} />
+      {EDIT_ENABLED && <EditToolbar editMode={editMode} onToggle={toggleEdit} onReset={resetConfig} />}
 
       <Layout title="Strolling Entertainment">
         {/* Reserve dead-zone width for the floating Jolie on every section */}
