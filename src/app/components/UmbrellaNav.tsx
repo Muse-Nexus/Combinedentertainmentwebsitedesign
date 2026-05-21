@@ -169,14 +169,25 @@ export const UmbrellaNav = ({ className = '', compact = false, displayWidth = UM
           }}
           style={{ pointerEvents: 'none' }}
         >
-          {sections.map((s, i) => {
-            const p = labelAt(s.panelIdx, 0.86);
+          {sections.map((s) => {
+            const midDeg = 180 - (s.panelIdx + 0.5) * (180 / 7);
+            const rad = (midDeg * Math.PI) / 180;
+            const F = 0.86;
+            const x = CX + F * RX * Math.cos(rad);
+            const y = CY + F * RY * Math.sin(rad);
+            // Rotate each label so its baseline is tangent to the canopy
+            // arc at this point. Tangent (left→right reading direction) is
+            // (RX·sin d, −RY·cos d), so the angle is atan2(−RY·cos, RX·sin).
+            const tangentDeg =
+              (Math.atan2(-RY * Math.cos(rad), RX * Math.sin(rad)) * 180) /
+              Math.PI;
             const isHover = hoveredId === s.id;
             return (
               <text
                 key={s.id}
-                x={p.x}
-                y={p.y}
+                x={x}
+                y={y}
+                transform={`rotate(${tangentDeg}, ${x}, ${y})`}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#ffffff"
