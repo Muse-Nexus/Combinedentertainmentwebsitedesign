@@ -35,7 +35,7 @@ export default function Magic() {
             aria-hidden="true"
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           >
-            <source src="/media/video/girl-moving-balloons-source.mp4" type="video/mp4" />
+            <source src="/media/video/magic-brent-hero.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
         </motion.div>

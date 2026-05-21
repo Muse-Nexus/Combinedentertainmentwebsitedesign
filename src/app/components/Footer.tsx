@@ -7,7 +7,7 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="col-span-1 md:col-span-2">
-             <Link to="/" className="inline-block mb-4">
+             <Link to="/" state={{ skipAnimation: true }} className="inline-block mb-4">
                <img src="/media/logos/White Primary Logo Raining Entertainment.png" alt="Raining Entertainment" className="h-20 w-auto" />
              </Link>
              <p className="max-w-md">
@@ -53,8 +53,7 @@ export function Footer() {
         <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-sm">
           <p>&copy; {new Date().getFullYear()} Raining Entertainment. All rights reserved.</p>
           <div className="flex gap-4 mt-4 md:mt-0">
-            <Link to="/privacy" className="hover:text-white">Privacy</Link>
-            <Link to="/terms" className="hover:text-white">Terms</Link>
+            <a href="mailto:info@rainingentertainment.com" className="hover:text-white">info@rainingentertainment.com</a>
           </div>
         </div>
       </div>

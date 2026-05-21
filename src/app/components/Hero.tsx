@@ -66,7 +66,7 @@ export function Hero() {
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
           <motion.div
             style={{ scale: umbrellaScale }}
-            className="w-full max-w-7xl relative"
+            className="w-full relative"
             animate={{ rotate: [-0.4, 0.4, -0.4] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           >

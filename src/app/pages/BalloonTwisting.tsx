@@ -3,7 +3,6 @@ import { Layout } from '../components/Layout';
 import { motion, useScroll, useTransform, useInView } from 'motion/react';
 import { Palette, Sparkles, Heart, Star, Wand2, Music } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { PromoVideo } from '../components/PromoVideo';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
@@ -22,13 +21,23 @@ export default function BalloonTwisting() {
 
   return (
     <Layout title="Kids Entertainment">
-      {/* HERO — full-width image background matching Magic/Casino pattern */}
+      {/* HERO — Vimeo background video (autoplay, loop, muted) */}
       <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
-        <motion.div style={{ y: heroY }} className="absolute inset-0">
-          <img
-            src="/media/balloons/kid-panda-facepainting.jpg"
-            alt="Happy child with panda balloon and face painting by Cirque Jolie"
-            className="absolute inset-0 w-full h-full object-cover"
+        <motion.div style={{ y: heroY }} className="absolute inset-0 overflow-hidden">
+          {/* Cover-fit trick: oversize the iframe so its 16:9 video
+              fills the hero on any aspect ratio without letterboxing. */}
+          <iframe
+            src="https://player.vimeo.com/video/334597801?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&dnt=1"
+            title="Balloon twisting hero"
+            allow="autoplay; fullscreen"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            style={{
+              border: 'none',
+              width:  'max(177.78vh, 100%)',  // 16/9 of viewport height
+              height: 'max(56.25vw, 100%)',   //  9/16 of viewport width
+              minWidth: '100%',
+              minHeight: '100%',
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
         </motion.div>
@@ -53,15 +62,6 @@ export default function BalloonTwisting() {
           </motion.div>
         </div>
       </div>
-
-      {/* PROMO VIDEO */}
-      <section className="py-20 bg-slate-900">
-        <div className="container mx-auto px-4">
-          <FadeInSection className="max-w-4xl mx-auto">
-            <PromoVideo source={{ type: 'vimeo', videoId: '334597801' }} className="shadow-2xl shadow-lavender/10" />
-          </FadeInSection>
-        </div>
-      </section>
 
       {/* ABOUT JOLIE */}
       <section id="about" className="py-24 bg-slate-900">

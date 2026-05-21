@@ -25,9 +25,12 @@ export default function Casino() {
       {/* HERO */}
       <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
-          <img
-            src="/media/Casino-Night-92-1030x579.jpg"
-            alt="Casino night with balloon decor at Maui event"
+          <video
+            src="/media/video/casino-hero.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
@@ -78,8 +81,8 @@ export default function Casino() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {[
               { src: '/media/casino-gameshow/casino-craps-table.jpg', alt: 'Craps table at casino event', title: 'Craps', desc: 'The most social game in the house — the whole table cheers together.' },
-              { src: '/media/casino-gameshow/casino-blackjack.jpg', alt: 'Blackjack at Maui casino night', title: 'Blackjack', desc: 'Fast, fun, and friendly. Our dealers keep the energy high and the game moving.' },
-              { src: '/media/casino-gameshow/casino-poker-table.jpg', alt: 'Poker table at casino party', title: 'Poker', desc: 'For the strategists in the room. Texas Hold\'Em style tournament play.' },
+              { src: '/media/casino-gameshow/casino-blackjack-table.jpg', alt: 'Blackjack at Maui casino night', title: 'Blackjack', desc: 'Fast, fun, and friendly. Our dealers keep the energy high and the game moving.' },
+              { src: '/media/casino-gameshow/casino-group-photo.jpg', alt: 'Poker table at casino party', title: 'Poker', desc: 'For the strategists in the room. Texas Hold\'Em style tournament play.' },
             ].map((table, i) => (
               <FadeInSection key={i} delay={i * 0.1}>
                 <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl overflow-hidden hover:border-burgundy/30 transition-all group">

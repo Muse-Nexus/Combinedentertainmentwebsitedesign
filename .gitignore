@@ -5,4 +5,23 @@ dist/
 .env
 .env.local
 .vite/
+.vercel/
 visual-contact-sheets/
+
+# Large unused source/source-of-truth media (keep local, do not deploy)
+public/media/video/balloons_jolie_alpha.mov
+public/media/video/jolie-balloons-v2.webm
+public/media/video/jolie-balloons-v3.webm
+public/media/video/jolie-balloons-alpha.webm
+public/media/video/girl-balloons-alpha.webm
+public/media/video/girl-moving-balloons-alpha.webm
+public/media/video/girl-moving-balloons-clean.webm
+public/media/video/*-proof.png
+public/media/video/*-storyboard.jpg
+
+# Dev-only runtime upload dir
+public/media/uploads/
+
+# Source files
+media/*.psd
+

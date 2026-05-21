@@ -10,6 +10,8 @@ import CasinoGameshow from './pages/CasinoGameshow';
 import Casino from './pages/Casino';
 import GameShow from './pages/GameShow';
 import Corporate from './pages/Corporate';
+import FacePainting from './pages/FacePainting';
+import { UpcomingShows } from './pages/UpcomingShows';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
 import { ScrollToTop } from './components/ScrollToTop';
@@ -30,10 +32,12 @@ function App() {
         <Route path="/casino" element={<Casino />} />
         <Route path="/game-show" element={<GameShow />} />
         <Route path="/corporate" element={<Corporate />} />
+        <Route path="/face-painting" element={<FacePainting />} />
         
         {/* Info Pages */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/upcoming-shows" element={<UpcomingShows />} />
         
         {/* Legacy routes for backward compatibility */}
         <Route path="/service/:serviceId" element={<ServicePage />} />
