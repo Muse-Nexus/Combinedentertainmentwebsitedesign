@@ -16,6 +16,11 @@ const CY = 460;
 const RX = 465;
 const RY = 50;
 
+// Label arc is a *dome* (apex up) so labels curve like the top of the canopy,
+// not a U. Same horizontal span, but the midpoint sits HIGHER than the edges.
+const LABEL_CY = 430;
+const LABEL_RY = -70; // negative → sin(90°) lifts the middle upward
+
 const PT = Array.from({ length: 8 }, (_, i) => {
   const deg = 180 - i * (180 / 7);
   const rad = (deg * Math.PI) / 180;
@@ -26,20 +31,22 @@ const wedge = (i: number) =>
   `M ${HUB_X} ${HUB_Y} L ${PT[i].x} ${PT[i].y} ` +
   `A ${RX} ${RY} 0 0 1 ${PT[i + 1].x} ${PT[i + 1].y} Z`;
 
-const labelAt = (i: number, factor = 0.7) => {
+const labelAt = (i: number, factor = 0.78) => {
   const midDeg = 180 - (i + 0.5) * (180 / 7);
   const rad = (midDeg * Math.PI) / 180;
   const rimX = CX + RX * Math.cos(rad);
-  const rimY = CY + RY * Math.sin(rad);
+  const rimY = LABEL_CY + LABEL_RY * Math.sin(rad);
   return { x: HUB_X + factor * (rimX - HUB_X), y: HUB_Y + factor * (rimY - HUB_Y) };
 };
 
 const labelRotation = (i: number) => {
+  // Tangent to the dome arc at the wedge midpoint.
   const midDeg = 180 - (i + 0.5) * (180 / 7);
   const rad = (midDeg * Math.PI) / 180;
-  const dx = RX * Math.cos(rad);
-  const dy = CY + RY * Math.sin(rad) - HUB_Y;
-  return (Math.atan2(dx, dy) * 180) / Math.PI;
+  // d/dθ of (RX cosθ, LABEL_RY sinθ) = (-RX sinθ, LABEL_RY cosθ)
+  const tx = -RX * Math.sin(rad);
+  const ty = LABEL_RY * Math.cos(rad);
+  return (Math.atan2(ty, tx) * 180) / Math.PI;
 };
 
 interface Section {
