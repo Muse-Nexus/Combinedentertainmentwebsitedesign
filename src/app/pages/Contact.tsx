@@ -27,18 +27,33 @@ interface FormData {
   date: string;
   type: string;
   guests: string;
+  venue: string;
   message: string;
 }
 
 export function Contact() {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<FormData>();
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 5000);
+  const onSubmit = async (data: FormData) => {
+    setError(null);
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? 'Something went wrong');
+      }
+      setSubmitted(true);
+      reset();
+      setTimeout(() => setSubmitted(false), 6000);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to send. Please try again.');
+    }
   };
 
   const contactInfo = [
@@ -177,9 +192,19 @@ export function Contact() {
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-6 p-4 rounded-xl bg-sage/20 border border-sage/40 text-sage"
+                        className="mb-6 p-4 rounded-xl bg-green-900/30 border border-green-500/40 text-green-400"
                       >
-                        Thanks for reaching out! We'll get back to you within 24 hours.
+                        ✅ Thanks for reaching out! We'll get back to you within 24 hours.
+                      </motion.div>
+                    )}
+
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-6 p-4 rounded-xl bg-red-900/30 border border-red-500/40 text-red-400"
+                      >
+                        ❌ {error}
                       </motion.div>
                     )}
 
@@ -232,42 +257,51 @@ export function Contact() {
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                           >
                             <option value="">Select type...</option>
-                            <option value="kids-party">Kids Birthday Party</option>
-                            <option value="magic">Magic Show</option>
-                            <option value="gameshow">Game Show</option>
-                            <option value="casino">Casino Night</option>
-                            <option value="strolling">Strolling Entertainment</option>
-                            <option value="balloon-decor">Balloon Decor</option>
-                            <option value="corporate">Corporate Event</option>
-                            <option value="wedding">Wedding</option>
-                            <option value="combo">Custom Package</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="Corporate">Corporate Event</option>
+                            <option value="Birthday">Birthday Party</option>
+                            <option value="Luau">Luau</option>
+                            <option value="Private Party">Private Party</option>
+                            <option value="Festival">Festival</option>
+                            <option value="Other">Other</option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-semibold text-slate-300">Expected Guests</label>
                           <input
+                            type="number"
                             {...register('guests')}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
-                            placeholder="Approx. number"
+                            placeholder="e.g. 150"
                           />
                         </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-300">Venue / Location</label>
+                        <input
+                          {...register('venue')}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                          placeholder="e.g. Four Seasons Maui, private residence..."
+                        />
                       </div>
 
                       <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-300">Tell Us About Your Event</label>
                         <textarea
                           {...register('message')}
-                          rows={5}
+                          rows={4}
                           className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all resize-none"
-                          placeholder="Date, venue, theme, entertainment ideas — the more detail, the better!"
+                          placeholder="What kind of entertainment are you looking for? Any special requests?"
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-4 bg-coral hover:bg-coral/85 text-white font-bold rounded-xl text-lg transition-colors shadow-lg shadow-coral/20"
+                        disabled={isSubmitting}
+                        className="w-full py-4 rounded-xl bg-coral hover:bg-coral/90 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold text-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                       >
-                        Send Inquiry
+                        {isSubmitting ? 'Sending…' : 'Request a Quote'}
                       </button>
                     </form>
                   </div>
