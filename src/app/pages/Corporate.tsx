@@ -38,8 +38,8 @@ const services = [
   },
   {
     icon: Sparkles,
-    title: 'Strolling Entertainment',
-    description: 'Stilt walkers, fire dancers, close-up magic, and balloon artistry. Eye-catching performers who mingle with your guests.',
+    title: 'Stilt & Ambient Performers',
+    description: 'Stilt walkers and costumed ambient characters who add wonder and photo moments. Eye-catching performers who mingle with your guests.',
     image: '/media/strolling/moth-stilt-costume.jpg',
     link: '/strolling',
   },

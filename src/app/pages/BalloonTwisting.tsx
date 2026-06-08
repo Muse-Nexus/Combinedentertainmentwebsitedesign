@@ -53,7 +53,7 @@ export default function BalloonTwisting() {
               <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Children&rsquo;s Magic</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
-              Cirque Jolie&rsquo;s 30-minute interactive children&rsquo;s magic show, professional face painting, and balloon twisting &mdash; keeping young children delighted and entertained at parties across Maui.
+              Cirque Jolie has a professional team of face painters and balloon twisters &mdash; plus a 30-minute interactive children&rsquo;s magic show &mdash; keeping young children delighted and entertained at parties across Maui.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/contact" className="px-8 py-4 bg-lavender hover:bg-lavender/80 text-white font-bold rounded-full transition-all shadow-lg shadow-lavender/25 hover:shadow-lavender/40 hover:scale-105">Book Kids Entertainment</Link>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence, useMotionValueEvent, MotionValue } from 'motion/react';
 import { RainEffect } from './RainEffect';
 import { UmbrellaNav } from './UmbrellaNav';
+import { BalloonCluster } from './BalloonCluster';
 import { ArrowDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import confetti from 'canvas-confetti';
@@ -279,7 +280,6 @@ const DiscoveryScene = ({
 
   // Instruction
   const instructOpacity = useTransform(progress, [DISC_INSTRUCT_IN[0], DISC_INSTRUCT_IN[1]], [0, 1], { clamp: true });
-  const instructY       = useTransform(progress, [DISC_INSTRUCT_IN[0], DISC_INSTRUCT_IN[1]], [20, 0], { clamp: true });
 
   // Fire confetti once we cross the trigger point.
   useMotionValueEvent(progress, 'change', (p) => {
@@ -344,19 +344,16 @@ const DiscoveryScene = ({
           ))}
         </div>
 
-        {/* Passive scroll-to-continue instruction (NOT a button) */}
+        {/* Passive scroll-to-continue cue (arrow only, pinned to bottom) */}
         <motion.div
-          style={{ opacity: instructOpacity, y: instructY }}
-          className="mt-12 flex flex-col items-center gap-3 text-slate-700"
+          style={{ opacity: instructOpacity }}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center text-slate-700 pointer-events-none z-[60]"
         >
-          <span className="text-sm md:text-base font-bold uppercase tracking-[0.3em]">
-            Scroll to continue
-          </span>
           <motion.span
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <ArrowDown className="w-5 h-5" />
+            <ArrowDown className="w-6 h-6" />
           </motion.span>
         </motion.div>
       </div>
@@ -553,6 +550,8 @@ export const LandingPage = () => {
             className="flex justify-center pointer-events-none origin-top" 
         >
             <div className="relative pointer-events-auto drop-shadow-2xl">
+               <BalloonCluster side="left" className="hidden lg:block absolute left-[-3%] xl:left-[1%] bottom-[8%] w-[6vw] max-w-[110px] z-10" />
+               <BalloonCluster side="right" className="hidden lg:block absolute right-[-3%] xl:right-[1%] bottom-[8%] w-[6vw] max-w-[110px] z-10" />
                <UmbrellaNav revealText={revealText} />
                <AnimatePresence>
                  {isMiracle && (

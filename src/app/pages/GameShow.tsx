@@ -144,7 +144,7 @@ export default function GameShow() {
             {[
               { icon: <Tv className="w-8 h-8" />, title: 'Full Production', desc: 'Real podiums, buzzers, lights, music, and a professional host. This is the real deal.' },
               { icon: <Users className="w-8 h-8" />, title: 'Fully Customized', desc: 'Questions written specifically for your group, celebrant, or company culture.' },
-              { icon: <Mic className="w-8 h-8" />, title: 'High-Energy Host', desc: 'Brenton Keith has 25+ years of comedy and crowd work — your guests are in great hands.' },
+              { icon: <Mic className="w-8 h-8" />, title: 'High-Energy Host', desc: 'Brenton Keith has 30+ years of comedy and crowd work — your guests are in great hands.' },
               { icon: <Zap className="w-8 h-8" />, title: 'Turn-Key Setup', desc: 'We bring everything — you just bring your people.' },
               { icon: <Trophy className="w-8 h-8" />, title: 'Team Building', desc: 'Perfect for corporate groups — collaborative, competitive, and laugh-out-loud fun.' },
               { icon: <Star className="w-8 h-8" />, title: 'Maui\'s Only Mobile Show', desc: 'Hawaii\'s premiere portable game show experience. There\'s nothing else like it.' },
@@ -199,7 +199,7 @@ export default function GameShow() {
               { src: '/media/499547445_1232949328832793_5242943925623788269_n.jpg', alt: 'Game show nite crowd interaction' },
               { src: '/media/casino-gameshow/gameshow-outdoor-fullset.jpg', alt: 'Full game show outdoor setup at night' },
               { src: '/media/488251977_1193147566146303_4577536044659466625_n.jpg', alt: 'Brenton Keith hosting game show on Maui' },
-              { src: '/media/502549410_10164120360868825_1880458003759888586_n.jpg', alt: 'Game show podium action shot' },
+              { src: '/media/casino-gameshow/gameshow-indoor-teams.jpg', alt: 'Game show teams competing indoors at Maui event' },
               { src: '/media/magic/brent-jolie-stage.jpg', alt: 'Brenton and Jolie onstage together' },
             ].map((img, i) => (
               <FadeInSection key={i} delay={i * 0.07}>

@@ -22,7 +22,7 @@ interface UmbrellaNavProps {
 
 // ── SINGLE PLACE TO RESIZE THE UMBRELLA ───────────────────────────────────
 // Change this value to scale the umbrella nav everywhere it is rendered.
-export const UMBRELLA_DISPLAY_WIDTH = 'min(96vw, 1400px)';
+export const UMBRELLA_DISPLAY_WIDTH = 'min(90vw, 1180px)';
 
 // ─── Geometry overlay for /media/umbrella-photo.png (2417×1278) ──────────────
 const HUB_X = 1240;
@@ -32,8 +32,12 @@ const CY = 270;
 const RX = 1180;
 const RY = 230;
 
-const PT = Array.from({ length: 8 }, (_, i) => {
-  const deg = 180 - i * (180 / 7);
+// Number of canopy wedges = number of nav sections. Kept as a single constant
+// so the hit boxes, labels, and arc maths all stay in sync if sections change.
+const SEGMENTS = 6;
+
+const PT = Array.from({ length: SEGMENTS + 1 }, (_, i) => {
+  const deg = 180 - i * (180 / SEGMENTS);
   const rad = (deg * Math.PI) / 180;
   return { x: CX + RX * Math.cos(rad), y: CY + RY * Math.sin(rad) };
 });
@@ -50,7 +54,7 @@ const wedge = (i: number) =>
 // Labels sit along the bottom edge of the front canopy (horizontal, no rotation).
 // Factor pulls them slightly inward from the rim so they sit ON the canopy fabric.
 const labelAt = (i: number, factor = 0.88) => {
-  const midDeg = 180 - (i + 0.5) * (180 / 7);
+  const midDeg = 180 - (i + 0.5) * (180 / SEGMENTS);
   const rad = (midDeg * Math.PI) / 180;
   return {
     x: CX + factor * RX * Math.cos(rad),
@@ -66,14 +70,15 @@ interface Section {
 }
 
 // Single-line labels keep the text horizontal along the canopy edge.
+// Corporate lives in the standard top-nav menu instead of the umbrella.
+// STILT sits in the central canopy wedge.
 const sections: Section[] = [
-  { id: 'corporate',          label: 'CORPORATE',     route: '/corporate',        panelIdx: 0 },
-  { id: 'balloons-facepaint', label: 'BALLOONS',      route: '/balloon-twisting', panelIdx: 1 },
-  { id: 'balloon-decor',      label: 'DECOR',         route: '/balloon-decor',    panelIdx: 2 },
-  { id: 'strolling',          label: 'STROLLING',     route: '/strolling',        panelIdx: 3 },
-  { id: 'magic',              label: 'MAGIC',         route: '/magic',            panelIdx: 4 },
-  { id: 'casino',             label: 'CASINO',        route: '/casino',           panelIdx: 5 },
-  { id: 'gameshow',           label: 'GAMESHOW',      route: '/game-show',        panelIdx: 6 },
+  { id: 'balloons-facepaint', label: 'BALLOONS',      route: '/balloon-twisting', panelIdx: 0 },
+  { id: 'balloon-decor',      label: 'DECOR',         route: '/balloon-decor',    panelIdx: 1 },
+  { id: 'strolling',          label: 'STILT',         route: '/strolling',        panelIdx: 2 },
+  { id: 'magic',              label: 'MAGIC',         route: '/magic',            panelIdx: 3 },
+  { id: 'casino',             label: 'CASINO',        route: '/casino',           panelIdx: 4 },
+  { id: 'gameshow',           label: 'GAMESHOW',      route: '/game-show',        panelIdx: 5 },
 ];
 
 // Shared label font size (px in SVG user units; SVG scales with the umbrella).
@@ -170,7 +175,7 @@ export const UmbrellaNav = ({ className = '', compact = false, displayWidth = UM
           style={{ pointerEvents: 'none' }}
         >
           {sections.map((s) => {
-            const midDeg = 180 - (s.panelIdx + 0.5) * (180 / 7);
+            const midDeg = 180 - (s.panelIdx + 0.5) * (180 / SEGMENTS);
             const rad = (midDeg * Math.PI) / 180;
             // Labels follow a *dome* arc (apex up at the center) instead of
             // the canopy's bottom rim, which would read as a U. Same

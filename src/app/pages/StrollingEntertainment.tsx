@@ -60,7 +60,6 @@ const DEFAULT_CONFIG: PageConfig = {
     { id: 'j2', src: '/media/strolling/fire-dancing.jpg', alt: 'Fire dancer performing at luau' },
     { id: 'j3', src: '/media/strolling/moth-stilt-costume.jpg', alt: 'Moth fairy stilt costume at festival' },
     { id: 'j4', src: '/media/strolling/silver-white-stilt.jpg', alt: 'Elegant silver stilt costume at wedding' },
-    { id: 'j5', src: '/media/brenton/table-magic.jpg', alt: 'Brenton performing close-up magic at restaurant table' },
   ],
 };
 
@@ -621,10 +620,12 @@ function EditToolbar({ editMode, onToggle, onReset }: { editMode: boolean; onTog
 }
 
 // ── Floating girl ──────────────────────────────────────────────────────────
+// Stilt-walker cinemagraph, anchored off to the right edge (no longer centered).
+// Demo placement — sits as a side accent rather than dominating the page.
 function FloatingGirl() {
   return (
     <div
-      className="fixed inset-0 pointer-events-none overflow-hidden flex items-start justify-center"
+      className="fixed inset-0 pointer-events-none overflow-hidden flex items-end justify-end"
       style={{ zIndex: 9999 }}
       aria-hidden="true"
     >
@@ -634,12 +635,12 @@ function FloatingGirl() {
         loop
         muted
         playsInline
+        className="h-[78vh] md:h-[88vh]"
         style={{
-          height: '100vh',
           width: 'auto',
-          maxWidth: '95vw',
+          maxWidth: '55vw',
           display: 'block',
-          transform: 'translateX(-6vw)',
+          transform: 'translateX(10vw)',
         }}
       />
     </div>
@@ -674,7 +675,7 @@ export default function StrollingEntertainment() {
       <FloatingGirl />
       {EDIT_ENABLED && <EditToolbar editMode={editMode} onToggle={toggleEdit} onReset={resetConfig} />}
 
-      <Layout title="Strolling Entertainment">
+      <Layout title="Stilt & Ambient Performers">
         {/* Reserve dead-zone width for the floating Jolie on every section */}
         <div style={{ ['--jolie-w' as any]: JOLIE_W }}>
 
@@ -684,19 +685,19 @@ export default function StrollingEntertainment() {
             className="relative z-20"
             left={
               <FadeInSection className="md:text-left">
-                <p className="text-coral/80 uppercase tracking-[0.3em] text-xs font-bold mb-4">Maui · Walk-Around · Stilts · Fire</p>
+                <p className="text-coral/80 uppercase tracking-[0.3em] text-xs font-bold mb-4">Maui · Stilts · Ambient · Walk-Around · Fire</p>
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95]">
-                  Strolling<br /><span className="text-coral">Entertainment</span>
+                  Stilt &amp; Ambient<br /><span className="text-coral">Performers</span>
                 </h1>
               </FadeInSection>
             }
             right={
               <FadeInSection delay={0.1} className="md:text-right">
                 <p className="text-lg md:text-xl text-gray-300 mb-8">
-                  The magic that moves through the crowd — stilt walkers, fire dancers, close-up magicians, and walk-around gameshows that turn your event into a memory.
+                  The magic that moves through the crowd — towering stilt walkers and costumed ambient characters that turn your event into a spectacle people talk about for years.
                 </p>
                 <Link to="/contact" className="inline-block px-8 py-3.5 bg-coral text-white font-bold rounded-full hover:bg-coral/80 transition-all shadow-xl hover:scale-105">
-                  Book Strolling Entertainment
+                  Book Stilt &amp; Ambient Performers
                 </Link>
               </FadeInSection>
             }
@@ -715,32 +716,6 @@ export default function StrollingEntertainment() {
               left={
                 <div className="space-y-4">
                   <FadeInSection className="md:text-left">
-                    <p className="text-coral uppercase tracking-[0.25em] text-xs font-bold mb-2">Magic Brent</p>
-                    <EditableText value={config.headlineBrenton} onChange={v => update({ headlineBrenton: v })} editMode={editMode} as="h2" className="text-3xl md:text-4xl font-bold mb-3 text-white leading-tight" />
-                    <EditableText value={config.subheadBrenton} onChange={v => update({ subheadBrenton: v })} editMode={editMode} className="text-gray-400 text-base" />
-                  </FadeInSection>
-                  {config.brentonPhotos.slice(0, 5).map((item, i) => (
-                    <FadeInSection key={item.id} delay={i * 0.05}>
-                      <SortablePhoto item={item} editMode={false} />
-                    </FadeInSection>
-                  ))}
-                  <FadeInSection delay={0.2}>
-                    <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
-                      <div className="text-4xl mb-3">🎮</div>
-                      <h3 className="text-xl font-bold mb-2 text-white">Gameshow Fanatics</h3>
-                      <p className="text-gray-400 text-sm mb-4">
-                        Walk-around gameshow with portable podium, buzzers, and Brenton as your roving host — no stage needed.
-                      </p>
-                      <Link to="/game-show" className="inline-block px-5 py-2.5 bg-coral text-white font-bold rounded-full hover:bg-coral/80 transition-all text-sm">
-                        See Gameshow →
-                      </Link>
-                    </div>
-                  </FadeInSection>
-                </div>
-              }
-              right={
-                <div className="space-y-4">
-                  <FadeInSection className="md:text-right">
                     <p className="text-lavender uppercase tracking-[0.25em] text-xs font-bold mb-2">Cirque Jolie</p>
                     <EditableText value={config.headlineJolie} onChange={v => update({ headlineJolie: v })} editMode={editMode} as="h2" className="text-3xl md:text-4xl font-bold mb-3 text-white leading-tight" />
                     <EditableText value={config.subheadJolie} onChange={v => update({ subheadJolie: v })} editMode={editMode} className="text-gray-400 text-base" />
@@ -752,6 +727,7 @@ export default function StrollingEntertainment() {
                   ))}
                 </div>
               }
+              right={<div aria-hidden="true" />}
             />
           )}
         </section>
@@ -797,10 +773,10 @@ export default function StrollingEntertainment() {
                 <div className="relative bg-gradient-to-br from-coral to-burgundy md:rounded-l-[2rem] rounded-[2rem] md:rounded-r-none p-10 md:p-12 h-full">
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white leading-tight">Make Your Event Unforgettable</h2>
                   <p className="text-white/90 mb-6">
-                    Stilt walkers, fire dancers, strolling magicians — tell us your vision and we'll match the perfect performers.
+                    Stilt walkers and ambient characters — tell us your vision and we'll match the perfect performers.
                   </p>
                   <Link to="/contact" className="inline-block px-8 py-3.5 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">
-                    Book Strolling Entertainment
+                    Book Stilt &amp; Ambient Performers
                   </Link>
                 </div>
               </FadeInSection>
@@ -813,6 +789,12 @@ export default function StrollingEntertainment() {
                   <a href="tel:8088702102" className="inline-block px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/10 transition-all">
                     (808) 870-2102
                   </a>
+                  <p className="text-white/80 text-sm mt-6">
+                    Looking for fire &amp; LED, characters, or other extras?{' '}
+                    <Link to="/additional-services" className="underline font-semibold hover:text-white">
+                      See add-ons &amp; à la carte →
+                    </Link>
+                  </p>
                 </div>
               </FadeInSection>
             }

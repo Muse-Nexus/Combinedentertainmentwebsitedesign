@@ -142,7 +142,7 @@ export default function Casino() {
               { icon: <Users className="w-8 h-8" />, title: 'Professional Dealers', desc: 'Trained entertainers who know how to keep energy high and every guest involved.' },
               { icon: <Trophy className="w-8 h-8" />, title: 'Real Prizes', desc: 'Top chip holders win real prizes. It makes the competition real and the fun even better.' },
               { icon: <Zap className="w-8 h-8" />, title: 'Full Setup', desc: 'We bring the tables, chips, decor, sound, and lighting. You just bring your guests.' },
-              { icon: <Star className="w-8 h-8" />, title: '25+ Years Experience', desc: 'Brenton has been entertaining Maui for over 25 years. You\'re in the best hands.' },
+              { icon: <Star className="w-8 h-8" />, title: '30+ Years Experience', desc: 'Brenton has been entertaining Maui for over 30 years. You\'re in the best hands.' },
               { icon: <Heart className="w-8 h-8" />, title: 'All Skill Levels Welcome', desc: 'First-timers and veterans alike — our dealers guide everyone through the fun.' },
               { icon: <Dice5 className="w-8 h-8" />, title: 'Island-Wide Coverage', desc: 'Based on Maui, available across all Hawaiian islands for the right event.' },
             ].map((item, i) => (
@@ -155,6 +155,17 @@ export default function Casino() {
               </FadeInSection>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* DISCLAIMER */}
+      <section className="py-10 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection>
+            <p className="max-w-3xl mx-auto text-center text-gray-500 text-sm leading-relaxed">
+              All casino games are for entertainment purposes only &mdash; no real-money gambling. Guests play with complimentary chips for prizes; there are no cash buy-ins and no cash payouts.
+            </p>
+          </FadeInSection>
         </div>
       </section>
 

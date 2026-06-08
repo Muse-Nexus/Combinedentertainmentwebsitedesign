@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { UmbrellaNav } from './UmbrellaNav';
 import { RainEffect } from './RainEffect';
+import { BalloonCluster } from './BalloonCluster';
 import { ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,6 +36,7 @@ export function Hero() {
             src="/media/hero-fairy-luau.jpg"
             alt="Sunset luau performance with stilt-walking fairy and casino tables"
             className="absolute inset-0 w-full h-full object-cover brightness-90"
+            style={{ objectPosition: '50% 30%' }}
           />
         </motion.div>
 
@@ -66,11 +68,14 @@ export function Hero() {
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
           <motion.div
             style={{ scale: umbrellaScale }}
-            className="w-full relative"
+            className="w-full relative flex items-center justify-center"
             animate={{ rotate: [-0.4, 0.4, -0.4] }}
             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           >
+            {/* Balloon bookends — flank the umbrella on wider screens */}
+            <BalloonCluster side="left" className="hidden lg:block absolute left-[2%] xl:left-[5%] bottom-[6%] w-[7vw] max-w-[120px] z-10" />
             <UmbrellaNav />
+            <BalloonCluster side="right" className="hidden lg:block absolute right-[2%] xl:right-[5%] bottom-[6%] w-[7vw] max-w-[120px] z-10" />
           </motion.div>
 
           <motion.div

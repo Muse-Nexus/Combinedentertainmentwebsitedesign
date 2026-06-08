@@ -27,6 +27,7 @@ interface FormData {
   date: string;
   type: string;
   guests: string;
+  kids: string;
   message: string;
 }
 
@@ -236,7 +237,7 @@ export function Contact() {
                             <option value="magic">Magic Show</option>
                             <option value="gameshow">Game Show</option>
                             <option value="casino">Casino Night</option>
-                            <option value="strolling">Strolling Entertainment</option>
+                            <option value="strolling">Stilt &amp; Ambient Performers</option>
                             <option value="balloon-decor">Balloon Decor</option>
                             <option value="corporate">Corporate Event</option>
                             <option value="wedding">Wedding</option>
@@ -251,6 +252,15 @@ export function Contact() {
                             placeholder="Approx. number"
                           />
                         </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-300">Of Those, How Many Kids?</label>
+                        <input
+                          {...register('kids')}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
+                          placeholder="Approx. number of children"
+                        />
                       </div>
 
                       <div className="space-y-2">

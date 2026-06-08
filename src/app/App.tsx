@@ -11,6 +11,7 @@ import Casino from './pages/Casino';
 import GameShow from './pages/GameShow';
 import Corporate from './pages/Corporate';
 import FacePainting from './pages/FacePainting';
+import AdditionalServices from './pages/AdditionalServices';
 import { UpcomingShows } from './pages/UpcomingShows';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
@@ -33,6 +34,7 @@ function App() {
         <Route path="/game-show" element={<GameShow />} />
         <Route path="/corporate" element={<Corporate />} />
         <Route path="/face-painting" element={<FacePainting />} />
+        <Route path="/additional-services" element={<AdditionalServices />} />
         
         {/* Info Pages */}
         <Route path="/about" element={<About />} />

@@ -24,9 +24,10 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link to="/balloon-twisting" className="hover:text-burgundy transition-colors">Balloon Twisting & Facepainting</Link></li>
               <li><Link to="/balloon-decor" className="hover:text-coral transition-colors">Balloon Decor</Link></li>
-              <li><Link to="/strolling" className="hover:text-cream transition-colors">Strolling Entertainment</Link></li>
+              <li><Link to="/strolling" className="hover:text-cream transition-colors">Stilt & Ambient Performers</Link></li>
               <li><Link to="/magic" className="hover:text-sage transition-colors">Magic</Link></li>
               <li><Link to="/casino-gameshow" className="hover:text-lavender transition-colors">Casino & Gameshow</Link></li>
+              <li><Link to="/additional-services" className="hover:text-coral transition-colors">Additional & À La Carte</Link></li>
             </ul>
           </div>
 

@@ -50,7 +50,7 @@ export default function Magic() {
               <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Maui Magician</span>
               <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Comedy Magic &amp; Entertainment for Hire</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">Hawaii magician astonishing the islands for over 25 years. Shows that are big on comedy, high on energy, and large on interaction &mdash; with family-friendly jokes and laughs for all ages.</p>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">Hawaii magician astonishing the islands for over 30 years. Tens of thousands of shows that are big on comedy, high on interaction &mdash; with family-friendly jokes and laughs for all ages.</p>
             <div className="flex flex-wrap gap-4">
               <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Magic Brent</Link>
               <a href="#about" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Learn More</a>
@@ -67,7 +67,7 @@ export default function Magic() {
               <div className="relative">
                 <img src="/media/magic/brent-umbrella-beach.jpg" alt="Brenton Keith on the beach with cards raining down" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/5]" />
                 <div className="absolute -bottom-6 -left-6 bg-coral text-white px-6 py-4 rounded-2xl shadow-xl">
-                  <div className="text-3xl font-black">25+</div>
+                  <div className="text-3xl font-black">30+</div>
                   <div className="text-sm font-medium opacity-90">Years of Magic</div>
                 </div>
               </div>
@@ -81,10 +81,50 @@ export default function Magic() {
               <div className="flex flex-wrap gap-3">
                 <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Magic Castle Alum</span>
                 <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Wizardz Magic Theatre</span>
-                <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">25+ Years on Maui</span>
+                <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">30+ Years on Maui</span>
               </div>
             </FadeInSection>
           </div>
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF */}
+      <section className="py-20 bg-slate-950">
+        <div className="container mx-auto px-4">
+          <FadeInSection className="text-center mb-12">
+            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Recognition &amp; Credentials</p>
+            <h2 className="text-4xl md:text-5xl font-bold">Trusted Across Hawaii</h2>
+          </FadeInSection>
+
+          {/* Credential badges */}
+          <FadeInSection>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-12">
+              {[
+                { icon: <Award className="w-8 h-8" />, label: 'Maui\u2019s Funniest Comedian', sub: 'Voted by Maui Time Readers' },
+                { icon: <Star className="w-8 h-8" />, label: 'Magic Castle Alum', sub: 'Hollywood, CA' },
+                { icon: <Users className="w-8 h-8" />, label: 'Tens of Thousands of Shows', sub: 'Across All Islands' },
+                { icon: <Wand2 className="w-8 h-8" />, label: 'Longest-Running', sub: 'Active Magic Show on Maui' },
+              ].map((cred, i) => (
+                <div key={i} className="text-center bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6">
+                  <div className="text-coral mb-3 flex justify-center">{cred.icon}</div>
+                  <p className="font-bold text-white text-sm mb-1">{cred.label}</p>
+                  <p className="text-gray-500 text-xs">{cred.sub}</p>
+                </div>
+              ))}
+            </div>
+          </FadeInSection>
+
+          {/* Pull quote */}
+          <FadeInSection delay={0.2}>
+            <div className="max-w-3xl mx-auto text-center">
+              <Quote className="w-10 h-10 text-coral/30 mx-auto mb-6" />
+              <p className="text-2xl md:text-3xl text-gray-300 italic leading-relaxed mb-6">&ldquo;Brenton is a complete natural and knows how to keep the audience on their toes and entertained! He really cares about the success of each event.&rdquo;</p>
+              <div>
+                <p className="text-coral font-bold">Josh Desilva</p>
+                <p className="text-gray-500 text-sm">Desilva Meeting Consultants</p>
+              </div>
+            </div>
+          </FadeInSection>
         </div>
       </section>
 
@@ -128,7 +168,7 @@ export default function Magic() {
                 <div>
                   <div className="flex items-center gap-3 mb-4"><MapPin className="w-5 h-5 text-coral" /><p className="text-coral font-semibold tracking-widest uppercase text-sm">Weekly Residency</p></div>
                   <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Mulligan&rsquo;s on the Blue<span className="text-coral"> Magic Show</span></h2>
-                  <p className="text-lg text-gray-300 leading-relaxed mb-6">Every Thursday night, Brent takes over Mulligan&rsquo;s on the Blue in Wailea for a family-friendly comedy magic extravaganza. It&rsquo;s the longest-running magic show on Maui.</p>
+                  <p className="text-lg text-gray-300 leading-relaxed mb-6">Every Thursday night, Brent takes over Mulligan&rsquo;s on the Blue in Wailea for a family-friendly comedy magic extravaganza. It&rsquo;s the longest-running active magic show on Maui.</p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-gray-300"><Clock className="w-5 h-5 text-coral shrink-0" /><span>Showtime: 6:30pm, with close-up tableside magic starting around 5:30pm</span></div>
                     <div className="flex items-center gap-3 text-gray-300"><MapPin className="w-5 h-5 text-coral shrink-0" /><span>Mulligan&rsquo;s on the Blue, Wailea</span></div>
@@ -187,46 +227,6 @@ export default function Magic() {
               {['Birthdays', '1st Birthday Luaus', 'Corporate Events', 'Maui Weddings', 'Walk-Around Magic', 'Cocktail Hours', 'Resort Entertainment', 'Private Luaus', 'Holiday Parties', 'Fundraisers', 'School Events', 'Restaurant Shows'].map((event, i) => (
                 <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-5 py-2.5 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all duration-300 cursor-default">{event}</span>
               ))}
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* SOCIAL PROOF */}
-      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
-        <div className="container mx-auto px-4">
-          <FadeInSection className="text-center mb-16">
-            <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Recognition &amp; Credentials</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Trusted Across Hawaii</h2>
-          </FadeInSection>
-
-          {/* Credential badges */}
-          <FadeInSection>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
-              {[
-                { icon: <Award className="w-8 h-8" />, label: 'Best Comedian on Maui', sub: 'Maui Time Weekly 2019' },
-                { icon: <Star className="w-8 h-8" />, label: 'Magic Castle Alum', sub: 'Hollywood, CA' },
-                { icon: <Users className="w-8 h-8" />, label: 'Thousands of Shows', sub: 'Across All Islands' },
-                { icon: <Wand2 className="w-8 h-8" />, label: 'Longest-Running', sub: 'Live Magic Show on Maui' },
-              ].map((cred, i) => (
-                <div key={i} className="text-center bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6">
-                  <div className="text-coral mb-3 flex justify-center">{cred.icon}</div>
-                  <p className="font-bold text-white text-sm mb-1">{cred.label}</p>
-                  <p className="text-gray-500 text-xs">{cred.sub}</p>
-                </div>
-              ))}
-            </div>
-          </FadeInSection>
-
-          {/* Pull quote */}
-          <FadeInSection delay={0.2}>
-            <div className="max-w-3xl mx-auto text-center">
-              <Quote className="w-10 h-10 text-coral/30 mx-auto mb-6" />
-              <p className="text-2xl md:text-3xl text-gray-300 italic leading-relaxed mb-6">&ldquo;Brenton is a complete natural and knows how to keep the audience on their toes and entertained! He really cares about the success of each event.&rdquo;</p>
-              <div>
-                <p className="text-coral font-bold">Josh Desilva</p>
-                <p className="text-gray-500 text-sm">Desilva Meeting Consultants</p>
-              </div>
             </div>
           </FadeInSection>
         </div>
