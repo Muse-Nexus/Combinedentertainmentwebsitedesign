@@ -10,19 +10,38 @@ declare global {
 }
 
 const CONSENT_STORAGE_KEY = 'raining.analytics-consent.v1';
+const CAMPAIGN_PARAMETERS = [
+  'utm_id',
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_source_platform',
+  'utm_term',
+  'utm_content',
+  'utm_creative_format',
+  'utm_marketing_tactic',
+  'gclid',
+  'dclid',
+  'gbraid',
+  'wbraid',
+  'srsltid',
+] as const;
 const measurementId = String(import.meta.env.VITE_GOOGLE_ANALYTICS_ID ?? '').trim();
 
 export const isGoogleAnalyticsConfigured = /^G-[A-Z0-9]+$/i.test(measurementId);
 
 let initializationPromise: Promise<void> | null = null;
 let consentDefaultsSet = false;
+let runtimeConsent: AnalyticsConsent = null;
 
 function ensureGtagQueue() {
   window.dataLayer = window.dataLayer ?? [];
   window.gtag =
     window.gtag ??
-    function gtag(...args: unknown[]) {
-      window.dataLayer?.push(args);
+    function gtag(..._args: unknown[]) {
+      // Google’s loader consumes the Arguments object used by its canonical
+      // bootstrap snippet, rather than a rest-parameter Array.
+      window.dataLayer?.push(arguments);
     };
 }
 
@@ -43,16 +62,19 @@ export function initializeConsentMode() {
 
 export function getStoredAnalyticsConsent(): AnalyticsConsent {
   if (!isGoogleAnalyticsConfigured) return null;
+  if (runtimeConsent) return runtimeConsent;
 
   try {
     const stored = window.localStorage.getItem(CONSENT_STORAGE_KEY);
-    return stored === 'granted' || stored === 'denied' ? stored : null;
+    runtimeConsent = stored === 'granted' || stored === 'denied' ? stored : null;
+    return runtimeConsent;
   } catch {
-    return null;
+    return runtimeConsent;
   }
 }
 
 function persistConsent(consent: Exclude<AnalyticsConsent, null>) {
+  runtimeConsent = consent;
   try {
     window.localStorage.setItem(CONSENT_STORAGE_KEY, consent);
   } catch {
@@ -143,10 +165,34 @@ export function trackAnalyticsEvent(name: string, parameters: AnalyticsParameter
   window.gtag?.('event', name, parameters);
 }
 
-export function trackPageView(path: string, title: string, referrer?: string) {
+export function buildAnalyticsLocation(path: string, search = '') {
+  const incoming = new URLSearchParams(search);
+  const allowed = new URLSearchParams();
+
+  CAMPAIGN_PARAMETERS.forEach((name) => {
+    const value = incoming.get(name)?.trim();
+    if (value) allowed.set(name, value.slice(0, 240));
+  });
+
+  const query = allowed.toString();
+  return `${window.location.origin}${path}${query ? `?${query}` : ''}`;
+}
+
+export function sanitizeAnalyticsReferrer(referrer: string) {
+  if (!referrer) return undefined;
+
+  try {
+    const url = new URL(referrer);
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    return undefined;
+  }
+}
+
+export function trackPageView(path: string, search: string, title: string, referrer?: string) {
   trackAnalyticsEvent('page_view', {
     page_title: title,
-    page_location: `${window.location.origin}${path}`,
+    page_location: buildAnalyticsLocation(path, search),
     page_path: path,
     page_referrer: referrer,
   });

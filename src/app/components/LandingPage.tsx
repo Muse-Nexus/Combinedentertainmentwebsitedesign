@@ -208,7 +208,7 @@ function Sun({ active, mobile }: { active: boolean; mobile: boolean }) {
 
 function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: boolean }) {
   const opacity = useTransform(progress, [0, 0.08, 0.82, 0.98], [0, 1, 1, 0]);
-  const x = useTransform(progress, [0, 1], mobile ? ['-130%', '130%'] : ['-120%', '120%']);
+  const x = useTransform(progress, [0, 1], mobile ? ['-160%', '160%'] : ['-120%', '120%']);
   const scale = useTransform(progress, [0.1, 0.5, 0.9], [1, mobile ? 1.08 : 1.16, 1]);
 
   return (
@@ -230,7 +230,7 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
             WebkitMaskImage:
               'radial-gradient(ellipse 66% 56% at 50% 50%, black 0%, rgba(0,0,0,.96) 36%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.24) 72%, transparent 90%)',
           }}
-          className={`${mobile ? 'w-[240%] opacity-90 blur-[10px]' : 'w-[205%] opacity-95 blur-[12px]'} absolute h-auto max-w-none object-contain mix-blend-screen`}
+          className={`${mobile ? 'h-[120svh] w-auto opacity-90 blur-[10px]' : 'h-auto w-[205%] opacity-95 blur-[12px]'} absolute max-w-none object-contain mix-blend-screen`}
         />
       </motion.div>
     </motion.div>

@@ -48,6 +48,14 @@ export function Privacy() {
                 to decline stops future events and removes the site’s accessible Google Analytics cookies.
               </p>
               <p className="mt-3">
+                The site stores your choice locally under{' '}
+                <code className="rounded bg-white/10 px-1.5 py-0.5">raining.analytics-consent.v1</code>{' '}
+                as either “granted” or “denied” so it can remember the preference. That entry contains
+                no contact details or unique user identifier. Campaign parameters such as UTM tags or a
+                Google click identifier may be included in the landing-page event for attribution; all
+                other query-string fields are discarded before analytics receives the page location.
+              </p>
+              <p className="mt-3">
                 Learn more in{' '}
                 <a
                   className="font-semibold text-white underline underline-offset-4"

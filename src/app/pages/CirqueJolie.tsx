@@ -70,7 +70,7 @@ export default function CirqueJolie() {
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
-                to="/contact"
+                to="/contact?service=combo"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-lavender px-7 py-3.5 font-bold text-slate-950 transition hover:bg-lavender/80"
               >
                 Plan Your Event <ArrowRight className="h-5 w-5" />
@@ -156,7 +156,7 @@ export default function CirqueJolie() {
           </p>
           <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
             <Link
-              to="/contact"
+              to="/contact?service=combo"
               className="rounded-full bg-white px-8 py-4 font-bold text-burgundy transition hover:bg-white/90"
             >
               Request a Custom Quote

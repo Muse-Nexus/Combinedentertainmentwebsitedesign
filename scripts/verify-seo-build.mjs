@@ -76,11 +76,13 @@ for (const route of INDEXED_ROUTES) {
   assert(html.includes('id="raining-structured-data"'), `Missing structured data for ${route}`);
   assert(!html.includes('Combined Entertainment Website Design'), `Generic title leaked into ${route}`);
   assert(sitemap.includes(`<loc>${canonical}</loc>`), `Sitemap is missing ${route}`);
-  if (googleSiteVerification) {
+  if (indexableBuild && googleSiteVerification) {
     assert(
       html.includes(`name="google-site-verification" content="${googleSiteVerification}"`),
       `Missing Google site verification for ${route}`,
     );
+  } else if (!indexableBuild) {
+    assert(!html.includes('name="google-site-verification"'), `Verification token leaked into preview route ${route}`);
   }
 }
 
@@ -98,6 +100,9 @@ for (const route of NOINDEX_ROUTES) {
   assert(html.includes(`rel="canonical" href="${absoluteUrl(route)}"`), `Missing canonical for ${route}`);
   assert(!html.includes('id="raining-structured-data"'), `Noindex route ${route} must not emit structured data`);
   assert(!sitemap.includes(`<loc>${absoluteUrl(route)}</loc>`), `Noindex route ${route} leaked into sitemap`);
+  if (!indexableBuild) {
+    assert(!html.includes('name="google-site-verification"'), `Verification token leaked into preview route ${route}`);
+  }
 }
 
 for (const redirect of config.redirects || []) {

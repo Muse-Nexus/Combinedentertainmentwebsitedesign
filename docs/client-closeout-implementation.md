@@ -45,6 +45,7 @@ No production deployment, external form submission, analytics-provider activatio
 - Responsive checks pass at 360, 390, 768, 1024, 1280, and 1440 CSS pixels. Tablets use the focused one-card discovery sequence; the complete seven-card sequence is legible from 1024px upward.
 - The cloud wipe was inspected at multiple scroll positions after moving the feather mask onto the traveling image; no viewport-sized crop edge remains.
 - With a dummy local GA4 stream ID, the browser recorded no Google script before consent, one consent update after opt-in, and exactly one manual `page_view` for each tested SPA route.
+- The final analytics QA also confirmed Google-compatible `Arguments` queue entries, a safe campaign-parameter allowlist with arbitrary query fields removed, and `service_cta_click` firing for explicit service-booking links but not generic Contact navigation.
 - Gallery lightboxes open from the keyboard, trap focus, close with Escape, restore focus, and restore body scrolling.
 - `/contact?service=led-performers` preselects LED Performers; an unknown service leaves the form unselected.
 - `/additional-services` resolves to the current contact page in the application, and the build verifier confirms the hosting redirect is not shadowed by generated HTML.

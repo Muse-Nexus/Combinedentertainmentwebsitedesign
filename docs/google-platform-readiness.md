@@ -11,6 +11,7 @@ Status: code wired and live consoles audited; new-brand provider setup, collecti
 - Optional Search Console HTML-tag verification via `VITE_GOOGLE_SITE_VERIFICATION`.
 - Consent-gated GA4 via `VITE_GOOGLE_ANALYTICS_ID`. No Google network script loads before consent.
 - Manual SPA `page_view` plus `service_cta_click`, `generate_lead`, `contact_click`, and `social_click` events.
+- Landing-page attribution preserves a bounded allowlist of UTM and Google click parameters while discarding all other query fields; generic Contact navigation is excluded from the service-CTA event.
 - Inquiry analytics contain only the selected service and lead source—never name, email, phone, message, event date, or other form content.
 - `generate_lead` fires only on the API's HTTP 201 Airtable-write success; the bot-honeypot HTTP 202 acknowledgement is deliberately excluded.
 - Google Consent Mode v2 defaults all four storage/user-data choices to denied. Accepting optional analytics grants only `analytics_storage`; advertising storage, advertising user data, personalization, and Google signals remain denied.

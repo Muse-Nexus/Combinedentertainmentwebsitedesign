@@ -85,7 +85,9 @@ export function RouteHead() {
       });
     });
 
-    const structuredData = knownMetadata ? createStructuredData(knownMetadata) : null;
+    const structuredData = knownMetadata && !metadata.robots?.includes('noindex')
+      ? createStructuredData(knownMetadata)
+      : null;
     if (structuredData) {
       const script = upsertElement<HTMLScriptElement>(
         'script#raining-structured-data',

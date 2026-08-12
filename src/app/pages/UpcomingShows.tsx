@@ -230,7 +230,7 @@ export function UpcomingShows() {
                 Most of Brenton&rsquo;s shows are private events &mdash; corporate parties, weddings, birthday luaus, and more.
               </p>
               <p className="text-gray-500 mb-6">Want your own show? Let&rsquo;s talk.</p>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all hover:scale-105">
+              <Link to="/contact?service=magic" className="inline-flex items-center gap-2 px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all hover:scale-105">
                 Book a Private Show
               </Link>
             </div>
@@ -251,7 +251,7 @@ export function UpcomingShows() {
                 </p>
                 <p className="text-white/70 mb-10">Based on Maui &bull; brentonkeith@magicbrent.com &bull; (808) 870-2102</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Your Show</Link>
+                  <Link to="/contact?service=magic" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Your Show</Link>
                   <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
                 </div>
               </div>

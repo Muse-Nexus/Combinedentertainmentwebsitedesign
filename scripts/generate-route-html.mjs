@@ -46,7 +46,7 @@ function renderManagedHead(metadata, { indexable = indexableBuild } = {}) {
     '      <meta data-raining-head="true" name="theme-color" content="#020617" />',
   ];
 
-  if (googleSiteVerification) {
+  if (indexableBuild && googleSiteVerification) {
     lines.push(
       `      <meta name="google-site-verification" content="${escapeHtml(googleSiteVerification)}" />`,
     );

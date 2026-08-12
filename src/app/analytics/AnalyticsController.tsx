@@ -1,35 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
+  buildAnalyticsLocation,
   denyAnalytics,
   enableAnalytics,
   getStoredAnalyticsConsent,
   initializeConsentMode,
   isGoogleAnalyticsConfigured,
+  sanitizeAnalyticsReferrer,
   trackAnalyticsEvent,
   trackPageView,
   type AnalyticsConsent,
 } from './googleAnalytics';
-
-const servicePaths = new Set([
-  '/balloon-twisting',
-  '/balloon-decor',
-  '/strolling',
-  '/led-performers',
-  '/magic',
-  '/casino',
-  '/game-show',
-  '/corporate',
-  '/face-painting',
-  '/cirque-jolie',
-  '/shows/mulligans-magic-show',
-]);
-
-function inferService(pathname: string) {
-  if (pathname === '/') return 'home';
-  if (servicePaths.has(pathname)) return pathname.slice(1).replaceAll('/', ':');
-  return 'site';
-}
 
 function networkFromHostname(hostname: string) {
   if (hostname.includes('instagram.com')) return 'instagram';
@@ -46,7 +28,7 @@ export function AnalyticsController() {
   const [preferencesOpen, setPreferencesOpen] = useState(
     isGoogleAnalyticsConfigured && consent === null,
   );
-  const previousLocation = useRef(document.referrer || undefined);
+  const previousLocation = useRef(sanitizeAnalyticsReferrer(document.referrer));
 
   useEffect(() => {
     if (!isGoogleAnalyticsConfigured) return;
@@ -66,22 +48,21 @@ export function AnalyticsController() {
   useEffect(() => {
     if (consent !== 'granted') return;
 
-    // Never forward arbitrary query strings to analytics. They can contain
-    // accidental contact details, and route-level reporting only needs paths.
     const path = location.pathname;
+    const search = location.search;
     let cancelled = false;
     enableAnalytics().then(() => {
       window.requestAnimationFrame(() => {
         if (cancelled) return;
-        trackPageView(path, document.title, previousLocation.current);
-        previousLocation.current = `${window.location.origin}${path}`;
+        trackPageView(path, search, document.title, previousLocation.current);
+        previousLocation.current = buildAnalyticsLocation(path, search);
       });
     });
 
     return () => {
       cancelled = true;
     };
-  }, [consent, location.pathname]);
+  }, [consent, location.pathname, location.search]);
 
   useEffect(() => {
     if (consent !== 'granted') return;
@@ -123,9 +104,14 @@ export function AnalyticsController() {
         return;
       }
 
-      if (destination.origin === window.location.origin && destination.pathname === '/contact') {
+      const service = destination.searchParams.get('service');
+      if (
+        service &&
+        destination.origin === window.location.origin &&
+        destination.pathname === '/contact'
+      ) {
         trackAnalyticsEvent('service_cta_click', {
-          service: destination.searchParams.get('service') || inferService(window.location.pathname),
+          service,
           destination_path: '/contact',
           page_path: pagePath,
         });

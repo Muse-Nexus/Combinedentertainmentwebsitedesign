@@ -89,7 +89,7 @@ export default function CasinoGameshow() {
 
           <div className="mt-12 text-center">
             <Link
-              to="/contact"
+              to="/contact?service=combo"
               className="inline-flex rounded-full bg-white px-8 py-4 font-bold text-slate-950 transition-transform hover:scale-105"
             >
               Ask Brenton Which Service Fits
