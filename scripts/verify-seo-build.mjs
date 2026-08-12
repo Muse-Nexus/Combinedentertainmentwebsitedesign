@@ -24,6 +24,11 @@ function assert(condition, message) {
 const sitemap = await readFile(path.join(distDir, 'sitemap.xml'), 'utf8');
 const robots = await readFile(path.join(distDir, 'robots.txt'), 'utf8');
 const config = JSON.parse(await readFile(path.join(projectRoot, 'vercel.json'), 'utf8'));
+const sitemapRoutes = new Set(
+  [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) =>
+    new URL(match[1]).pathname.replace(/\/$/, '') || '/',
+  ),
+);
 
 assert(
   robots.includes(`Sitemap: ${SITE.origin}/sitemap.xml`),
@@ -31,6 +36,11 @@ assert(
 );
 assert(config.cleanUrls === true, 'vercel.json must enable cleanUrls for generated route HTML');
 assert(!config.rewrites?.length, 'vercel.json must not contain a catch-all SPA rewrite');
+assert(
+  sitemapRoutes.size === INDEXED_ROUTES.length &&
+    INDEXED_ROUTES.every((route) => sitemapRoutes.has(route)),
+  'Sitemap must contain exactly the indexed canonical routes with no stale extras',
+);
 
 for (const route of INDEXED_ROUTES) {
   const metadata = getRouteMetadata(route);
@@ -46,6 +56,17 @@ for (const route of INDEXED_ROUTES) {
   assert(html.includes('id="raining-structured-data"'), `Missing structured data for ${route}`);
   assert(!html.includes('Combined Entertainment Website Design'), `Generic title leaked into ${route}`);
   assert(sitemap.includes(`<loc>${canonical}</loc>`), `Sitemap is missing ${route}`);
+}
+
+for (const redirect of config.redirects || []) {
+  const shadowPath = outputPathForRoute(redirect.source);
+  let shadowExists = true;
+  try {
+    await access(shadowPath);
+  } catch {
+    shadowExists = false;
+  }
+  assert(!shadowExists, `Redirect ${redirect.source} is shadowed by generated HTML`);
 }
 
 const notFound = await readFile(path.join(distDir, '404.html'), 'utf8');

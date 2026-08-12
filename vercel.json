@@ -13,7 +13,8 @@
     { "source": "/service/gameshow", "destination": "/game-show", "permanent": true },
     { "source": "/service/casino", "destination": "/casino", "permanent": true },
     { "source": "/service/kids-circus", "destination": "/cirque-jolie", "permanent": true },
-    { "source": "/service/corporate", "destination": "/corporate", "permanent": true }
+    { "source": "/service/corporate", "destination": "/corporate", "permanent": true },
+    { "source": "/additional-services", "destination": "/contact", "permanent": true }
   ],
   "headers": [
     {

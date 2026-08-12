@@ -48,7 +48,7 @@ export default function Casino() {
               Blackjack, Poker, Craps, and Roulette &mdash; led by fun-loving, professional dealers. It is all for entertainment purposes only, with no real-money gambling.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-burgundy hover:bg-burgundy/80 text-white font-bold rounded-full transition-all shadow-lg shadow-burgundy/25 hover:shadow-burgundy/40 hover:scale-105">Book Casino NITE</Link>
+              <Link to="/contact?service=casino" className="px-8 py-4 bg-burgundy hover:bg-burgundy/80 text-white font-bold rounded-full transition-all shadow-lg shadow-burgundy/25 hover:shadow-burgundy/40 hover:scale-105">Book Casino NITE</Link>
               <a href="#tables" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">See the Tables</a>
             </div>
           </motion.div>
@@ -86,7 +86,7 @@ export default function Casino() {
               { src: '/media/casino-gameshow/casino-craps-table.jpg', alt: 'Craps table at casino event', title: 'Craps', desc: 'The most social game in the house — the whole table cheers together.' },
               { src: '/media/casino-gameshow/casino-blackjack-table.jpg', alt: 'Blackjack at Maui Casino NITE', title: 'Blackjack', desc: 'Fast, fun, and friendly. Our dealers keep the energy high and the game moving.' },
               { src: '/media/casino-nite/roulette-action-maui.webp', alt: 'Roulette table at a Maui Casino NITE event', title: 'Roulette', desc: 'A classic crowd favorite with colorful chips, quick rounds, and plenty of suspense.' },
-              { src: '/media/casino-gameshow/casino-group-photo.jpg', alt: 'Poker table at casino party', title: 'Poker', desc: 'For the strategists in the room. Texas Hold\'Em style tournament play.' },
+              { src: '/media/client-selected/casino/christmas-poker-table.webp', alt: 'Octagonal poker table decorated for Christmas with a holiday tree at a Maui Casino NITE party', title: 'Poker', desc: 'For the strategists in the room. Texas Hold\'Em style tournament play.' },
             ].map((table, i) => (
               <FadeInSection key={i} delay={i * 0.1}>
                 <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl overflow-hidden hover:border-burgundy/30 transition-all group">
@@ -227,7 +227,7 @@ export default function Casino() {
                 </p>
                 <p className="text-white/70 mb-10">Based on Maui &bull; Available on Oahu, Kauai &amp; Big Island</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact" className="px-10 py-4 bg-white text-burgundy font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Get a Custom Quote</Link>
+                  <Link to="/contact?service=casino" className="px-10 py-4 bg-white text-burgundy font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Get a Custom Quote</Link>
                   <a href="#tables" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">Explore the Tables</a>
                 </div>
               </div>

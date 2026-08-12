@@ -120,7 +120,7 @@ export const LATEST_MOMENTS_FALLBACK: LatestMoment[] = [
     caption: 'A roaming spectacle guests cannot help but follow.',
     href: 'https://www.instagram.com/cirquejolie/',
     account: '@cirquejolie',
-    service: 'Costumed Stilt Walking',
+    service: 'Stilt Walkers',
   },
 ];
 

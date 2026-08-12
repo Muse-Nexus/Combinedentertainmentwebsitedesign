@@ -45,7 +45,7 @@ export default function Magic() {
             </h1>
             <p className="text-lg md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">Hawaii magician astonishing the islands for over 30 years. Tens of thousands of shows that are big on comedy, high on interaction &mdash; with family-friendly jokes and laughs for all ages.</p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Brenton Keith &amp; His Bag O&rsquo; Tricks</Link>
+              <Link to="/contact?service=magic" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Brenton Keith &amp; His Bag O&rsquo; Tricks</Link>
               <a href="#about" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Learn More</a>
             </div>
           </motion.div>
@@ -236,7 +236,7 @@ export default function Magic() {
                 <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">Book Brenton Keith &amp; His Bag O&rsquo; Tricks for your next event &mdash; birthdays, corporate events, up-close magic, and 1st birthdays. Comedy, magic, MC &amp; DJ all rolled into one unforgettable performer.</p>
                 <p className="text-white/70 mb-10">Appearing live on Maui, Oahu, Kauai &amp; Big Island</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Brenton Keith &amp; His Bag O&rsquo; Tricks</Link>
+                  <Link to="/contact?service=magic" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Brenton Keith &amp; His Bag O&rsquo; Tricks</Link>
                   <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
                 </div>
               </div>

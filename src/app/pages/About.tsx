@@ -38,7 +38,7 @@ export function About() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection>
               <div className="relative">
-                <img src="/media/about/brent-umbrella-beach.jpg" alt="Brenton Keith on the beach" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/5]" />
+                <img src="/media/about/brent-umbrella-beach.jpg" alt="Brenton Keith on the beach" loading="lazy" decoding="async" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/5]" />
                 <div className="absolute -bottom-6 left-3 md:-left-6 bg-coral text-slate-950 px-6 py-4 rounded-2xl shadow-xl">
                   <div className="text-3xl font-black">25+</div>
                   <div className="text-sm font-medium opacity-90">Years Performing</div>
@@ -70,47 +70,32 @@ export function About() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection delay={0.2} className="md:order-2">
-              <div className="relative">
-                <img src="/media/about/jolie-strickland-portrait.webp" alt="Jolie Strickland in a colorful Cirque Jolie costume" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover object-center aspect-[4/5]" />
+              <figure className="relative">
+                <img src="/media/client-selected/about/jolie-shaka-balloon-crown.webp" alt="Jolie Strickland throwing a shaka from above a ring of colorful twisting balloons, wearing a rainbow flower crown" loading="lazy" decoding="async" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover object-center aspect-[4/3]" />
                 <div className="absolute -bottom-6 right-3 bg-lavender text-slate-950 px-6 py-4 rounded-2xl shadow-xl">
                   <div className="text-3xl font-black">20+</div>
                   <div className="text-sm font-medium opacity-90">Years as Cirque Jolie</div>
                 </div>
-              </div>
+                <figcaption className="mt-8 text-center text-sm text-gray-500">Jolie says aloha</figcaption>
+              </figure>
             </FadeInSection>
             <FadeInSection className="md:order-1">
               <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">Cirque Jolie</p>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Jolie<span className="text-lavender"> Strickland</span></h2>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                A classically trained circus performer, Jolie is Maui&rsquo;s premier stilt walker, fire dancer, and children&rsquo;s entertainer. Standing 9 feet tall on stilts and bringing any costume theme to life, she transforms events into visual spectacles.
+              Jolie is a Maui stilt walker and balloon artist. Standing 9 feet tall on stilts and bringing imaginative costume themes to life, she transforms events into visual spectacles.
               </p>
               <p className="text-gray-400 leading-relaxed mb-6">
-                Through Cirque Jolie, she offers kids&rsquo; entertainment packages featuring a 30-minute live magic show with a real bunny, professional face painting, and balloon twisting. She also runs the Balloons of Aloha community program, donating balloon d&eacute;cor to local non-profits and families in need.
+                Through Cirque Jolie, she offers professional face painting and balloon twisting for birthdays, resorts, and corporate events alike. She also runs the Balloons of Aloha community program, donating balloon d&eacute;cor to local non-profits and families in need.
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Stilt Walking</span>
-                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Fire Dancing</span>
-                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Kids Entertainment</span>
+                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Balloon Artistry</span>
+                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Face Painting</span>
                 <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Balloon D&eacute;cor</span>
               </div>
             </FadeInSection>
           </div>
-        </div>
-      </section>
-
-      {/* BRENT & JOLIE TOGETHER */}
-      <section className="py-24 bg-slate-950">
-        <div className="container mx-auto px-4">
-          <FadeInSection>
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="rounded-3xl overflow-hidden shadow-2xl shadow-coral/10">
-                <img src="/media/472753445_1039860624823457_3993024156608406927_n.jpg" alt="Brenton Keith and Jolie Strickland performing together at oceanfront Maui 4th of July event" className="w-full aspect-[4/5] object-cover" />
-              </div>
-              <div className="rounded-3xl overflow-hidden shadow-2xl shadow-lavender/10">
-                <img src="/media/598419647_1413764607417930_4065430168744957782_n.jpg" alt="Raining Entertainment Casino NITE crew posing with holiday balloon decor at a Maui venue" className="w-full aspect-[4/5] object-cover" />
-              </div>
-            </div>
-          </FadeInSection>
         </div>
       </section>
 
@@ -124,7 +109,7 @@ export function About() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { name: "Brenton Keith & His Bag O' Tricks", color: 'coral', desc: 'Comedy magic, MC & DJ services. Brenton brings the laughs, the wonder, and the energy to every event.', link: '/magic' },
-              { name: 'Cirque Jolie', color: 'lavender', desc: 'Stilt walking, fire dancing, kids entertainment, balloon twisting, face painting & balloon décor.', link: '/balloon-twisting' },
+              { name: 'Cirque Jolie', color: 'lavender', desc: 'Stilt walking, LED performance, balloon twisting, face painting & balloon décor.', link: '/balloon-twisting' },
               { name: 'Gameshow Fanatics', color: 'sage', desc: 'Full-production Game Show NITE experiences, trivia, and interactive entertainment.', link: '/game-show' },
             ].map((brand, i) => (
               <FadeInSection key={i} delay={i * 0.15}>

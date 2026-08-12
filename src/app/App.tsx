@@ -8,13 +8,13 @@ import { RouteHead } from './seo/RouteHead';
 const BalloonTwisting = lazy(() => import('./pages/BalloonTwisting'));
 const BalloonDecor = lazy(() => import('./pages/BalloonDecor'));
 const StrollingEntertainment = lazy(() => import('./pages/StrollingEntertainment'));
+const LEDPerformers = lazy(() => import('./pages/LEDPerformers'));
 const Magic = lazy(() => import('./pages/Magic'));
 const CasinoGameshow = lazy(() => import('./pages/CasinoGameshow'));
 const Casino = lazy(() => import('./pages/Casino'));
 const GameShow = lazy(() => import('./pages/GameShow'));
 const Corporate = lazy(() => import('./pages/Corporate'));
 const FacePainting = lazy(() => import('./pages/FacePainting'));
-const AdditionalServices = lazy(() => import('./pages/AdditionalServices'));
 const CirqueJolie = lazy(() => import('./pages/CirqueJolie'));
 const MulligansMagicShow = lazy(() => import('./pages/MulligansMagicShow'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -60,13 +60,13 @@ function App() {
           <Route path="/balloon-twisting" element={<BalloonTwisting />} />
           <Route path="/balloon-decor" element={<BalloonDecor />} />
           <Route path="/strolling" element={<StrollingEntertainment />} />
+          <Route path="/led-performers" element={<LEDPerformers />} />
           <Route path="/magic" element={<Magic />} />
           <Route path="/casino-gameshow" element={<CasinoGameshow />} />
           <Route path="/casino" element={<Casino />} />
           <Route path="/game-show" element={<GameShow />} />
           <Route path="/corporate" element={<Corporate />} />
           <Route path="/face-painting" element={<FacePainting />} />
-          <Route path="/additional-services" element={<AdditionalServices />} />
           <Route path="/cirque-jolie" element={<CirqueJolie />} />
 
           {/* Information and public show pages */}
@@ -87,6 +87,7 @@ function App() {
           <Route path="/service/casino" element={<Navigate to="/casino" replace />} />
           <Route path="/service/kids-circus" element={<Navigate to="/cirque-jolie" replace />} />
           <Route path="/service/corporate" element={<Navigate to="/corporate" replace />} />
+          <Route path="/additional-services" element={<Navigate to="/contact" replace />} />
 
           <Route path="*" element={<NotFound />} />
           </Routes>

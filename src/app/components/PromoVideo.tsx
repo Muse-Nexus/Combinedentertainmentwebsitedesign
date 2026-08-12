@@ -17,7 +17,7 @@ export function PromoVideo({
   source,
   className = '',
   aspectRatio = '16/9',
-  poster = '/media/hero-reigning-entertainment.webp',
+  poster = '/media/hero-real-brenton-jolie.webp',
   title = 'Play promo video',
 }: PromoVideoProps) {
   const [isMuted, setIsMuted] = useState(true);

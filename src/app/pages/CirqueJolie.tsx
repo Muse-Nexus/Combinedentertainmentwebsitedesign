@@ -1,4 +1,4 @@
-import { ArrowRight, Flame, Instagram, Palette, PartyPopper, Sparkles } from 'lucide-react';
+import { ArrowRight, Footprints, Instagram, Palette, PartyPopper, Sparkles, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 
@@ -6,7 +6,7 @@ const services = [
   {
     title: 'Balloon Twisting & Face Painting',
     description:
-      'Custom balloon creations, a lively children’s magic show and colorful party entertainment for Maui keiki celebrations.',
+      'Custom balloon creations and colorful party entertainment for Maui keiki celebrations, families, and adult events alike.',
     to: '/balloon-twisting',
     image: '/media/balloons/balloon-animals-fish-maui.webp',
     alt: 'Colorful fish balloon animals created by Cirque Jolie for a Maui party',
@@ -31,13 +31,22 @@ const services = [
     icon: Sparkles,
   },
   {
-    title: 'Costumed Stilt Walking',
+    title: 'Stilt Walkers',
     description:
-      'Nine-foot stilt characters, fire and LED performers, jugglers and themed walk-around entertainment for every age.',
+      'Nine-foot stilt characters and themed walk-around entertainment for every age.',
     to: '/strolling',
     image: '/media/strolling/cirque-jolie-balloon-creatures-maui.webp',
     alt: 'Cirque Jolie stilt performers carrying giant balloon creatures on Maui',
-    icon: Flame,
+    icon: Footprints,
+  },
+  {
+    title: 'LED Performers',
+    description:
+      'Glowing LED wing performers and ambient light shows that turn heads after dark — perfect for evening receptions and nightlife.',
+    to: '/led-performers',
+    image: '/media/client-selected/led-performers/hero-golden-wings-dusk.webp',
+    alt: 'Cirque Jolie performers in glowing golden LED wing costumes at dusk',
+    icon: Zap,
   },
 ];
 
@@ -56,8 +65,8 @@ export default function CirqueJolie() {
             </h1>
             <p className="max-w-2xl text-xl leading-relaxed text-slate-300">
               Jolie Strickland has delighted Maui audiences since her early days as Jolie the
-              Clown. Today, Cirque Jolie brings balloon artistry, face painting, children’s
-              magic, stilt walking and spectacular ambient performers to events across Hawaii.
+              Clown. Today, Cirque Jolie brings balloon artistry, face painting, stilt walking,
+              LED performance and spectacular ambient characters to events across Hawaii.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
@@ -83,7 +92,6 @@ export default function CirqueJolie() {
               src="/media/about/jolie-strickland-portrait.webp"
               alt="Jolie Strickland in a colorful Cirque Jolie costume"
               className="relative aspect-[4/3] w-full rounded-[2rem] border border-white/10 object-cover object-center shadow-2xl"
-              fetchPriority="high"
             />
           </div>
         </div>
@@ -105,13 +113,14 @@ export default function CirqueJolie() {
           </div>
 
           <div className="grid gap-7 md:grid-cols-2">
-            {services.map((service) => {
+            {services.map((service, i) => {
               const Icon = service.icon;
+              const isLastOdd = services.length % 2 === 1 && i === services.length - 1;
               return (
                 <Link
                   key={service.to}
                   to={service.to}
-                  className="group overflow-hidden rounded-3xl border border-white/10 bg-slate-900 transition hover:-translate-y-1 hover:border-lavender/50"
+                  className={`group overflow-hidden rounded-3xl border border-white/10 bg-slate-900 transition hover:-translate-y-1 hover:border-lavender/50 ${isLastOdd ? 'md:col-span-2' : ''}`}
                 >
                   <img
                     src={service.image}

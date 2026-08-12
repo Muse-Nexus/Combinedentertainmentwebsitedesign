@@ -68,7 +68,6 @@ export function SmartBackgroundVideo({
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
         loading="eager"
-        fetchPriority="high"
       />
       {nearViewport && !reduceMotion && !saveData && (!mobile || Boolean(mobileSrc)) && (
         <video

@@ -47,7 +47,7 @@ export default function GameShow() {
               Hawaii&rsquo;s completely unique, full-production mobile game show. We bring the complete television experience to your event — customized to your group, your guests, your moment.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Game Show NITE</Link>
+              <Link to="/contact?service=gameshow" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Game Show NITE</Link>
               <a href="#how-it-works" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">See How It Works</a>
             </div>
           </motion.div>
@@ -113,7 +113,7 @@ export default function GameShow() {
             <FadeInSection delay={0.1} className="order-2 md:order-1">
               <h3 className="text-3xl font-bold mb-4">Game Show LITE</h3>
               <p className="text-gray-300 leading-relaxed mb-6">
-                Game Show LITE brings the same custom hosting energy in a compact setup designed for smaller budgets and tighter spaces. It can engage anything from an intimate group to a crowd of 1,000, including a strolling format that moves through large events.
+                Game Show LITE brings the same custom hosting energy in a compact, travel-ready setup designed for smaller budgets and tighter spaces. It can engage anything from an intimate group to a crowd of 1,000 — including off-island events and a strolling format that moves through large parties.
               </p>
               <ul className="space-y-3">
                 {[
@@ -254,7 +254,7 @@ export default function GameShow() {
                 </p>
                 <p className="text-white/70 mb-10">Based on Maui &bull; Available on Oahu, Kauai &amp; Big Island</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Game Show NITE</Link>
+                  <Link to="/contact?service=gameshow" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Game Show NITE</Link>
                   <a href="https://www.instagram.com/gameshowfanatics/" target="_blank" rel="noopener noreferrer" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">See Gameshow Fanatics</a>
                 </div>
               </div>

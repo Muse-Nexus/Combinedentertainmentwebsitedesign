@@ -85,7 +85,7 @@ function mapEvent(id: string, fields: AirtableFields): ShowEvent | null {
       location: 'Maui, Hawaiʻi',
       type,
       description: 'Raining Entertainment is booked for a private celebration.',
-      image: '/media/hero-reigning-entertainment.webp',
+      image: '/media/hero-real-brenton-jolie.webp',
       tag: 'Booked',
     };
   }
@@ -104,7 +104,7 @@ function mapEvent(id: string, fields: AirtableFields): ShowEvent | null {
     price: textField(fields, 'Price') || undefined,
     description: textField(fields, 'Description') || 'More details are coming soon.',
     bookingLink: safeHttpUrl(fields['Booking URL']),
-    image: imageField(fields, 'Image') || safeHttpUrl(fields['Image URL']) || '/media/hero-fairy-luau.webp',
+    image: imageField(fields, 'Image') || safeHttpUrl(fields['Image URL']) || '/media/hero-real-brenton-jolie.webp',
     tag: textField(fields, 'Tag') || undefined,
   };
 }

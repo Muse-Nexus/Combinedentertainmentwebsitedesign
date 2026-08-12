@@ -3,6 +3,22 @@ import { useForm } from 'react-hook-form';
 import { motion, useInView } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Mail, Phone, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+
+const SERVICE_OPTIONS = [
+  ['kids-party', 'Kids Birthday Party'],
+  ['magic', 'Magic Show'],
+  ['gameshow', 'Game Show NITE'],
+  ['casino', 'Casino NITE'],
+  ['strolling', 'Stilt Walkers'],
+  ['led-performers', 'LED Performers'],
+  ['balloon-decor', 'Balloon Decor'],
+  ['balloon-animals', 'Balloon Twisting & Face Painting'],
+  ['face-painting', 'Face Painting'],
+  ['corporate', 'Corporate Event'],
+  ['wedding', 'Wedding'],
+  ['combo', 'Custom Package'],
+] as const;
 
 function FadeInSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const ref = useRef(null);
@@ -33,12 +49,17 @@ interface FormData {
 }
 
 export function Contact() {
+  const [searchParams] = useSearchParams();
+  const requestedService = searchParams.get('service') ?? '';
+  const initialService = SERVICE_OPTIONS.some(([value]) => value === requestedService)
+    ? requestedService
+    : '';
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ defaultValues: { website: '' } });
+  } = useForm<FormData>({ defaultValues: { website: '', type: initialService } });
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -309,17 +330,9 @@ export function Contact() {
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                           >
                             <option value="">Select type...</option>
-                            <option value="kids-party">Kids Birthday Party</option>
-                            <option value="magic">Magic Show</option>
-                            <option value="gameshow">Game Show NITE</option>
-                            <option value="casino">Casino NITE</option>
-                            <option value="strolling">Costumed Stilt Walking</option>
-                            <option value="balloon-decor">Balloon Decor</option>
-                            <option value="balloon-animals">Balloon Twisting</option>
-                            <option value="face-painting">Face Painting</option>
-                            <option value="corporate">Corporate Event</option>
-                            <option value="wedding">Wedding</option>
-                            <option value="combo">Custom Package</option>
+                            {SERVICE_OPTIONS.map(([value, label]) => (
+                              <option key={value} value={value}>{label}</option>
+                            ))}
                           </select>
                         </div>
                         <div className="space-y-2">

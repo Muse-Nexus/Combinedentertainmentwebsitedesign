@@ -13,12 +13,12 @@ import clsx from 'clsx';
 const services = [
   { to: '/balloon-twisting', label: 'Balloon Twisting & Face Painting' },
   { to: '/balloon-decor',    label: 'Balloon Decor' },
-  { to: '/strolling',        label: 'Costumed Stilt Walking' },
+  { to: '/strolling',        label: 'Stilt Walkers' },
+  { to: '/led-performers',   label: 'LED Performers' },
   { to: '/magic',            label: 'Magic' },
   { to: '/casino',           label: 'Casino' },
   { to: '/game-show',        label: 'Game Show NITE' },
   { to: '/corporate',        label: 'Corporate Events' },
-  { to: '/additional-services', label: 'Additional & À La Carte' },
 ];
 
 const utility = [

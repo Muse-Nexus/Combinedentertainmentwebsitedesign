@@ -27,7 +27,7 @@ export function SmartVimeoBackground({ videoId, poster, title }: SmartVimeoBackg
 
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-      <img src={poster} alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={poster} alt="" className="absolute inset-0 h-full w-full object-cover" />
       {desktop && !reduceMotion && !saveData && (
         <iframe
           src={`https://player.vimeo.com/video/${videoId}?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&dnt=1`}

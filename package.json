@@ -5,14 +5,12 @@
   "type": "module",
   "scripts": {
     "airtable:setup": "node scripts/setup-airtable.mjs",
-    "build": "vite build && node scripts/generate-route-html.mjs && node scripts/verify-seo-build.mjs",
+    "build": "vite build && node scripts/generate-route-html.mjs && node scripts/verify-seo-build.mjs && node scripts/verify-site-content.mjs",
     "dev": "vite",
-    "verify:seo": "node scripts/verify-seo-build.mjs"
+    "verify:seo": "node scripts/verify-seo-build.mjs",
+    "verify:content": "node scripts/verify-site-content.mjs"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.5",
@@ -75,7 +73,7 @@
     "@types/canvas-confetti": "^1.9.0",
     "@vitejs/plugin-react": "4.7.0",
     "tailwindcss": "4.1.12",
-    "vite": "6.3.5"
+    "vite": "^6.4.3"
   },
   "peerDependencies": {
     "react": "18.3.1",

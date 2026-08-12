@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight, Instagram, Facebook, Mail, Youtube } from 'lucide-react';
 
 const brentonRoutes = ['/magic', '/game-show', '/casino', '/casino-gameshow', '/shows/mulligans-magic-show'];
-const jolieRoutes = ['/cirque-jolie', '/strolling', '/balloon-twisting', '/face-painting', '/balloon-decor'];
+const jolieRoutes = ['/cirque-jolie', '/strolling', '/led-performers', '/balloon-twisting', '/face-painting', '/balloon-decor'];
 
 const isFeaturedRoute = (pathname: string, routes: string[]) =>
   routes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
@@ -34,12 +34,12 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link to="/balloon-twisting" className="hover:text-coral transition-colors">Balloon Twisting &amp; Face Painting</Link></li>
               <li><Link to="/balloon-decor" className="hover:text-coral transition-colors">Balloon Decor</Link></li>
-              <li><Link to="/strolling" className="hover:text-cream transition-colors">Costumed Stilt Walking</Link></li>
+              <li><Link to="/strolling" className="hover:text-cream transition-colors">Stilt Walkers</Link></li>
+              <li><Link to="/led-performers" className="hover:text-lavender transition-colors">LED Performers</Link></li>
               <li><Link to="/magic" className="hover:text-sage transition-colors">Magic</Link></li>
               <li><Link to="/casino" className="hover:text-lavender transition-colors">Casino NITE</Link></li>
               <li><Link to="/game-show" className="hover:text-coral transition-colors">Game Show NITE</Link></li>
               <li><Link to="/corporate" className="hover:text-coral transition-colors">Corporate Events</Link></li>
-              <li><Link to="/additional-services" className="hover:text-coral transition-colors">Additional & À La Carte</Link></li>
             </ul>
           </div>
 
@@ -110,7 +110,7 @@ export function Footer() {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-bold text-white">@cirquejolie</span>
-                <span className="block text-sm text-slate-400">Stilts · Balloons · Face Painting</span>
+                <span className="block text-sm text-slate-400">Stilts · LED · Balloons · Face Painting</span>
               </span>
               <ArrowUpRight className="h-5 w-5 shrink-0 text-slate-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-lavender" aria-hidden="true" />
             </a>

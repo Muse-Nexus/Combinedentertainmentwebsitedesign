@@ -141,7 +141,7 @@ export function CasinoPackages({ id = 'casino-packages', className = '' }: Casin
             Not sure which package fits? Brenton handles every booking and will help match the setup to your event.
           </p>
           <Link
-            to="/contact"
+            to="/contact?service=casino"
             className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-coral px-8 py-3 font-black text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coral"
           >
             Ask Brenton About Casino NITE

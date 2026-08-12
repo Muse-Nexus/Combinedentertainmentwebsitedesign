@@ -17,7 +17,7 @@ const brandStories = [
     name: 'Cirque Jolie',
     eyebrow: 'Color in motion',
     title: 'Nine-foot characters. Tiny painted dragons. Total delight.',
-    copy: 'Jolie and her team bring stilt performers, balloon art, face painting, fire, LED, and immersive characters to family and grown-up events alike.',
+    copy: 'Jolie and her team bring stilt performers, balloon art, face painting, LED performance, and immersive characters to family and grown-up events alike.',
     image: '/media/strolling/cirque-jolie-balloon-creatures-maui.webp',
     alt: 'Cirque Jolie stilt performers carrying giant balloon creatures on Maui',
     to: '/cirque-jolie',
@@ -49,11 +49,18 @@ const services = [
     to: '/balloon-decor',
   },
   {
-    title: 'Costumed Stilt Walking',
+    title: 'Stilt Walkers',
     kicker: 'A visual welcome guests remember',
     image: '/media/strolling/cirque-jolie-balloon-stilt-maui.webp',
     alt: 'Cirque Jolie in a dramatic balloon stilt costume on Maui',
     to: '/strolling',
+  },
+  {
+    title: 'LED Performers',
+    kicker: 'A glowing spectacle after dark',
+    image: '/media/client-selected/led-performers/hero-golden-wings-dusk.webp',
+    alt: 'Cirque Jolie performers in glowing golden LED wing costumes at dusk',
+    to: '/led-performers',
   },
   {
     title: 'Magic',

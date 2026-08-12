@@ -46,7 +46,7 @@ export default function FacePainting() {
               Hypoallergenic, professional-grade face paints applied by Cirque Jolie &mdash; intricate full-face designs in minutes, perfect for birthday parties, school events, and resort family days across Maui.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Face Painting</Link>
+              <Link to="/contact?service=face-painting" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Face Painting</Link>
               <Link to="/balloon-twisting" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Add Balloon Twisting</Link>
             </div>
           </motion.div>
@@ -94,7 +94,7 @@ export default function FacePainting() {
               Most parties book Face Painting + Balloon Twisting together &mdash; one performer, one fee, twice the fun. Ask about the combo when you book.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Link to="/contact" className="px-10 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full text-lg transition-all shadow-lg shadow-coral/25 hover:scale-105">
+              <Link to="/contact?service=face-painting" className="px-10 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full text-lg transition-all shadow-lg shadow-coral/25 hover:scale-105">
                 Book Now
               </Link>
               <Link to="/balloon-twisting" className="px-10 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full text-lg transition-all hover:bg-white/5">

@@ -27,8 +27,13 @@ export const UMBRELLA_SECTIONS: UmbrellaSection[] = [
   },
   {
     id: 'strolling',
-    label: 'Costumed Stilt Walking',
+    label: 'Stilt Walkers',
     route: '/strolling',
+  },
+  {
+    id: 'led-performers',
+    label: 'LED Performers',
+    route: '/led-performers',
   },
   {
     id: 'magic',
@@ -45,38 +50,41 @@ export const UMBRELLA_SECTIONS: UmbrellaSection[] = [
     label: 'Balloon Decor',
     route: '/balloon-decor',
   },
-  {
-    id: 'corporate',
-    label: 'Corporate Entertainment',
-    route: '/corporate',
-  },
 ];
 
 function ServiceButtons({ className = '' }: { className?: string }) {
   return (
-    <nav
-      aria-label="Entertainment services"
-      className={`grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center ${className}`}
-    >
-      {UMBRELLA_SECTIONS.map((section, index) => {
-        const isLastOddItem =
-          UMBRELLA_SECTIONS.length % 2 === 1 && index === UMBRELLA_SECTIONS.length - 1;
+    <div className={className}>
+      <nav aria-label="Entertainment services" className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center">
+        {UMBRELLA_SECTIONS.map((section, index) => {
+          const isLastOddItem =
+            UMBRELLA_SECTIONS.length % 2 === 1 && index === UMBRELLA_SECTIONS.length - 1;
 
-        return (
-          <Link
-            key={section.id}
-            to={section.route}
-            className={`flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-slate-950/82 px-4 py-2.5 text-center text-[0.66rem] font-bold uppercase leading-tight tracking-[0.08em] text-white shadow-xl backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/45 hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral sm:min-h-11 sm:min-w-40 sm:max-w-56 sm:flex-1 sm:basis-44 sm:text-xs ${
-              isLastOddItem
-                ? 'col-span-2 mx-auto w-[calc(50%-0.25rem)] sm:mx-0 sm:w-auto'
-                : ''
-            }`}
-          >
-            {section.label}
-          </Link>
-        );
-      })}
-    </nav>
+          return (
+            <Link
+              key={section.id}
+              to={section.route}
+              className={`flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-slate-950/82 px-4 py-2.5 text-center text-sm font-semibold leading-tight tracking-[0.01em] text-white shadow-xl backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/45 hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral sm:min-h-12 sm:min-w-40 sm:max-w-56 sm:flex-1 sm:basis-44 sm:text-base ${
+                isLastOddItem
+                  ? 'col-span-2 mx-auto w-[calc(50%-0.25rem)] sm:mx-0 sm:w-auto'
+                  : ''
+              }`}
+            >
+              {section.label}
+            </Link>
+          );
+        })}
+      </nav>
+      <div className="mx-auto mt-3 flex max-w-2xl items-center justify-center gap-3 rounded-2xl border border-coral/45 bg-slate-950/85 px-4 py-3 text-center shadow-lg backdrop-blur-md">
+        <span className="text-sm font-medium text-white sm:text-base">Planning a corporate event?</span>
+        <Link
+          to="/corporate"
+          className="shrink-0 font-bold text-coral underline decoration-coral/40 underline-offset-4 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
+        >
+          Start here
+        </Link>
+      </div>
+    </div>
   );
 }
 

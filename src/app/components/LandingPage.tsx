@@ -17,8 +17,8 @@ import { UMBRELLA_SECTIONS, UmbrellaNav } from './UmbrellaNav';
 import { Navbar } from './Navbar';
 import { HomeContent } from './HomeContent';
 
-const HERO_DESKTOP = '/media/hero-reigning-entertainment.webp';
-const HERO_MOBILE = '/media/hero-reigning-mobile.webp';
+const HERO_DESKTOP = '/media/hero-real-brenton-jolie.webp';
+const HERO_MOBILE = '/media/hero-real-brenton-jolie-mobile.webp';
 const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
 const CLOUD_TEXTURE = '/media/clouds-wipe.webp';
 
@@ -34,9 +34,14 @@ const SERVICE_VISUALS: Record<string, { image: string; alt: string; color: strin
     color: 'bg-purple-700',
   },
   '/strolling': {
-    image: '/media/strolling/cirque-jolie-balloon-stilt-maui.webp',
-    alt: 'Cirque Jolie in a dramatic balloon stilt costume on Maui',
+    image: '/media/client-selected/stilt-walkers/hero-winged-trio-monkeypod.webp',
+    alt: 'Three Cirque Jolie winged stilt walkers welcoming guests at a Maui resort',
     color: 'bg-red-600',
+  },
+  '/led-performers': {
+    image: '/media/client-selected/led-performers/hero-golden-wings-dusk.webp',
+    alt: 'Cirque Jolie performers in glowing golden LED wings at dusk on Maui',
+    color: 'bg-violet-700',
   },
   '/magic': {
     image: '/media/magic/magic-brent-live-show-maui.webp',
@@ -52,11 +57,6 @@ const SERVICE_VISUALS: Record<string, { image: string; alt: string; color: strin
     image: '/media/balloon-decor/candy-stage-balloon-arch-maui.webp',
     alt: 'Candy-themed balloon stage installation by Cirque Jolie',
     color: 'bg-orange-500',
-  },
-  '/corporate': {
-    image: '/media/corporate/cirque-jolie-wing-performers.webp',
-    alt: 'Cirque Jolie gold wing performers welcoming guests at a corporate event',
-    color: 'bg-amber-600',
   },
 };
 
@@ -119,7 +119,6 @@ function HeroImage({
         aria-hidden={decorative || undefined}
         width="1672"
         height="941"
-        fetchPriority={decorative ? undefined : 'high'}
         decoding="async"
         className={`h-full w-full object-cover ${className}`}
       />
@@ -222,14 +221,8 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
         <img
           src={CLOUD_TEXTURE}
           alt=""
-          className={`${mobile ? 'w-[210%] opacity-90' : 'w-[180%] opacity-100'} absolute h-auto max-w-none rotate-6 object-contain mix-blend-screen blur-[6px]`}
+          className={`${mobile ? 'w-[225%] opacity-90' : 'w-[195%] opacity-95'} absolute h-auto max-w-none object-contain mix-blend-screen blur-[10px]`}
         />
-        {!mobile && (
-          <>
-            <img src={CLOUD_TEXTURE} alt="" className="absolute left-[-35%] top-[-20%] w-[135%] max-w-none -rotate-12 object-contain opacity-70 mix-blend-screen blur-[8px]" />
-            <img src={CLOUD_TEXTURE} alt="" className="absolute bottom-[-22%] right-[-30%] w-[145%] max-w-none rotate-12 object-contain opacity-65 mix-blend-screen blur-[8px]" />
-          </>
-        )}
       </motion.div>
     </motion.div>
   );
@@ -263,10 +256,22 @@ function DiscoveryCard({
   const gray = useTransform(progress, [colorStart, colorEnd], [1, 0], { clamp: true });
   const filter = useMotionTemplate`grayscale(${gray}) saturate(calc(1 + (1 - ${gray}) * 0.22))`;
   const [interactive, setInteractive] = useState(() => progress.get() >= cardInStart);
+  const interactiveFrame = useRef<number | null>(null);
 
   useMotionValueEvent(progress, 'change', (value) => {
-    setInteractive(value >= cardInStart);
+    if (interactiveFrame.current !== null) window.cancelAnimationFrame(interactiveFrame.current);
+    interactiveFrame.current = window.requestAnimationFrame(() => {
+      setInteractive(value >= cardInStart);
+      interactiveFrame.current = null;
+    });
   });
+
+  useEffect(
+    () => () => {
+      if (interactiveFrame.current !== null) window.cancelAnimationFrame(interactiveFrame.current);
+    },
+    [],
+  );
 
   return (
     <motion.article
@@ -298,6 +303,7 @@ function DiscoveryScene({
 }) {
   const [mobileIndex, setMobileIndex] = useState(0);
   const confettiFired = useRef(false);
+  const mobileIndexFrame = useRef<number | null>(null);
   const introOpacity = useTransform(progress, [DISC_INTRO_IN[0], DISC_INTRO_IN[1]], [0, 1], { clamp: true });
   const introY = useTransform(progress, [DISC_INTRO_IN[0], DISC_INTRO_IN[1]], [30, 0], { clamp: true });
   const instructionOpacity = useTransform(progress, [DISC_INSTRUCT_IN[0], DISC_INSTRUCT_IN[1]], [0, 1], { clamp: true });
@@ -305,7 +311,11 @@ function DiscoveryScene({
   useMotionValueEvent(progress, 'change', (value) => {
     const normalized = Math.max(0, Math.min(0.999, (value - 0.18) / 0.62));
     const nextIndex = Math.min(SERVICE_DECK.length - 1, Math.floor(normalized * SERVICE_DECK.length));
-    setMobileIndex(nextIndex);
+    if (mobileIndexFrame.current !== null) window.cancelAnimationFrame(mobileIndexFrame.current);
+    mobileIndexFrame.current = window.requestAnimationFrame(() => {
+      setMobileIndex(nextIndex);
+      mobileIndexFrame.current = null;
+    });
 
     if (!reduceMotion && value >= DISC_CONFETTI_AT && !confettiFired.current) {
       confettiFired.current = true;
@@ -325,6 +335,13 @@ function DiscoveryScene({
       confettiFired.current = false;
     }
   });
+
+  useEffect(
+    () => () => {
+      if (mobileIndexFrame.current !== null) window.cancelAnimationFrame(mobileIndexFrame.current);
+    },
+    [],
+  );
 
   const mobileCard = SERVICE_DECK[mobileIndex];
 
@@ -391,7 +408,7 @@ function ReducedMotionLanding({ mobile }: { mobile: boolean }) {
       <Navbar />
       <section className="relative min-h-[100svh] overflow-hidden bg-[#070b22] pt-20 text-white">
         <div className={`absolute inset-x-0 top-20 ${mobile ? 'h-[55svh]' : 'bottom-0'}`}>
-          <HeroImage alt="Brenton Keith and Jolie Strickland entertaining guests at a Maui sunset event" />
+          <HeroImage alt="Brenton Keith and Jolie Strickland performing together at an oceanfront Maui event" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-slate-950/20 to-[#070b22]" />
         <div className="relative z-20 mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center px-5 pt-14 text-center md:justify-center md:pt-0">
@@ -416,11 +433,23 @@ export function LandingPage() {
   const timeline = mobile ? MOBILE_TIMELINE : DESKTOP_TIMELINE;
   const [isMiracle, setIsMiracle] = useState(false);
   const [scrollValue, setScrollValue] = useState(0);
+  const scrollFrame = useRef<number | null>(null);
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    setScrollValue(latest);
-    setIsMiracle(latest > timeline.stormEnd);
+    if (scrollFrame.current !== null) window.cancelAnimationFrame(scrollFrame.current);
+    scrollFrame.current = window.requestAnimationFrame(() => {
+      setScrollValue(latest);
+      setIsMiracle(latest > timeline.stormEnd);
+      scrollFrame.current = null;
+    });
   });
+
+  useEffect(
+    () => () => {
+      if (scrollFrame.current !== null) window.cancelAnimationFrame(scrollFrame.current);
+    },
+    [],
+  );
 
   const stormRaw = useTransform(scrollY, [0, timeline.stormEnd], [0, 1], { clamp: true });
   const stormProgress = useSpring(stormRaw, { stiffness: mobile ? 70 : 52, damping: 22 });
@@ -564,7 +593,7 @@ export function LandingPage() {
         <div className={`absolute inset-x-0 top-0 z-20 ${mobile ? 'h-[72svh]' : 'bottom-0'}`}>
           <motion.div className="relative h-full w-full overflow-hidden" animate={{ scale: isMiracle ? 1.015 : 1 }} transition={{ duration: 1.5 }}>
             <HeroImage
-              alt="Brenton Keith and Jolie Strickland entertaining a cheering crowd at a Maui sunset event"
+              alt="Brenton Keith and Jolie Strickland performing together at an oceanfront Maui event"
               className={heroObjectPosition}
             />
 

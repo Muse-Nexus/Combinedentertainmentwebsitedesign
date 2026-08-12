@@ -28,7 +28,6 @@ export default function MulligansMagicShow() {
           src="/media/magic/magic-brent-live-show-maui.webp"
           alt="Brenton Keith performing live comedy magic for a Maui audience"
           className="absolute inset-0 h-full w-full object-cover object-center opacity-45"
-          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/35" />
         <div className="container relative z-10 mx-auto px-4 py-24 md:py-36">

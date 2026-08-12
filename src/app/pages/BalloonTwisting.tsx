@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { motion, useScroll, useTransform, useInView } from 'motion/react';
-import { Palette, Sparkles, Heart, Star, Wand2, Music } from 'lucide-react';
+import { Palette, Sparkles, Star, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SmartVimeoBackground } from '../components/SmartVimeoBackground';
+import { GalleryLightbox, type GalleryImage } from '../components/GalleryLightbox';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
@@ -15,19 +16,35 @@ const FadeInSection = ({ children, className = '', delay = 0 }: { children: Reac
   );
 };
 
+// Balanced, alternating gallery drawn from Jolie's selected balloon-twisting
+// and face-painting assets — no balloon-decor imagery on this page.
+const GALLERY_IMAGES: GalleryImage[] = [
+  { src: '/media/client-selected/balloon-twisting/twisting-01-mermaid-doll-balloon.webp', alt: 'Girl beaming beside a mermaid-doll balloon sculpture by Cirque Jolie' },
+  { src: '/media/client-selected/face-painting/face-01-artist-with-child.webp', alt: 'Jolie in a flower crown beside a child with freshly painted face art' },
+  { src: '/media/client-selected/balloon-twisting/twisting-02-parent-toddler-lion.webp', alt: 'Parent and toddler with a custom lion balloon creation' },
+  { src: '/media/client-selected/face-painting/face-02-rainbow-butterfly-girl.webp', alt: 'Girl with a rainbow butterfly face painting design outdoors' },
+  { src: '/media/client-selected/balloon-twisting/twisting-03-senior-guest-monkey-flower.webp', alt: 'Senior guest smiling with a monkey and flower balloon twist' },
+  { src: '/media/client-selected/face-painting/face-03-adult-grinch-face.webp', alt: 'Adult guest with a Grinch-themed face painting design' },
+  { src: '/media/client-selected/balloon-twisting/twisting-04-boy-monkey-palm-indoor.webp', alt: 'Boy holding a monkey-and-palm-tree balloon at a large indoor Maui event' },
+  { src: '/media/client-selected/face-painting/face-04-matching-tiger-pair.webp', alt: 'Two guests with matching tiger face painting designs' },
+  { src: '/media/client-selected/balloon-twisting/twisting-05-jolie-stitch-balloon.webp', alt: 'Jolie posing with a Stitch character balloon sculpture' },
+  { src: '/media/client-selected/face-painting/face-05-koi-arm-art.webp', alt: 'Painted koi fish arm art by a Cirque Jolie face painter' },
+  { src: '/media/client-selected/face-painting/face-06-beachfront-mermaid-face.webp', alt: 'Mermaid-scale face painting design at a Maui beachfront event' },
+];
+
 export default function BalloonTwisting() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
-    <Layout title="Kids Entertainment">
+    <Layout title="Balloon Twisting & Face Painting">
       {/* HERO — Vimeo background video (autoplay, loop, muted) */}
       <div ref={heroRef} className="relative min-h-[calc(100svh-5rem)] overflow-hidden flex items-end md:h-[85vh]">
         <motion.div style={{ y: heroY }} className="absolute inset-0 overflow-hidden">
           <SmartVimeoBackground
             videoId="334597801"
-            poster="/media/balloons/octopus-balloon-sculpture.jpg"
+            poster="/media/client-selected/balloon-twisting/twisting-01-mermaid-doll-balloon.webp"
             title="Cirque Jolie balloon twisting promo"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
@@ -38,16 +55,15 @@ export default function BalloonTwisting() {
         </div>
         <div className="relative z-10 container mx-auto px-4 py-14 md:py-0 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
-            <p className="text-lavender font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie &mdash; Children&rsquo;s Entertainment</p>
+            <p className="text-lavender font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie</p>
             <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 leading-[0.9]">
-              <span className="bg-gradient-to-r from-lavender via-coral to-sage bg-clip-text text-transparent">Maui Kids Party Entertainment</span>
-              <br /><span className="text-white/90 text-2xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Children&rsquo;s Magic</span>
+              <span className="bg-gradient-to-r from-lavender via-coral to-sage bg-clip-text text-transparent">Balloon Twisting &amp; Face Painting</span>
             </h1>
             <p className="text-lg md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
-              Cirque Jolie has a professional team of face painters and balloon twisters &mdash; plus a 30-minute interactive children&rsquo;s magic show &mdash; keeping young children delighted and entertained at parties across Maui.
+              Cirque Jolie&rsquo;s professional balloon artists and face painters bring color and delight to keiki birthday parties, family luaus, resort welcome events, weddings, and corporate mixers across Maui.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-lavender hover:bg-lavender/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-lavender/25 hover:shadow-lavender/40 hover:scale-105">Book Kids Entertainment</Link>
+              <Link to="/contact?service=balloon-animals" className="px-8 py-4 bg-lavender hover:bg-lavender/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-lavender/25 hover:shadow-lavender/40 hover:scale-105">Book Balloon Twisting &amp; Face Painting</Link>
               <a href="#about" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Meet Jolie</a>
             </div>
           </motion.div>
@@ -60,7 +76,7 @@ export default function BalloonTwisting() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection>
               <div className="relative">
-                <img src="/media/strolling/jolie-portrait.jpg" alt="Jolie Strickland — Cirque Jolie" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover aspect-[4/5]" />
+                <img src="/media/strolling/jolie-portrait.jpg" alt="Jolie Strickland — Cirque Jolie" loading="lazy" decoding="async" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover aspect-[4/5]" />
                 <div className="absolute -bottom-6 right-3 md:-right-6 bg-lavender text-slate-950 px-6 py-4 rounded-2xl shadow-xl">
                   <div className="text-3xl font-black">20+</div>
                   <div className="text-sm font-medium opacity-90">Years Performing</div>
@@ -71,17 +87,17 @@ export default function BalloonTwisting() {
               <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">About Cirque Jolie</p>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Jolie<span className="text-lavender"> Strickland</span></h2>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                Cirque Jolie&rsquo;s beginnings lie in Jolie&rsquo;s youth. Growing up mostly on Maui, she was part of a group trained as &ldquo;clowns&rdquo; in 2000 by Una the Clown, and they volunteered all over the island at places like Hale Makua and Kula Hospital. Una the Clown left Maui in 2004, leaving her legacy behind in &ldquo;Jolie the Clown,&rdquo; who continued to entertain at events and parties with her balloon-making, face-painting, and magic.
+                Jolie has entertained Maui audiences for more than two decades. Cirque Jolie grew from her love of balloon artistry, colorful characters, and bringing guests of every age into the fun.
               </p>
               <p className="text-gray-400 leading-relaxed mb-4">
-                As the years passed and her skills expanded, Jolie the Clown evolved into Cirque Jolie. She will still wear a clown costume if requested, but enjoys the freedom to bring a diverse and colorful array of characters to events and parties. Her skills now include stilt walking and fire dancing, and she&rsquo;s thrilled to add &ldquo;prize girl&rdquo; to her ever-growing list of talents with <Link to="/game-show" className="text-lavender hover:underline">Gameshow Fanatics</Link>.
+                Her work now spans balloon twisting, face painting, stilt walking, LED performance, and colorful ambient characters. She also joins <Link to="/game-show" className="text-lavender hover:underline">Gameshow Fanatics</Link> to help turn the entire room into part of the show.
               </p>
               <p className="text-gray-400 leading-relaxed mb-8">
-                She lives in Haiku with her partner Brenton Keith and performs throughout Maui and the Hawaiian islands.
+                She and her husband Brenton Keith perform throughout Maui and the Hawaiian Islands.
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Entertaining Since 2000</span>
-                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Live Bunny Show</span>
+                <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Balloon Artistry</span>
                 <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Maui &amp; Hawaiian Islands</span>
               </div>
             </FadeInSection>
@@ -94,18 +110,17 @@ export default function BalloonTwisting() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">Everything for Your Party</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Three Shows in One</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">Our Services</h2>
           </FadeInSection>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
-              { icon: <Wand2 className="w-8 h-8" />, title: 'Live Magic Show', desc: 'A 30-minute interactive comedy magic show with a LIVE bunny rabbit! Designed for ages 2–9, every child gets to pet the bunny and be part of the magic.', img: '/media/balloons/kid-panda-facepainting.jpg', imgAlt: 'Child with panda balloon and face painting' },
-              { icon: <Palette className="w-8 h-8" />, title: 'Face Painting', desc: 'Professional face painting using skin-safe, hypoallergenic paints. From fierce dragons to sparkly butterflies — each design is a mini masterpiece.', img: '/media/balloons/dragon-facepainting.jpg', imgAlt: 'Child with dragon face painting design' },
-              { icon: <Sparkles className="w-8 h-8" />, title: 'Balloon Twisting', desc: 'Swords, puppies, crowns, flowers — you name it, Jolie twists it. Every child at the party goes home with a custom balloon creation.', img: '/media/balloons/minecraft-balloon-sculpture.jpg', imgAlt: 'Minecraft Creeper balloon sculpture' },
+              { icon: <Sparkles className="w-8 h-8" />, title: 'Balloon Twisting', desc: 'Swords, puppies, crowns, flowers — you name it, Jolie twists it. Every guest goes home with a custom balloon creation, from keiki celebrations to adult events.', img: '/media/client-selected/balloon-twisting/twisting-05-jolie-stitch-balloon.webp', imgAlt: 'Jolie posing with a Stitch character balloon sculpture' },
+              { icon: <Palette className="w-8 h-8" />, title: 'Face Painting', desc: 'Professional face painting using skin-safe, hypoallergenic paints. From fierce dragons and sparkly butterflies to full adult character designs — each is a mini masterpiece.', img: '/media/client-selected/face-painting/face-02-rainbow-butterfly-girl.webp', imgAlt: 'Girl with a rainbow butterfly face painting design outdoors' },
             ].map((service, i) => (
               <FadeInSection key={i} delay={i * 0.15}>
                 <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-lavender/20 transition-all group h-full">
                   <div className="aspect-[3/2] overflow-hidden">
-                    <img src={service.img} alt={service.imgAlt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={service.img} alt={service.imgAlt} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="p-8">
                     <div className="text-lavender mb-4">{service.icon}</div>
@@ -119,18 +134,6 @@ export default function BalloonTwisting() {
         </div>
       </section>
 
-      {/* FEATURED SCULPTURE */}
-      <section className="py-16 bg-slate-950">
-        <div className="container mx-auto px-4 max-w-md">
-          <FadeInSection>
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl shadow-lavender/10 group">
-              <img src="/media/balloons/octopus-balloon-sculpture.jpg" alt="Octopus balloon sculpture by Cirque Jolie" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
-            <p className="text-center text-gray-400 mt-4 text-sm">If a kid can dream it, Jolie can twist it</p>
-          </FadeInSection>
-        </div>
-      </section>
-
       {/* WHAT'S INCLUDED */}
       <section className="py-24 bg-slate-900">
         <div className="container mx-auto px-4">
@@ -141,11 +144,9 @@ export default function BalloonTwisting() {
                 <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center">What&rsquo;s Included</h2>
                 <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
                   {[
-                    { icon: <Wand2 className="w-6 h-6" />, text: '30-minute live magic show with LIVE bunny' },
-                    { icon: <Sparkles className="w-6 h-6" />, text: 'Balloon twisting for every child' },
+                    { icon: <Sparkles className="w-6 h-6" />, text: 'Balloon twisting for every guest' },
                     { icon: <Palette className="w-6 h-6" />, text: 'Professional face painting (skin-safe paints)' },
-                    { icon: <Music className="w-6 h-6" />, text: 'Fun music and kid-friendly MC' },
-                    { icon: <Heart className="w-6 h-6" />, text: 'Up to 25 kids per session' },
+                    { icon: <Users className="w-6 h-6" />, text: 'Sized to your group — intimate parties to large events' },
                     { icon: <Star className="w-6 h-6" />, text: 'Custom themes available' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-4">
@@ -165,24 +166,16 @@ export default function BalloonTwisting() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">Cirque Jolie in Action</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Maui Kids Entertainment Gallery</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">Balloon Twisting &amp; Face Painting Gallery</h2>
           </FadeInSection>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { src: '/media/480712819_1155376403052671_6432676726575521199_n.jpg', alt: 'Cirque Jolie custom purple cat balloon arch for Maui birthday party' },
-              { src: '/media/balloons/dragon-facepainting.jpg', alt: 'Dragon face painting design for kids at Maui party by Cirque Jolie' },
-              { src: '/media/balloons/minecraft-balloon-sculpture.jpg', alt: 'Minecraft Creeper balloon sculpture by Maui balloon artist Cirque Jolie' },
-              { src: '/media/balloons/octopus-balloon-sculpture.jpg', alt: 'Giant octopus balloon sculpture by Cirque Jolie Maui balloon twister' },
-              { src: '/media/balloons/kid-panda-facepainting.jpg', alt: 'Happy child with panda balloon and face painting at Maui kids party' },
-              { src: '/media/cirque-jolie-2.jpg', alt: 'Jolie Strickland Cirque Jolie Maui children entertainer' },
-            ].map((photo, i) => (
-              <FadeInSection key={i} delay={i * 0.08}>
-                <div className="rounded-2xl overflow-hidden group aspect-[4/3]">
-                  <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
+          <FadeInSection delay={0.1}>
+            <GalleryLightbox
+              images={GALLERY_IMAGES}
+              className="grid grid-cols-2 md:grid-cols-3 gap-4"
+              itemClassName="aspect-[4/3] overflow-hidden rounded-2xl"
+              eagerCount={2}
+            />
+          </FadeInSection>
         </div>
       </section>
 
@@ -191,11 +184,11 @@ export default function BalloonTwisting() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4">Perfect For</h2>
-            <p className="text-gray-400 text-lg">Keiki celebrations of every kind</p>
+            <p className="text-gray-400 text-lg">From keiki celebrations to grown-up gatherings</p>
           </FadeInSection>
           <FadeInSection delay={0.2}>
             <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-              {['Birthday Parties', '1st Birthday Luaus', 'School Events', 'Daycare Programs', 'Luaus', 'Holiday Parties', 'Church Events', 'Community Festivals', 'Resort Kids Clubs', 'Library Programs', 'Grand Openings', 'Family Reunions'].map((event, i) => (
+              {['Birthday Parties', '1st Birthday Luaus', 'School Events', 'Daycare Programs', 'Luaus', 'Holiday Parties', 'Resort Welcome Events', 'Wedding Cocktail Hours', 'Corporate Mixers', 'Community Festivals', 'Resort Kids Clubs', 'Grand Openings', 'Family Reunions'].map((event, i) => (
                 <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-5 py-2.5 rounded-full text-gray-300 text-sm font-medium hover:border-lavender/40 hover:text-lavender transition-all duration-300 cursor-default">{event}</span>
               ))}
             </div>
@@ -210,11 +203,11 @@ export default function BalloonTwisting() {
             <div className="relative bg-gradient-to-r from-lavender via-coral to-sage rounded-[2rem] p-12 md:p-16 text-center overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_70%)]" />
               <div className="relative z-10">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Make Their Party Magical</h2>
-                <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">Magic show, face painting &amp; balloon twisting &mdash; all in one booking. If you want magic for ALL ages (2&ndash;102 years old), check out <Link to="/magic" className="underline font-bold">Brenton Keith &amp; His Bag O&rsquo; Tricks</Link>. Book both together for an amazing discount!</p>
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Make Your Party Colorful</h2>
+                <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">Face painting &amp; balloon twisting in one booking. Want magic too, for ALL ages (2&ndash;102 years old)? Add <Link to="/magic" className="underline font-bold">Brenton Keith &amp; His Bag O&rsquo; Tricks</Link> to your event. Book both together for an amazing discount!</p>
                 <p className="text-white/70 mb-10">Entertainers based on the island of Maui &amp; willing to travel to outer island events</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact" className="px-10 py-4 bg-white text-lavender font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Kids Entertainment</Link>
+                  <Link to="/contact?service=balloon-animals" className="px-10 py-4 bg-white text-lavender font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Balloon Twisting &amp; Face Painting</Link>
                   <a href="tel:+18088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">Brenton · (808) 870-2102</a>
                 </div>
               </div>

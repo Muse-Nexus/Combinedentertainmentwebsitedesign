@@ -37,11 +37,11 @@ const services = [
     description: 'Professional DJ and MC to keep your event flowing — from cocktail hour through the final dance. Custom playlists and seamless transitions.',
     image: '/media/corporate/game-show-ballroom-maui.webp',
     imagePosition: 'center',
-    link: '/additional-services',
+    link: '/contact',
   },
   {
     icon: Sparkles,
-    title: 'Costumed Stilt Walking',
+    title: 'Stilt Walkers',
     description: 'Stilt walkers and costumed ambient characters who add wonder and photo moments. Eye-catching performers who mingle with your guests.',
     image: '/media/corporate/cirque-jolie-wing-performers.webp',
     imagePosition: 'center 15%',
@@ -70,7 +70,6 @@ export default function Corporate() {
             alt="Gameshow Fanatics leading an interactive corporate event in a Maui ballroom"
             width="1600"
             height="669"
-            fetchPriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -91,7 +90,7 @@ export default function Corporate() {
               From Casino NITE to live Game Show NITE productions, strolling performers to full DJ production &mdash; we make your corporate event the one everyone talks about.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Get a Quote</Link>
+              <Link to="/contact?service=corporate" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Get a Quote</Link>
               <a href="#services" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Our Services</a>
             </div>
           </motion.div>
@@ -114,7 +113,7 @@ export default function Corporate() {
               <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Why Choose Us</p>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">One Team.<br />Every Detail.</h2>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                Most corporate planners hire separate vendors for entertainment, music, and production. With Raining Entertainment, you get it all under one roof. Brenton Keith and Jolie Strickland bring a full roster of distinct services &mdash; from Game Show NITE and Casino NITE to costumed stilt walking and DJ sets &mdash; so your event runs seamlessly.
+                Most corporate planners hire separate vendors for entertainment, music, and production. With Raining Entertainment, you get it all under one roof. Brenton Keith and Jolie Strickland bring a full roster of distinct services &mdash; from Game Show NITE and Casino NITE to Stilt Walkers and DJ sets &mdash; so your event runs seamlessly.
               </p>
               <div className="space-y-3">
                 {['Single point of contact for all entertainment', 'Scalable packages for 20 to 2,000+ guests', 'Professional production with sound, lights & staging', 'Maui-based with deep local venue knowledge'].map((item) => (
@@ -206,9 +205,8 @@ export default function Corporate() {
             {[
               { src: '/media/Casino-Night-32-1030x579.jpg', label: 'Casino NITE' },
               { src: '/media/515925879_10164201867303825_1352723102744150605_n.jpg', label: 'Corporate Game Show' },
-              { src: '/media/strolling/fire-dancing.jpg', label: 'Fire Dancing' },
+              { src: '/media/client-selected/corporate/winged-trio-tent-resort.webp', label: 'Stilt Walkers' },
               { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', label: 'Casino Team' },
-              { src: '/media/472753445_1039860624823457_3993024156608406927_n.jpg', label: 'Stilt & Magic Duo' },
               { src: '/media/503698188_1245363894258003_1463121886193686301_n.jpg', label: 'Resort Game Show Setup' },
             ].map((img, i) => (
               <FadeInSection key={img.label} delay={i * 0.08}>
@@ -282,7 +280,7 @@ export default function Corporate() {
             <p className="text-lg text-gray-400 leading-relaxed mb-8">
               Whether you&rsquo;re planning a 50-person team dinner or a 2,000-guest gala, we&rsquo;ll build the perfect entertainment package for your event.
             </p>
-            <Link to="/contact" className="inline-block px-10 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105 text-lg">
+            <Link to="/contact?service=corporate" className="inline-block px-10 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105 text-lg">
               Request a Quote
             </Link>
           </FadeInSection>

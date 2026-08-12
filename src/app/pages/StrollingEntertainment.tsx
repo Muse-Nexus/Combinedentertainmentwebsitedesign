@@ -1,87 +1,13 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useCallback, useRef } from 'react';
 import { Layout } from '../components/Layout';
-import { motion, useInView, AnimatePresence, useReducedMotion } from 'motion/react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  useDroppable,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverlay,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  rectSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { Lightbox, useLightbox, type GalleryImage } from '../components/GalleryLightbox';
 
-const LS_KEY = 'strolling-page-config-v4';
+const HEADLINE_JOLIE = 'Cirque Jolie — Stilt Walkers & Themed Characters';
+const SUBHEAD_JOLIE =
+  'Towering costumes and imaginative characters — Jolie transforms a venue into a spectacle people talk about for years.';
 
-// ── Types ──────────────────────────────────────────────────────────────────
-interface PhotoItem {
-  id: string;
-  src: string;
-  alt: string;
-}
-
-interface PageConfig {
-  brentonPhotos: PhotoItem[];
-  joliePhotos: PhotoItem[];
-  headlineBrenton: string;
-  subheadBrenton: string;
-  headlineJolie: string;
-  subheadJolie: string;
-}
-
-// ── Defaults ───────────────────────────────────────────────────────────────
-const DEFAULT_CONFIG: PageConfig = {
-  headlineBrenton: "Brenton Keith & His Bag O' Tricks — Up-Close Magic & Game Show NITE",
-  subheadBrenton: 'Up-close magic that stops conversation, game-show energy that owns the room. Brenton works the crowd so you don\'t have to.',
-  headlineJolie: 'Cirque Jolie — Stilt Walking & Fire Dancing',
-  subheadJolie: 'Rainbow stilts, fire fans, costumed characters — Jolie transforms any venue into a spectacle people talk about for years.',
-  brentonPhotos: [
-    { id: 'b1', src: '/media/brenton/gameshow-crowd.jpg', alt: 'Brenton hosting an interactive game show for a large Lahaina street crowd' },
-    { id: 'b2', src: '/media/brenton/patriotic-stilt.jpg', alt: 'Jolie on stilts in patriotic stars & stripes costume at Maui resort' },
-    { id: 'b3', src: '/media/brenton/lawn-magic.jpg', alt: 'Brenton producing fire at outdoor gala' },
-    { id: 'b4', src: '/media/brenton/brent-fire-portrait.png', alt: 'Brenton Keith fire portrait' },
-  ],
-  joliePhotos: [
-    { id: 'j1', src: '/media/strolling/clown-stilt-rainbow.jpg', alt: 'Rainbow clown stilt performer with kids' },
-    { id: 'j2', src: '/media/strolling/fire-dancing.jpg', alt: 'Fire dancer performing at luau' },
-    { id: 'j3', src: '/media/strolling/moth-stilt-costume.jpg', alt: 'Moth fairy stilt costume at festival' },
-    { id: 'j4', src: '/media/strolling/silver-white-stilt.jpg', alt: 'Elegant silver stilt costume at wedding' },
-  ],
-};
-
-// Edit mode + localStorage persistence are dev-only.
-// In production we always render DEFAULT_CONFIG so the source code is the
-// single source of truth — no stale per-browser overrides leaking through.
-const EDIT_ENABLED = import.meta.env.DEV;
-
-function loadConfig(): PageConfig {
-  if (!EDIT_ENABLED) return DEFAULT_CONFIG;
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) return { ...DEFAULT_CONFIG, ...JSON.parse(raw) };
-  } catch {}
-  return DEFAULT_CONFIG;
-}
-
-function saveConfig(cfg: PageConfig) {
-  if (!EDIT_ENABLED) return;
-  try { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); } catch {}
-}
-
-// ── Helpers ────────────────────────────────────────────────────────────────
 /** Standard two-column section row used below the feature composition. */
 function Flank({
   left,
@@ -122,565 +48,24 @@ const FadeInSection = ({ children, className = '', delay = 0 }: { children: Reac
   );
 };
 
-function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    previousFocusRef.current = document.activeElement as HTMLElement | null;
-    closeButtonRef.current?.focus();
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handler);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', handler);
-      document.body.style.overflow = '';
-      previousFocusRef.current?.focus();
-    };
-  }, [onClose]);
-
-  return createPortal(
-    <AnimatePresence>
-      <motion.div key="lb-backdrop" role="dialog" aria-modal="true" aria-label={`Expanded photo: ${alt}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={onClose}>
-        <motion.div key="lb-img" initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} transition={{ duration: 0.25 }} className="relative max-w-[92vw] max-h-[92vh]" onClick={e => e.stopPropagation()}>
-          <img src={src} alt={alt} decoding="async" className="max-w-full max-h-[88vh] rounded-2xl shadow-2xl object-contain" />
-          <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close expanded photo" className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-black/60 hover:bg-black/90 text-white rounded-full text-xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">×</button>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>,
-    document.body,
-  );
-}
-
-// ── Sortable photo card ────────────────────────────────────────────────────
-function SortablePhoto({ item, editMode, onRemove }: { item: PhotoItem; editMode: boolean; onRemove?: (id: string) => void }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [errored, setErrored] = useState(false);
-  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.35 : 1,
-    zIndex: isDragging ? 50 : 'auto',
-  };
-
-  if (errored) {
-    return (
-      <div ref={setNodeRef} style={style} className="flex flex-col items-center justify-center bg-slate-800/60 border-2 border-dashed border-slate-600 rounded-2xl text-slate-500 text-xs text-center p-4 min-h-[180px]">
-        <span className="text-2xl mb-1">📸</span>
-        <span className="font-mono opacity-60">{item.src.split('/').pop()}</span>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <div
-        ref={setNodeRef}
-        style={style}
-        className={`relative group rounded-2xl shadow-xl overflow-hidden ${editMode ? 'ring-2 ring-coral/40 ring-offset-2 ring-offset-slate-900' : ''}`}
-      >
-        {/* drag handle — only visible in edit mode */}
-        {editMode && (
-          <div
-            {...attributes}
-            {...listeners}
-            className="absolute top-2 left-2 z-20 w-8 h-8 flex items-center justify-center bg-black/70 rounded-lg cursor-grab active:cursor-grabbing touch-none"
-            title="Drag to reorder"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="white" opacity="0.8">
-              <circle cx="4" cy="3" r="1.2"/><circle cx="10" cy="3" r="1.2"/>
-              <circle cx="4" cy="7" r="1.2"/><circle cx="10" cy="7" r="1.2"/>
-              <circle cx="4" cy="11" r="1.2"/><circle cx="10" cy="11" r="1.2"/>
-            </svg>
-          </div>
-        )}
-
-        {/* remove button — only in edit mode */}
-        {editMode && onRemove && (
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); if (confirm('Remove this photo?')) onRemove(item.id); }}
-            className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center bg-red-600/90 hover:bg-red-500 text-white rounded-lg text-lg font-bold shadow-lg"
-            title="Remove photo"
-          >
-            ×
-          </button>
-        )}
-
-        {editMode ? (
-          <img
-            src={item.src}
-            alt={item.alt}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-auto block cursor-default"
-            onError={() => setErrored(true)}
-          />
-        ) : (
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(true)}
-            aria-label={`View full photo: ${item.alt}`}
-            className="block w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-coral"
-          >
-            <img
-              src={item.src}
-              alt={item.alt}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.03]"
-              onError={() => setErrored(true)}
-            />
-          </button>
-        )}
-
-        {/* hover hint (non-edit only) */}
-        {!editMode && (
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center pointer-events-none">
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 text-white text-sm px-3 py-1.5 rounded-full font-medium">
-              View full photo
-            </span>
-          </div>
-        )}
-      </div>
-
-      {lightboxOpen && <Lightbox src={item.src} alt={item.alt} onClose={closeLightbox} />}
-    </>
-  );
-}
-
-// ── Editable text ──────────────────────────────────────────────────────────
-function EditableText({
-  value,
-  onChange,
-  editMode,
-  className = '',
-  as: Tag = 'p',
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  editMode: boolean;
-  className?: string;
-  as?: keyof JSX.IntrinsicElements;
-}) {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    if (ref.current && ref.current.textContent !== value) {
-      ref.current.textContent = value;
-    }
-  }, [editMode]); // only sync when toggling edit mode
-
-  if (!editMode) {
-    return <Tag className={className}>{value}</Tag>;
-  }
-
-  return (
-    <Tag
-      ref={ref as React.RefObject<HTMLHeadingElement>}
-      contentEditable
-      suppressContentEditableWarning
-      onBlur={() => { if (ref.current) onChange(ref.current.textContent || ''); }}
-      className={`${className} outline-none border-b-2 border-dashed border-coral/60 focus:border-coral cursor-text`}
-      spellCheck={false}
-    />
-  );
-}
-
-// ── Media picker modal ────────────────────────────────────────────────────
-function MediaPicker({ onPick, onClose, prefix }: { onPick: (item: PhotoItem) => void; onClose: () => void; prefix: string }) {
-  const [tab, setTab] = useState<'browse' | 'upload'>('browse');
-  const [files, setFiles] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('');
-  const [uploadBusy, setUploadBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch('/api/media-list')
-      .then(r => r.json())
-      .then(d => { setFiles(d.files || []); setLoading(false); })
-      .catch(e => { setError(String(e)); setLoading(false); });
-  }, []);
-
-  useEffect(() => {
-    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', h);
-    document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = ''; };
-  }, [onClose]);
-
-  const handlePick = (src: string) => {
-    const alt = prompt('Alt text (describe the photo)') || '';
-    onPick({ id: `${prefix}-${Date.now()}`, src, alt });
-    onClose();
-  };
-
-  const handleUpload = async (file: File) => {
-    setUploadBusy(true);
-    setError(null);
-    try {
-      // FileReader handles large files; btoa(spread) overflows for big images.
-      const dataUrl: string = await new Promise((resolve, reject) => {
-        const r = new FileReader();
-        r.onload = () => resolve(String(r.result));
-        r.onerror = () => reject(r.error || new Error('read failed'));
-        r.readAsDataURL(file);
-      });
-      const comma = dataUrl.indexOf(',');
-      const b64 = comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl;
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: file.name, dataBase64: b64 }),
-      });
-      const text = await res.text();
-      let data: any = {};
-      try { data = JSON.parse(text); } catch { data = { error: text }; }
-      if (!res.ok) throw new Error(data.error || `upload failed (${res.status})`);
-      if (!data.src) throw new Error('server did not return src');
-      const alt = prompt('Alt text (describe the photo)') || file.name;
-      onPick({ id: `${prefix}-${Date.now()}`, src: data.src, alt });
-      onClose();
-    } catch (e: any) {
-      setError(e.message || String(e));
-    } finally {
-      setUploadBusy(false);
-    }
-  };
-
-  const filtered = files.filter(f => f.toLowerCase().includes(filter.toLowerCase()));
-
-  return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700">
-          <h3 className="text-white font-bold text-lg">Add Image</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-white text-2xl leading-none">×</button>
-        </div>
-
-        <div className="flex border-b border-slate-700">
-          <button
-            onClick={() => setTab('browse')}
-            className={`px-6 py-3 text-sm font-bold transition-colors ${tab === 'browse' ? 'text-coral border-b-2 border-coral' : 'text-slate-400 hover:text-white'}`}
-          >Browse media</button>
-          <button
-            onClick={() => setTab('upload')}
-            className={`px-6 py-3 text-sm font-bold transition-colors ${tab === 'upload' ? 'text-coral border-b-2 border-coral' : 'text-slate-400 hover:text-white'}`}
-          >Upload new</button>
-        </div>
-
-        {error && (
-          <div className="px-6 py-3 bg-red-900/40 text-red-200 text-sm border-b border-red-800">{error}</div>
-        )}
-
-        {tab === 'browse' ? (
-          <div className="flex flex-col overflow-hidden">
-            <div className="px-6 py-3 border-b border-slate-800">
-              <input
-                type="text"
-                value={filter}
-                onChange={e => setFilter(e.target.value)}
-                placeholder="Filter by filename..."
-                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm placeholder-slate-500 focus:border-coral outline-none"
-                autoFocus
-              />
-            </div>
-            <div className="flex-1 overflow-y-auto p-4">
-              {loading ? (
-                <p className="text-slate-400 text-center py-12">Loading...</p>
-              ) : filtered.length === 0 ? (
-                <p className="text-slate-400 text-center py-12">No files match.</p>
-              ) : (
-                <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-                  {filtered.map(src => (
-                    <button
-                      key={src}
-                      type="button"
-                      onClick={() => handlePick(src)}
-                      className="group relative aspect-square rounded-lg overflow-hidden bg-slate-800 border border-slate-700 hover:border-coral transition-all"
-                      title={src}
-                    >
-                      <img src={src} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                      <div className="absolute inset-x-0 bottom-0 px-1.5 py-1 bg-black/80 text-white text-[10px] truncate text-left">
-                        {src.split('/').pop()}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="flex-1 p-8 flex flex-col items-center justify-center">
-            <label className={`flex flex-col items-center justify-center w-full max-w-md aspect-[2/1] rounded-2xl border-2 border-dashed transition-all cursor-pointer ${uploadBusy ? 'opacity-50 cursor-wait border-slate-600' : 'border-coral/50 hover:border-coral hover:bg-coral/5'}`}>
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                disabled={uploadBusy}
-                onChange={e => { const f = e.target.files?.[0]; if (f) handleUpload(f); }}
-              />
-              <span className="text-5xl mb-2">{uploadBusy ? '⏳' : '⬆'}</span>
-              <span className="text-white font-bold">{uploadBusy ? 'Uploading...' : 'Click to choose a file'}</span>
-              <span className="text-slate-400 text-xs mt-1">PNG · JPG · WebP · GIF · AVIF</span>
-              <span className="text-slate-500 text-[11px] mt-3">Saved to /public/media/uploads/</span>
-            </label>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── Add-image tile (opens MediaPicker) ────────────────────────────────────
-function AddImageTile({ onAdd, prefix }: { onAdd: (item: PhotoItem) => void; prefix: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="flex flex-col items-center justify-center min-h-[180px] rounded-2xl border-2 border-dashed border-coral/40 hover:border-coral hover:bg-coral/10 text-coral/70 hover:text-coral transition-all"
-      >
-        <span className="text-4xl mb-1">＋</span>
-        <span className="text-xs font-bold tracking-wide uppercase">Add image</span>
-      </button>
-      {open && <MediaPicker onPick={onAdd} onClose={() => setOpen(false)} prefix={prefix} />}
-    </>
-  );
-}
-
-// ── Editable column (no DndContext — lifted to TwoColumnEditor) ───────────
-function EditableColumn({
-  id,
-  photos,
-  editMode,
-  onAdd,
-  onRemove,
-  addPrefix,
-}: {
-  id: string;
-  photos: PhotoItem[];
-  editMode: boolean;
-  onAdd?: (item: PhotoItem) => void;
-  onRemove?: (id: string) => void;
-  addPrefix?: string;
-}) {
-  const { setNodeRef, isOver } = useDroppable({ id });
-  return (
-    <SortableContext items={photos.map(p => p.id)} strategy={rectSortingStrategy}>
-      <div
-        ref={setNodeRef}
-        className={`grid grid-cols-1 gap-4 rounded-2xl transition-colors ${isOver ? 'bg-coral/5 ring-2 ring-coral/30 p-2' : ''}`}
-      >
-        {photos.map(item => (
-          <SortablePhoto key={item.id} item={item} editMode={editMode} onRemove={onRemove} />
-        ))}
-        {photos.length === 0 && (
-          <div className="min-h-[120px] rounded-2xl border-2 border-dashed border-slate-700 flex items-center justify-center text-slate-500 text-sm">
-            Drop photos here
-          </div>
-        )}
-        {editMode && onAdd && addPrefix && (
-          <AddImageTile onAdd={onAdd} prefix={addPrefix} />
-        )}
-      </div>
-    </SortableContext>
-  );
-}
-
-// ── Two-column editor (shared DndContext, supports cross-column drag) ─────
-function TwoColumnEditor({
-  config,
-  update,
-}: {
-  config: PageConfig;
-  update: (patch: Partial<PageConfig>) => void;
-}) {
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  const findList = (id: string): 'brenton' | 'jolie' | null => {
-    if (id === 'col-brenton') return 'brenton';
-    if (id === 'col-jolie') return 'jolie';
-    if (config.brentonPhotos.some(p => p.id === id)) return 'brenton';
-    if (config.joliePhotos.some(p => p.id === id)) return 'jolie';
-    return null;
-  };
-
-  const handleDragEnd = (e: DragEndEvent) => {
-    setActiveId(null);
-    const { active, over } = e;
-    if (!over) return;
-    const fromList = findList(active.id as string);
-    const toList = findList(over.id as string);
-    if (!fromList || !toList) return;
-
-    if (fromList === toList) {
-      if (active.id === over.id) return;
-      const arr = fromList === 'brenton' ? config.brentonPhotos : config.joliePhotos;
-      const oldIdx = arr.findIndex(p => p.id === active.id);
-      const newIdx = arr.findIndex(p => p.id === over.id);
-      if (oldIdx < 0 || newIdx < 0) return;
-      const moved = arrayMove(arr, oldIdx, newIdx);
-      update(fromList === 'brenton' ? { brentonPhotos: moved } : { joliePhotos: moved });
-    } else {
-      const fromArr = fromList === 'brenton' ? config.brentonPhotos : config.joliePhotos;
-      const toArr = toList === 'brenton' ? config.brentonPhotos : config.joliePhotos;
-      const item = fromArr.find(p => p.id === active.id);
-      if (!item) return;
-      const newFrom = fromArr.filter(p => p.id !== active.id);
-      const overIdx = toArr.findIndex(p => p.id === over.id);
-      const insertAt = overIdx < 0 ? toArr.length : overIdx;
-      const newTo = [...toArr.slice(0, insertAt), item, ...toArr.slice(insertAt)];
-      const patch: Partial<PageConfig> = {};
-      patch[fromList === 'brenton' ? 'brentonPhotos' : 'joliePhotos'] = newFrom;
-      patch[toList === 'brenton' ? 'brentonPhotos' : 'joliePhotos'] = newTo;
-      update(patch);
-    }
-  };
-
-  const activeItem =
-    config.brentonPhotos.find(p => p.id === activeId) ||
-    config.joliePhotos.find(p => p.id === activeId);
-
-  return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={e => setActiveId(e.active.id as string)}
-      onDragEnd={handleDragEnd}
-      onDragCancel={() => setActiveId(null)}
-    >
-      <Flank
-        gap="1.5rem"
-        left={
-          <div className="space-y-4">
-            <FadeInSection className="md:text-left mb-2">
-              <p className="text-coral uppercase tracking-[0.25em] text-xs font-bold mb-2">Brenton Keith &amp; His Bag O&rsquo; Tricks</p>
-              <EditableText value={config.headlineBrenton} onChange={v => update({ headlineBrenton: v })} editMode={true} as="h2" className="text-3xl md:text-4xl font-bold mb-3 text-white leading-tight" />
-              <EditableText value={config.subheadBrenton} onChange={v => update({ subheadBrenton: v })} editMode={true} className="text-gray-400 text-base" />
-            </FadeInSection>
-            <p className="text-coral/70 text-xs mb-1 font-medium tracking-wide uppercase">Drag to reorder · drag across columns · × to remove · + to add</p>
-            <EditableColumn
-              id="col-brenton"
-              photos={config.brentonPhotos}
-              editMode={true}
-              onAdd={item => update({ brentonPhotos: [...config.brentonPhotos, item] })}
-              onRemove={id => update({ brentonPhotos: config.brentonPhotos.filter(p => p.id !== id) })}
-              addPrefix="b"
-            />
-          </div>
-        }
-        right={
-          <div className="space-y-4">
-            <FadeInSection className="md:text-right mb-2">
-              <p className="text-lavender uppercase tracking-[0.25em] text-xs font-bold mb-2">Cirque Jolie</p>
-              <EditableText value={config.headlineJolie} onChange={v => update({ headlineJolie: v })} editMode={true} as="h2" className="text-3xl md:text-4xl font-bold mb-3 text-white leading-tight" />
-              <EditableText value={config.subheadJolie} onChange={v => update({ subheadJolie: v })} editMode={true} className="text-gray-400 text-base" />
-            </FadeInSection>
-            <p className="text-lavender/70 text-xs mb-1 font-medium tracking-wide uppercase text-right">Drag to reorder · drag across columns · × to remove · + to add</p>
-            <EditableColumn
-              id="col-jolie"
-              photos={config.joliePhotos}
-              editMode={true}
-              onAdd={item => update({ joliePhotos: [...config.joliePhotos, item] })}
-              onRemove={id => update({ joliePhotos: config.joliePhotos.filter(p => p.id !== id) })}
-              addPrefix="j"
-            />
-          </div>
-        }
-      />
-      <DragOverlay>
-        {activeItem && (
-          <div className="rounded-2xl shadow-2xl overflow-hidden ring-4 ring-coral opacity-90 rotate-1">
-            <img src={activeItem.src} alt={activeItem.alt} className="w-full h-auto block" />
-          </div>
-        )}
-      </DragOverlay>
-    </DndContext>
-  );
-}
-
-// ── Sortable grid (used only by live page as static renderer) ─────────────
-function SortableGrid({ photos, editMode }: { photos: PhotoItem[]; editMode: boolean }) {
-  return (
-    <div className="grid grid-cols-1 gap-4">
-      {photos.map(item => (
-        <SortablePhoto key={item.id} item={item} editMode={editMode} />
-      ))}
-    </div>
-  );
-}
-
-// ── Edit mode toolbar ──────────────────────────────────────────────────────
-function EditToolbar({ editMode, onToggle, onReset }: { editMode: boolean; onToggle: () => void; onReset: () => void }) {
-  return (
-    <div className="fixed bottom-6 right-6 z-[1000] flex items-center gap-3">
-      {editMode && (
-        <button
-          onClick={onReset}
-          className="px-4 py-2.5 bg-slate-700/90 hover:bg-slate-600 text-white text-sm font-medium rounded-full shadow-lg backdrop-blur-sm transition-all border border-slate-600"
-        >
-          Reset to defaults
-        </button>
-      )}
-      <button
-        onClick={onToggle}
-        className={`px-5 py-2.5 rounded-full shadow-xl text-sm font-bold transition-all border ${
-          editMode
-            ? 'bg-coral text-slate-950 border-coral hover:bg-coral/80'
-            : 'bg-slate-800/90 text-white border-slate-600 hover:bg-slate-700 backdrop-blur-sm'
-        }`}
-      >
-        {editMode ? '✓ Save Layout' : '✏️ Edit Page'}
-      </button>
-    </div>
-  );
-}
-
-// ── Jolie feature column ───────────────────────────────────────────────────
-// Keep both treatments available: the live page uses the free-floating alpha
-// version, while `variant="boxed"` restores the previously approved card.
-type JolieFeatureVariant = 'floating' | 'boxed';
-
-function JolieFeature({ variant = 'floating' }: { variant?: JolieFeatureVariant }) {
+// ── Jolie feature column — sticky video/poster beside the H1 ──────────────
+function JolieFeature() {
   const reduceMotion = useReducedMotion();
   const saveData =
     typeof navigator !== 'undefined' &&
     Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
-  const boxed = variant === 'boxed';
-  const stillSrc = boxed
-    ? '/media/strolling/red-striped-stilt-performer-night.webp'
-    : '/media/strolling/jolie-balloons-poster.webp';
+  const stillSrc = '/media/strolling/jolie-balloons-poster.webp';
 
   return (
     <aside className="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-stretch" aria-label="Cirque Jolie featured performer">
       <div className="lg:sticky lg:top-28">
-        <figure
-          className={
-            boxed
-              ? 'relative overflow-hidden rounded-[2rem] border border-lavender/25 bg-[radial-gradient(circle_at_50%_28%,rgba(179,157,219,0.25),rgba(15,23,42,0.96)_66%)] shadow-2xl shadow-black/30'
-              : 'relative overflow-visible lg:origin-bottom lg:scale-[1.06]'
-          }
-        >
+        <figure className="relative overflow-visible lg:origin-bottom lg:scale-[1.06]">
           <div className="relative h-[68svh] min-h-[440px] max-h-[680px] lg:h-[72vh] lg:max-h-[800px]">
             {reduceMotion || saveData ? (
               <img
                 src={stillSrc}
                 alt="Cirque Jolie greeting guests on stilts at a Maui event"
-                className={
-                  boxed
-                    ? 'h-full w-full object-cover object-top'
-                    : 'pointer-events-none h-full w-full select-none object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.5)]'
-                }
+                className="pointer-events-none h-full w-full select-none object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.5)]"
               />
             ) : (
               <video
@@ -692,33 +77,15 @@ function JolieFeature({ variant = 'floating' }: { variant?: JolieFeatureVariant 
                 poster={stillSrc}
                 disablePictureInPicture
                 aria-label="Cirque Jolie performing on stilts beneath a balloon sculpture"
-                className={
-                  boxed
-                    ? 'h-full w-full object-contain object-bottom'
-                    : 'pointer-events-none h-full w-full select-none object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.5)]'
-                }
+                className="pointer-events-none h-full w-full select-none object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.5)]"
               >
                 <source src="/media/video/jolie-balloons-v4.webm" type="video/webm" />
                 <img
                   src={stillSrc}
                   alt="Cirque Jolie greeting guests on stilts at a Maui event"
-                  className={
-                    boxed
-                      ? 'h-full w-full object-cover object-top'
-                      : 'h-full w-full object-contain object-bottom'
-                  }
+                  className="h-full w-full object-contain object-bottom"
                 />
               </video>
-            )}
-            {boxed && (
-              <>
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
-                <figcaption className="absolute inset-x-0 bottom-0 z-10 p-6">
-                  <p className="text-lavender text-xs font-bold uppercase tracking-[0.25em]">Cirque Jolie</p>
-                  <p className="mt-1 text-xl font-bold text-white">A spectacle in every room</p>
-                  <p className="mt-1 text-sm text-slate-300">Stilts · Characters · Fire · Ambient performance</p>
-                </figcaption>
-              </>
             )}
           </div>
         </figure>
@@ -727,145 +94,224 @@ function JolieFeature({ variant = 'floating' }: { variant?: JolieFeatureVariant 
   );
 }
 
+// ── Jolie's 18 preferred stilt-walker photos ───────────────────────────────
+// 3 of the 18 client-selected files are intentionally withheld from this page:
+// 13-IMG_6689.jpg and 07-IMG_1596.jpg are Fable's top desktop/mobile picks for
+// the site's Home hero plate — never duplicate a hero photo into a gallery.
+// 01-83E27970...png (winged trio, alternate setup to the hero below) now lives
+// on the Corporate page instead, so the "don't run both" near-duplicate never
+// appears twice on the site.
+const HERO_IMAGE: GalleryImage = {
+  src: '/media/client-selected/stilt-walkers/hero-winged-trio-monkeypod.webp',
+  alt: 'Three winged Cirque Jolie stilt walkers in orange, green and gold costumes under a monkeypod tree',
+};
+
+const FEATURED_IMAGES: GalleryImage[] = [
+  { src: '/media/client-selected/stilt-walkers/01-crimson-wings-crowd.webp', alt: 'Crimson pleated stilt wings towering above a cheering Maui crowd' },
+  { src: '/media/client-selected/stilt-walkers/02-sea-goddess-pool.webp', alt: 'Sea-goddess stilt performer pair beside a Maui resort pool' },
+  { src: '/media/client-selected/stilt-walkers/03-monarch-wings-fair.webp', alt: 'Monarch butterfly stilt wings at the Maui County Fair gate' },
+  { src: '/media/client-selected/stilt-walkers/04-pearl-jellyfish-ballroom.webp', alt: 'Blue pearl-jellyfish stilt performer pair in a ballroom' },
+  { src: '/media/client-selected/stilt-walkers/05-glowing-jellyfish-stage.webp', alt: 'Glowing jellyfish headdress stilt performer on a dark stage' },
+  { src: '/media/client-selected/stilt-walkers/06-patriotic-wings-child.webp', alt: 'White-winged stilt performer in patriotic stars and stripes with a young guest' },
+  { src: '/media/client-selected/stilt-walkers/07-whale-mural-duo.webp', alt: 'Stilt performer duo posing beside a Maui whale mural' },
+];
+
+const MORE_IMAGES: GalleryImage[] = [
+  { src: '/media/client-selected/stilt-walkers/08-forest-led-wings-duo.webp', alt: 'Duo of stilt performers in glowing LED angel-wing costumes with leaf crowns' },
+  { src: '/media/client-selected/stilt-walkers/09-sugar-skull-witch-resort.webp', alt: 'Elaborate sugar-skull and witch-hat stilt performer duo at a Maui resort shopping center' },
+  { src: '/media/client-selected/stilt-walkers/10-mario-mushroom-stilt.webp', alt: 'Stilt performer in a Super Mario mushroom costume at an indoor school event' },
+  { src: '/media/client-selected/stilt-walkers/11-tribal-feather-duo-ballroom.webp', alt: 'Tribal feather stilt performer duo at an elegant ballroom event' },
+  { src: '/media/client-selected/stilt-walkers/12-emerald-led-wings-solo.webp', alt: 'Solo stilt performer in glowing emerald LED butterfly wings' },
+  { src: '/media/client-selected/stilt-walkers/13-scarecrow-farm-trio.webp', alt: 'Scarecrow-costumed stilt performer posing with two guests in farm costumes' },
+  { src: '/media/client-selected/stilt-walkers/14-jellyfish-stage-alt.webp', alt: 'Glowing jellyfish headdress stilt performer on stage, alternate angle' },
+];
+
+const ALL_IMAGES: GalleryImage[] = [HERO_IMAGE, ...FEATURED_IMAGES, ...MORE_IMAGES];
+
 // ── Main page ──────────────────────────────────────────────────────────────
 export default function StrollingEntertainment() {
-  const [config, setConfig] = useState<PageConfig>(loadConfig);
-  const [editMode, setEditMode] = useState(false);
+  const { index, isOpen, open, close, next, prev } = useLightbox(ALL_IMAGES.length);
+  const triggerRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const update = useCallback((patch: Partial<PageConfig>) => {
-    setConfig(prev => {
-      const next = { ...prev, ...patch };
-      saveConfig(next);
-      return next;
-    });
-  }, []);
-
-  const toggleEdit = () => {
-    if (editMode) saveConfig(config);
-    setEditMode(e => !e);
-  };
-
-  const resetConfig = () => {
-    localStorage.removeItem(LS_KEY);
-    setConfig(DEFAULT_CONFIG);
-  };
+  const handleClose = useCallback(() => {
+    const openedIndex = index;
+    close();
+    if (openedIndex !== null) triggerRefs.current[openedIndex]?.focus();
+  }, [close, index]);
 
   return (
-    <>
-      {EDIT_ENABLED && <EditToolbar editMode={editMode} onToggle={toggleEdit} onReset={resetConfig} />}
+    <Layout title="Stilt Walkers">
+      {/* ── HERO + JOLIE FEATURE ── */}
+      <section className="relative bg-slate-900">
+        <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-x-8 gap-y-12 px-6 py-20 sm:py-24 lg:grid-cols-[minmax(0,3fr)_minmax(280px,1fr)] lg:grid-rows-[auto_1fr] lg:items-start lg:gap-x-10 lg:py-28 xl:gap-x-14">
+          <FadeInSection className="min-w-0 lg:col-start-1 lg:row-start-1">
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-coral/80">Maui · Stilts · Ambient · Walk-Around</p>
+            <h1 className="text-5xl font-bold leading-[0.95] sm:text-6xl lg:text-7xl xl:text-8xl">
+              Stilt<br /><span className="text-coral">Walkers</span>
+            </h1>
+            <p className="mt-8 max-w-3xl text-lg text-gray-300 md:text-xl">
+              The magic that moves through the crowd — towering stilt walkers and costumed ambient characters that turn your event into a spectacle people talk about for years.
+            </p>
+            <Link to="/contact?service=strolling" className="mt-8 inline-block rounded-full bg-coral px-8 py-3.5 font-bold text-slate-950 shadow-xl transition-all hover:scale-105 hover:bg-coral/80">
+              Book Stilt Walkers
+            </Link>
+          </FadeInSection>
 
-      <Layout title="Costumed Stilt Walking">
-        {/* ── HERO + GALLERY + JOLIE FEATURE ── */}
-        <section className="relative bg-slate-900">
-          <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-x-8 gap-y-12 px-6 py-20 sm:py-24 lg:grid-cols-[minmax(0,3fr)_minmax(280px,1fr)] lg:grid-rows-[auto_1fr] lg:items-start lg:gap-x-10 lg:py-28 xl:gap-x-14">
-            <FadeInSection className="min-w-0 lg:col-start-1 lg:row-start-1">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-coral/80">Maui · Stilts · Ambient · Walk-Around · Fire</p>
-              <h1 className="text-5xl font-bold leading-[0.95] sm:text-6xl lg:text-7xl xl:text-8xl">
-                Costumed Stilt<br /><span className="text-coral">Walking</span>
-              </h1>
-              <p className="mt-8 max-w-3xl text-lg text-gray-300 md:text-xl">
-                The magic that moves through the crowd — towering stilt walkers and costumed ambient characters that turn your event into a spectacle people talk about for years.
-              </p>
-              <Link to="/contact" className="mt-8 inline-block rounded-full bg-coral px-8 py-3.5 font-bold text-slate-950 shadow-xl transition-all hover:scale-105 hover:bg-coral/80">
-                Book Costumed Stilt Walking
-              </Link>
+          <JolieFeature />
+
+          <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+            <FadeInSection className="mt-2 border-t border-slate-700/70 pt-12 lg:mt-14">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-lavender">Cirque Jolie</p>
+              <h2 className="mb-3 text-3xl font-bold leading-tight text-white md:text-4xl">{HEADLINE_JOLIE}</h2>
+              <p className="max-w-3xl text-base text-gray-400">{SUBHEAD_JOLIE}</p>
             </FadeInSection>
 
-            <JolieFeature />
+            {/* Lead gallery image */}
+            <FadeInSection delay={0.05} className="mt-8">
+              <button
+                type="button"
+                ref={(el) => { triggerRefs.current[0] = el; }}
+                onClick={() => open(0)}
+                aria-label={`View photo: ${HERO_IMAGE.alt}`}
+                className="group block w-full cursor-zoom-in overflow-hidden rounded-2xl shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-coral"
+              >
+                <img
+                  src={HERO_IMAGE.src}
+                  alt={HERO_IMAGE.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-auto transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </button>
+            </FadeInSection>
 
-            {!editMode && (
-              <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-                <FadeInSection className="mt-2 border-t border-slate-700/70 pt-12 lg:mt-14">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-lavender">Cirque Jolie</p>
-                  <EditableText value={config.headlineJolie} onChange={v => update({ headlineJolie: v })} editMode={editMode} as="h2" className="mb-3 text-3xl font-bold leading-tight text-white md:text-4xl" />
-                  <EditableText value={config.subheadJolie} onChange={v => update({ subheadJolie: v })} editMode={editMode} className="max-w-3xl text-base text-gray-400" />
-                </FadeInSection>
-                <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  {config.joliePhotos.slice(0, 6).map((item, i) => (
-                    <FadeInSection key={item.id} delay={i * 0.05}>
-                      <SortablePhoto item={item} editMode={false} />
-                    </FadeInSection>
-                  ))}
-                </div>
+            {/* Featured grid */}
+            <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              {FEATURED_IMAGES.map((img, i) => {
+                const globalIndex = i + 1;
+                return (
+                  <FadeInSection key={img.src} delay={i * 0.05}>
+                    <button
+                      type="button"
+                      ref={(el) => { triggerRefs.current[globalIndex] = el; }}
+                      onClick={() => open(globalIndex)}
+                      aria-label={`View photo: ${img.alt}`}
+                      className="group block w-full cursor-zoom-in overflow-hidden rounded-2xl shadow-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-coral"
+                    >
+                      <img
+                        src={img.src}
+                        alt={img.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-auto transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    </button>
+                  </FadeInSection>
+                );
+              })}
+            </div>
+
+            {/* More photos */}
+            <FadeInSection delay={0.1} className="mt-12">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-lavender">More Stilt Walker Photos</p>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                {MORE_IMAGES.map((img, i) => {
+                  const globalIndex = FEATURED_IMAGES.length + 1 + i;
+                  return (
+                    <button
+                      key={img.src}
+                      type="button"
+                      ref={(el) => { triggerRefs.current[globalIndex] = el; }}
+                      onClick={() => open(globalIndex)}
+                      aria-label={`View photo: ${img.alt}`}
+                      className="group relative aspect-square block w-full cursor-zoom-in overflow-hidden rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-coral"
+                    >
+                      <img
+                        src={img.src}
+                        alt={img.alt}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </button>
+                  );
+                })}
               </div>
-            )}
+            </FadeInSection>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {editMode && (
-          <section className="relative z-20 bg-slate-900 pb-24">
-            <TwoColumnEditor config={config} update={update} />
-          </section>
-        )}
+      {isOpen && index !== null && (
+        <Lightbox images={ALL_IMAGES} index={index} onClose={handleClose} onNext={next} onPrev={prev} />
+      )}
 
-        {/* ── PERFECT FOR ── */}
-        <section className="py-24 bg-slate-950 relative z-20">
-          <Flank
-            left={
-              <FadeInSection className="md:text-right">
-                <h2 className="text-4xl font-bold mb-4">Perfect For</h2>
-                <p className="text-gray-400 text-lg mb-6">Anywhere you want jaws to drop</p>
-                <div className="flex flex-wrap md:justify-end gap-2">
-                  {['Weddings','Corporate Events','Graduation Parties','Family Reunions','Holiday Parties','Milestone Birthdays'].map((event, i) => (
-                    <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-4 py-2 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all cursor-default">
-                      {event}
-                    </span>
-                  ))}
-                </div>
-              </FadeInSection>
-            }
-            right={
-              <FadeInSection delay={0.15} className="md:pt-[7.25rem]">
-                <div className="flex flex-wrap gap-2">
-                  {['Resort Entertainment','Cocktail Hours','Festivals','Grand Openings','Luaus','Private Parties'].map((event, i) => (
-                    <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-4 py-2 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all cursor-default">
-                      {event}
-                    </span>
-                  ))}
-                </div>
-              </FadeInSection>
-            }
-          />
-        </section>
+      {/* ── PERFECT FOR ── */}
+      <section className="py-24 bg-slate-950 relative z-20">
+        <Flank
+          left={
+            <FadeInSection className="md:text-right">
+              <h2 className="text-4xl font-bold mb-4">Perfect For</h2>
+              <p className="text-gray-400 text-lg mb-6">Anywhere you want jaws to drop</p>
+              <div className="flex flex-wrap md:justify-end gap-2">
+                {['Weddings','Corporate Events','Graduation Parties','Family Reunions','Holiday Parties','Milestone Birthdays'].map((event, i) => (
+                  <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-4 py-2 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all cursor-default">
+                    {event}
+                  </span>
+                ))}
+              </div>
+            </FadeInSection>
+          }
+          right={
+            <FadeInSection delay={0.15} className="md:pt-[7.25rem]">
+              <div className="flex flex-wrap gap-2">
+                {['Resort Entertainment','Cocktail Hours','Festivals','Grand Openings','Luaus','Private Parties'].map((event, i) => (
+                  <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-4 py-2 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all cursor-default">
+                    {event}
+                  </span>
+                ))}
+              </div>
+            </FadeInSection>
+          }
+        />
+      </section>
 
-        {/* ── CTA ── */}
-        <section className="py-24 bg-slate-950 relative z-20">
-          <Flank
-            gap="0"
-            left={
-              <FadeInSection>
-                <div className="relative bg-gradient-to-br from-coral to-burgundy md:rounded-l-[2rem] rounded-[2rem] md:rounded-r-none p-10 md:p-12 h-full">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white leading-tight">Make Your Event Unforgettable</h2>
-                  <p className="text-white/90 mb-6">
-                    Stilt walkers and ambient characters — tell us your vision and we'll match the perfect performers.
-                  </p>
-                  <Link to="/contact" className="inline-block px-8 py-3.5 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">
-                    Book Costumed Stilt Walking
+      {/* ── CTA ── */}
+      <section className="py-24 bg-slate-950 relative z-20">
+        <Flank
+          gap="0"
+          left={
+            <FadeInSection>
+              <div className="relative bg-gradient-to-br from-coral to-burgundy md:rounded-l-[2rem] rounded-[2rem] md:rounded-r-none p-10 md:p-12 h-full">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white leading-tight">Make Your Event Unforgettable</h2>
+                <p className="text-white/90 mb-6">
+                  Stilt walkers and ambient characters — tell us your vision and we'll match the perfect performers.
+                </p>
+                <Link to="/contact?service=strolling" className="inline-block px-8 py-3.5 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">
+                  Book Stilt Walkers
+                </Link>
+              </div>
+            </FadeInSection>
+          }
+          right={
+            <FadeInSection delay={0.1}>
+              <div className="relative bg-gradient-to-br from-burgundy to-lavender md:rounded-r-[2rem] rounded-[2rem] md:rounded-l-none p-10 md:p-12 h-full">
+                <p className="text-white/80 uppercase tracking-[0.25em] text-xs font-bold mb-3">Maui Based · Outer Islands Available</p>
+                <p className="text-2xl md:text-3xl font-bold text-white mb-6 leading-tight">Call us and we'll talk through your vision.</p>
+                <a href="tel:+18088702102" className="inline-block px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/10 transition-all">
+                  Brenton · (808) 870-2102
+                </a>
+                <p className="text-white/80 text-sm mt-6">
+                  Looking for LED performers or other themed characters?{' '}
+                  <Link to="/led-performers" className="underline font-semibold hover:text-white">
+                    See LED Performers →
                   </Link>
-                </div>
-              </FadeInSection>
-            }
-            right={
-              <FadeInSection delay={0.1}>
-                <div className="relative bg-gradient-to-br from-burgundy to-lavender md:rounded-r-[2rem] rounded-[2rem] md:rounded-l-none p-10 md:p-12 h-full">
-                  <p className="text-white/80 uppercase tracking-[0.25em] text-xs font-bold mb-3">Maui Based · Outer Islands Available</p>
-                  <p className="text-2xl md:text-3xl font-bold text-white mb-6 leading-tight">Call us and we'll talk through your vision.</p>
-                  <a href="tel:+18088702102" className="inline-block px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/10 transition-all">
-                    Brenton · (808) 870-2102
-                  </a>
-                  <p className="text-white/80 text-sm mt-6">
-                    Looking for fire &amp; LED, characters, or other extras?{' '}
-                    <Link to="/additional-services" className="underline font-semibold hover:text-white">
-                      See add-ons &amp; à la carte →
-                    </Link>
-                  </p>
-                </div>
-              </FadeInSection>
-            }
-          />
-        </section>
-
-      </Layout>
-    </>
+                </p>
+              </div>
+            </FadeInSection>
+          }
+        />
+      </section>
+    </Layout>
   );
 }
