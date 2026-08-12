@@ -2,6 +2,7 @@
 /media/
 .choros-video/
 visual-contact-sheets/
+client-assets/
 file.png
 
 # Vercel builds this directory from source.
