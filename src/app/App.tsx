@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { MotionConfig } from 'motion/react';
+import { AnalyticsController } from './analytics/AnalyticsController';
 import { LandingPage } from './components/LandingPage';
 import { ScrollToTop } from './components/ScrollToTop';
 import { RouteHead } from './seo/RouteHead';
@@ -27,6 +28,9 @@ const About = lazy(() =>
 const Contact = lazy(() =>
   import('./pages/Contact').then((module) => ({ default: module.Contact })),
 );
+const Privacy = lazy(() =>
+  import('./pages/Privacy').then((module) => ({ default: module.Privacy })),
+);
 
 function RouteFallback() {
   return (
@@ -52,6 +56,7 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <RouteHead />
+        <AnalyticsController />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -72,6 +77,7 @@ function App() {
           {/* Information and public show pages */}
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="/upcoming-shows" element={<UpcomingShows />} />
           <Route path="/shows/mulligans-magic-show" element={<MulligansMagicShow />} />
 

@@ -2,9 +2,11 @@
 
 Status: **planned only — do not activate yet**
 
-This map preserves the most useful search equity from MagicBrent.com,
-GameshowFanatics.com, and CirqueJolie.com while avoiding broad redirects that
-Google may treat as soft 404s. None of these legacy-domain rules are present in
+The authorized first migration phase preserves the most useful search equity
+from MagicBrent.com and CirqueJolie.com while avoiding broad redirects that
+Google may treat as soft 404s. GameshowFanatics.com mappings remain below as a
+future option, but that domain is not part of the currently requested cutover.
+None of these legacy-domain rules are present in
 `vercel.json`; that file contains only exact aliases that already belonged to
 this application.
 
@@ -30,6 +32,15 @@ The live deployment and brand assets currently support the canonical host
 2026 audit. Resolve ownership and branding before purchasing or forwarding the
 alternate spelling; do not mix both spellings in canonical tags.
 
+### Reversibility is operational, not instantaneous SEO rollback
+
+Keep complete private exports, DNS records, URL inventories, and independent
+redirect-only projects so the businesses can be separated technically later.
+Be explicit with the client: once Google has processed a 301 migration and
+reassigned signals, turning the old sites back on does not instantly restore
+their former rankings. A future decoupling is possible, but it is a second site
+migration that must be planned and monitored.
+
 ## MagicBrent.com
 
 | Legacy path | Destination | Treatment |
@@ -46,7 +57,7 @@ duplicated Mulligan's occurrences. The evergreen show page is the safe landing
 for the recurring series; unrelated historical appearances should not be
 collapsed into it.
 
-## GameshowFanatics.com
+## GameshowFanatics.com — deferred, not authorized for this phase
 
 | Legacy path | Destination | Treatment |
 | --- | --- | --- |

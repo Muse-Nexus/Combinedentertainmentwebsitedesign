@@ -36,6 +36,9 @@ export function RouteHead() {
   useEffect(() => {
     const knownMetadata = getRouteMetadata(pathname);
     const metadata = knownMetadata ?? NOT_FOUND_METADATA;
+    const robots = __INDEXABLE_BUILD__
+      ? metadata.robots || 'index, follow, max-image-preview:large'
+      : 'noindex, nofollow';
     const canonical = knownMetadata ? absoluteUrl(knownMetadata.path) : null;
     const image = absoluteUrl(metadata.image);
 
@@ -47,7 +50,7 @@ export function RouteHead() {
     });
     upsertElement<HTMLMetaElement>('meta[name="robots"]', 'meta', {
       name: 'robots',
-      content: metadata.robots ?? 'index, follow, max-image-preview:large',
+      content: robots,
     });
 
     if (canonical) {

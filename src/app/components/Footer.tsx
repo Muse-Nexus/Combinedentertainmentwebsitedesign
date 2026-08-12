@@ -1,5 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight, Instagram, Facebook, Mail, Youtube } from 'lucide-react';
+import {
+  isGoogleAnalyticsConfigured,
+  openAnalyticsPreferences,
+} from '../analytics/googleAnalytics';
 
 const brentonRoutes = ['/magic', '/game-show', '/casino', '/casino-gameshow', '/shows/mulligans-magic-show'];
 const jolieRoutes = ['/cirque-jolie', '/strolling', '/led-performers', '/balloon-twisting', '/face-painting', '/balloon-decor'];
@@ -50,6 +54,7 @@ export function Footer() {
               <li><Link to="/upcoming-shows" className="hover:text-white transition-colors">Upcoming Shows</Link></li>
               <li><Link to="/shows/mulligans-magic-show" className="hover:text-white transition-colors">Mulligan&rsquo;s Magic Show</Link></li>
               <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
             </ul>
             <h3 className="text-white font-bold mb-4">Follow Us</h3>
             <div className="flex gap-4 mb-4">
@@ -119,8 +124,19 @@ export function Footer() {
         
         <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-sm">
           <p>&copy; {new Date().getFullYear()} Raining Entertainment. All rights reserved.</p>
-          <div className="flex gap-4 mt-4 md:mt-0">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 md:mt-0 md:justify-end">
+            <a href="tel:+18088702102" className="hover:text-white">(808) 870-2102</a>
             <a href="mailto:brentonkeith@magicbrent.com" className="hover:text-white">brentonkeith@magicbrent.com</a>
+            <Link to="/privacy" className="hover:text-white">Privacy</Link>
+            {isGoogleAnalyticsConfigured && (
+              <button
+                type="button"
+                onClick={openAnalyticsPreferences}
+                className="underline decoration-slate-600 underline-offset-4 hover:text-white"
+              >
+                Privacy choices
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { motion, useInView } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Mail, Phone, MapPin, Instagram, Facebook, Youtube } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { trackAnalyticsEvent } from '../analytics/googleAnalytics';
 
 const SERVICE_OPTIONS = [
   ['kids-party', 'Kids Birthday Party'],
@@ -85,6 +86,14 @@ export function Contact() {
       }
 
       setSubmitted(true);
+      // The API intentionally returns 202 to acknowledge honeypot submissions
+      // without writing them. Only a 201 proves a real Airtable lead was saved.
+      if (response.status === 201) {
+        trackAnalyticsEvent('generate_lead', {
+          lead_source: 'inquiry_form',
+          service: data.type || 'unspecified',
+        });
+      }
       reset();
     } catch (error) {
       setSubmitError(

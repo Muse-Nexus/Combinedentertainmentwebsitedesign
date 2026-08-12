@@ -3,6 +3,7 @@ export const SITE = Object.freeze({
   origin: 'https://www.rainingentertainment.com',
   locale: 'en_US',
   email: 'brentonkeith@magicbrent.com',
+  phone: '+18088702102',
   defaultImage: '/media/hero-real-brenton-jolie.webp',
   socialProfiles: [
     'https://www.instagram.com/magicbrent/',
@@ -189,6 +190,18 @@ const routes = [
     changefreq: 'yearly',
   },
   {
+    path: '/privacy',
+    title: 'Privacy & Analytics | Raining Entertainment',
+    description:
+      'How Raining Entertainment handles booking inquiries, optional analytics, cookies and privacy choices.',
+    image: '/media/hero-real-brenton-jolie.webp',
+    imageAlt: 'Raining Entertainment',
+    pageType: 'WebPage',
+    schemaKind: 'privacy',
+    robots: 'noindex, follow',
+    changefreq: 'yearly',
+  },
+  {
     path: '/upcoming-shows',
     title: 'Maui Magic Shows & Upcoming Events | Brenton Keith',
     description:
@@ -272,10 +285,20 @@ function organizationSchema() {
     logo: absoluteUrl('/favicon.png'),
     image: absoluteUrl(SITE.defaultImage),
     email: SITE.email,
+    telephone: SITE.phone,
     sameAs: SITE.socialProfiles,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      telephone: SITE.phone,
+      email: SITE.email,
+      availableLanguage: 'English',
+      areaServed: ['US-HI', 'US'],
+    },
     areaServed: [
       { '@type': 'AdministrativeArea', name: 'Maui, Hawaii' },
       { '@type': 'State', name: 'Hawaii' },
+      { '@type': 'Country', name: 'United States' },
     ],
   };
 }
@@ -371,6 +394,7 @@ export function createStructuredData(metadata) {
       areaServed: [
         { '@type': 'AdministrativeArea', name: 'Maui, Hawaii' },
         { '@type': 'State', name: 'Hawaii' },
+        { '@type': 'Country', name: 'United States' },
       ],
     });
   }

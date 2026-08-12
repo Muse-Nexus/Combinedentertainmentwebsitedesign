@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   INDEXED_ROUTES,
+  NOINDEX_ROUTES,
   SITE,
   absoluteUrl,
   getRouteMetadata,
@@ -10,6 +11,9 @@ import {
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(projectRoot, 'dist');
+const indexableBuild = process.env.VERCEL_ENV !== 'preview';
+const googleSiteVerification = process.env.VITE_GOOGLE_SITE_VERIFICATION?.trim();
+const googleAnalyticsId = process.env.VITE_GOOGLE_ANALYTICS_ID?.trim();
 
 function outputPathForRoute(route) {
   return route === '/'
@@ -21,6 +25,10 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+if (googleAnalyticsId) {
+  assert(/^G-[A-Z0-9]+$/i.test(googleAnalyticsId), 'VITE_GOOGLE_ANALYTICS_ID must be a GA4 G- measurement ID');
+}
+
 const sitemap = await readFile(path.join(distDir, 'sitemap.xml'), 'utf8');
 const robots = await readFile(path.join(distDir, 'robots.txt'), 'utf8');
 const config = JSON.parse(await readFile(path.join(projectRoot, 'vercel.json'), 'utf8'));
@@ -30,10 +38,14 @@ const sitemapRoutes = new Set(
   ),
 );
 
-assert(
-  robots.includes(`Sitemap: ${SITE.origin}/sitemap.xml`),
-  'robots.txt does not advertise the canonical sitemap',
-);
+if (indexableBuild) {
+  assert(
+    robots.includes(`Sitemap: ${SITE.origin}/sitemap.xml`),
+    'robots.txt does not advertise the canonical sitemap',
+  );
+} else {
+  assert(!robots.includes('Disallow: /'), 'Preview robots.txt must allow crawlers to read noindex');
+}
 assert(config.cleanUrls === true, 'vercel.json must enable cleanUrls for generated route HTML');
 assert(!config.rewrites?.length, 'vercel.json must not contain a catch-all SPA rewrite');
 assert(
@@ -52,10 +64,40 @@ for (const route of INDEXED_ROUTES) {
   assert(html.includes(`<title data-raining-head="true">${metadata.title.replaceAll('&', '&amp;')}</title>`), `Wrong title for ${route}`);
   assert(html.includes(`rel="canonical" href="${canonical}"`), `Missing canonical for ${route}`);
   assert(html.includes('name="description"'), `Missing description for ${route}`);
+  assert(
+    html.includes(
+      indexableBuild
+        ? 'name="robots" content="index, follow, max-image-preview:large"'
+        : 'name="robots" content="noindex, nofollow"',
+    ),
+    `Wrong robots directive for ${route}`,
+  );
   assert(html.includes('property="og:title"'), `Missing Open Graph tags for ${route}`);
   assert(html.includes('id="raining-structured-data"'), `Missing structured data for ${route}`);
   assert(!html.includes('Combined Entertainment Website Design'), `Generic title leaked into ${route}`);
   assert(sitemap.includes(`<loc>${canonical}</loc>`), `Sitemap is missing ${route}`);
+  if (googleSiteVerification) {
+    assert(
+      html.includes(`name="google-site-verification" content="${googleSiteVerification}"`),
+      `Missing Google site verification for ${route}`,
+    );
+  }
+}
+
+for (const route of NOINDEX_ROUTES) {
+  const metadata = getRouteMetadata(route);
+  const outputPath = outputPathForRoute(route);
+  await access(outputPath);
+  const html = await readFile(outputPath, 'utf8');
+  const expectedRobots = indexableBuild ? metadata.robots : 'noindex, nofollow';
+
+  assert(
+    html.includes(`name="robots" content="${expectedRobots}"`),
+    `Wrong noindex robots directive for ${route}`,
+  );
+  assert(html.includes(`rel="canonical" href="${absoluteUrl(route)}"`), `Missing canonical for ${route}`);
+  assert(!html.includes('id="raining-structured-data"'), `Noindex route ${route} must not emit structured data`);
+  assert(!sitemap.includes(`<loc>${absoluteUrl(route)}</loc>`), `Noindex route ${route} leaked into sitemap`);
 }
 
 for (const redirect of config.redirects || []) {
