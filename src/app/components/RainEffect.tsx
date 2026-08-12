@@ -1,71 +1,118 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useReducedMotion } from 'motion/react';
 
-export const RainEffect = ({ intensity = 1 }: { intensity?: number }) => {
+export const RainEffect = ({
+  active = true,
+  intensity = 1,
+}: {
+  active?: boolean;
+  intensity?: number;
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const reduceMotion = useReducedMotion();
+  const saveData =
+    typeof navigator !== 'undefined' &&
+    Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !active || reduceMotion || saveData) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-    
-    const drops: { x: number; y: number; speed: number; len: number }[] = [];
-    const maxDrops = 500 * intensity;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let animationId = 0;
+    let running = true;
 
-    for (let i = 0; i < maxDrops; i++) {
-      drops.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        speed: Math.random() * 15 + 10,
-        len: Math.random() * 20 + 10,
-      });
-    }
+    const drops: { x: number; y: number; speed: number; len: number }[] = [];
+
+    const seedDrops = () => {
+      const areaAdjustedCount = Math.round((width * height * intensity) / 12000);
+      const maxDrops = Math.min(window.innerWidth < 768 ? 150 : 380, Math.max(45, areaAdjustedCount));
+      drops.length = 0;
+
+      for (let index = 0; index < maxDrops; index += 1) {
+        drops.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          speed: Math.random() * 13 + 9,
+          len: Math.random() * 18 + 8,
+        });
+      }
+    };
+
+    const resize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      seedDrops();
+    };
 
     const draw = () => {
-      ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(174, 194, 224, 0.5)';
+      if (!running) return;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(174, 194, 224, 0.46)';
       ctx.lineWidth = 1;
       ctx.lineCap = 'round';
 
-      for (let i = 0; i < drops.length; i++) {
-        const d = drops[i];
+      for (const drop of drops) {
         ctx.beginPath();
-        ctx.moveTo(d.x, d.y);
-        ctx.lineTo(d.x, d.y + d.len);
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x, drop.y + drop.len);
         ctx.stroke();
 
-        d.y += d.speed;
-        if (d.y > h) {
-          d.y = -d.len;
-          d.x = Math.random() * w;
+        drop.y += drop.speed;
+        if (drop.y > height) {
+          drop.y = -drop.len;
+          drop.x = Math.random() * width;
         }
       }
-      requestAnimationFrame(draw);
+
+      animationId = requestAnimationFrame(draw);
     };
 
-    const animId = requestAnimationFrame(draw);
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        running = false;
+        cancelAnimationFrame(animationId);
+        return;
+      }
 
-    const handleResize = () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
+      if (!running) {
+        running = true;
+        animationId = requestAnimationFrame(draw);
+      }
     };
 
-    window.addEventListener('resize', handleResize);
+    resize();
+    animationId = requestAnimationFrame(draw);
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
+      running = false;
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [intensity]);
+  }, [active, intensity, reduceMotion, saveData]);
+
+  if (reduceMotion || saveData) return null;
 
   return (
-    <canvas 
-      ref={canvasRef} 
-      className="absolute inset-0 z-10 pointer-events-none mix-blend-screen opacity-60"
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="absolute inset-0 z-10 pointer-events-none mix-blend-screen opacity-45 md:opacity-60"
     />
   );
 };

@@ -13,7 +13,7 @@ const casinoImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
 const services = [
   {
     id: 'balloon-twisting',
-    title: 'Balloon Twisting & Facepainting',
+    title: 'Balloon Twisting & Face Painting',
     shortTitle: 'Balloon Twisting',
     icon: Palette,
     desc: 'Maui balloon artist and face painter for kids parties — custom balloon sculptures and creative designs by Cirque Jolie.',
@@ -35,8 +35,8 @@ const services = [
   },
   {
     id: 'strolling',
-    title: 'Strolling Entertainment',
-    shortTitle: 'Strolling Entertainment',
+    title: 'Costumed Stilt Walking',
+    shortTitle: 'Costumed Stilt Walking',
     icon: Trophy,
     desc: 'Maui stilt walkers, fire dancers, and roaming performers who mingle with your guests and bring magic up close.',
     color: 'bg-red-600',
@@ -56,15 +56,15 @@ const services = [
     alt: 'Maui magician Brenton Keith performing comedy magic with Bag O Tricks on the beach'
   },
   {
-    id: 'casino-gameshow',
-    title: 'Casino & Gameshow',
-    shortTitle: 'Casino & Gameshow',
+    id: 'game-show',
+    title: 'Game Show NITE',
+    shortTitle: 'Game Show NITE',
     icon: Briefcase,
-    desc: 'Maui casino nights and live Family Feud-style game shows — perfect for corporate team building and celebrations.',
+    desc: 'A live Family Feud-style Maui game show — perfect for corporate team building and celebrations.',
     color: 'bg-purple-700',
-    link: '/casino-gameshow',
+    link: '/game-show',
     image: casinoImg,
-    alt: 'Maui casino night and Family Feud game show entertainment by Gameshow Fanatics'
+    alt: 'Maui Family Feud-style Game Show NITE entertainment by Gameshow Fanatics'
   }
 ];
 

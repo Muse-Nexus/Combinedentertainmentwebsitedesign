@@ -19,6 +19,32 @@
   --color-sun-blue: #38bdf8;
 }
 
+@media (max-height: 620px) {
+  .discovery-scene-inner {
+    padding-block: 0.5rem;
+  }
+
+  .discovery-scene-intro {
+    margin-bottom: 0.25rem;
+  }
+
+  .discovery-scene-intro > p {
+    display: none;
+  }
+
+  .discovery-sunshine {
+    font-size: 2.5rem;
+  }
+
+  .discovery-mobile-card-wrap {
+    height: 66svh;
+  }
+
+  .discovery-mobile-card {
+    height: min(60svh, 300px);
+  }
+}
+
 body {
   @apply bg-slate-950 text-white font-sans antialiased;
   overflow-x: hidden;
@@ -27,4 +53,36 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   @apply font-display;
+}
+
+/* The umbrella labels are SVG text so they stay crisp at every viewport size. */
+.umbrella-label {
+  font-size: 34px;
+  letter-spacing: 2px;
+  paint-order: stroke fill;
+  stroke: rgba(15, 23, 42, 0.35);
+  stroke-width: 1px;
+}
+
+.umbrella-hit-area:focus-visible {
+  outline: none;
+}
+
+.umbrella-hit-area:focus-visible path {
+  fill: rgba(255, 255, 255, 0.14);
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 4px;
+}
+
+@media (max-width: 767px) {
+  .umbrella-label {
+    font-size: 36px;
+    letter-spacing: 0.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

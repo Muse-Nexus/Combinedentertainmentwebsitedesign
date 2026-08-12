@@ -6,7 +6,7 @@ interface PhotoUmbrellaNavProps {
   className?: string;
 }
 
-// ─── Geometry (matches /media/umbrella-photo.png, 1110×770) ──────────────
+// ─── Geometry (matches /media/umbrella-photo.webp, 1110×770) ─────────────
 // Hub (finial) at (555, 95). Visible front rim is a shallow arc:
 // ellipse center (555, 460), rx=465, ry=50, sweeping 180°→0° through θ=90°.
 const HUB_X = 555;
@@ -88,7 +88,7 @@ export const PhotoUmbrellaNav = ({ className = '' }: PhotoUmbrellaNavProps) => {
 
         {/* Photographic umbrella backdrop */}
         <image
-          href="/media/umbrella-photo.png"
+          href="/media/umbrella-photo.webp"
           x="0" y="0" width="1110" height="770"
           style={{ pointerEvents: 'none' }}
         />

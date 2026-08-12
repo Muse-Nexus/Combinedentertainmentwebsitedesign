@@ -17,30 +17,34 @@ const FadeInSection = ({ children, className = '', delay = 0 }: { children: Reac
 const services = [
   {
     icon: Dice5,
-    title: 'Casino Night',
+    title: 'Casino NITE',
     description: 'Full Vegas-style casino experience with professional dealers, real tables, and custom funny money. Blackjack, craps, roulette & poker.',
-    image: '/media/Casino-Night-48-1030x579.jpg',
-    link: '/casino-gameshow',
+    image: '/media/casino-gameshow/casino-night-red-carpet-maui.webp',
+    imagePosition: 'center',
+    link: '/casino',
   },
   {
     icon: Tv,
-    title: 'Game Show',
+    title: 'Game Show NITE',
     description: 'Live Family Feud–style game show with custom podiums, professional sound & lights. Perfect for team building and friendly competition.',
-    image: '/media/casino-gameshow/gameshow-outdoor-fullset.jpg',
-    link: '/casino-gameshow',
+    image: '/media/casino-gameshow/game-show-tent-wide-maui.webp',
+    imagePosition: 'center',
+    link: '/game-show',
   },
   {
     icon: Music,
     title: 'DJ & MC Services',
     description: 'Professional DJ and MC to keep your event flowing — from cocktail hour through the final dance. Custom playlists and seamless transitions.',
-    image: '/media/casino-gameshow/gameshow-podium-street.jpg',
-    link: '/casino-gameshow',
+    image: '/media/corporate/game-show-ballroom-maui.webp',
+    imagePosition: 'center',
+    link: '/additional-services',
   },
   {
     icon: Sparkles,
-    title: 'Stilt & Ambient Performers',
+    title: 'Costumed Stilt Walking',
     description: 'Stilt walkers and costumed ambient characters who add wonder and photo moments. Eye-catching performers who mingle with your guests.',
-    image: '/media/strolling/moth-stilt-costume.jpg',
+    image: '/media/corporate/cirque-jolie-wing-performers.webp',
+    imagePosition: 'center 15%',
     link: '/strolling',
   },
 ];
@@ -59,11 +63,15 @@ export default function Corporate() {
   return (
     <Layout title="Corporate Events">
       {/* HERO — group shot background */}
-      <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
+      <div ref={heroRef} className="relative min-h-[calc(100svh-5rem)] overflow-hidden flex items-end md:h-[85vh]">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
           <img
-            src="/media/Casino-Night-92-1030x579.jpg"
-            alt="Raining Entertainment corporate event team"
+            src="/media/corporate/game-show-ballroom-maui.webp"
+            alt="Gameshow Fanatics leading an interactive corporate event in a Maui ballroom"
+            width="1600"
+            height="669"
+            fetchPriority="high"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
@@ -72,18 +80,18 @@ export default function Corporate() {
           <motion.div className="absolute top-[15%] left-[5%] text-coral/10 text-[10rem] font-serif select-none" animate={{ rotate: [0, 5, -5, 0] }} transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}>&#9733;</motion.div>
           <motion.div className="absolute top-[10%] right-[10%] text-burgundy/10 text-[8rem] font-serif select-none" animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>&#9830;</motion.div>
         </div>
-        <div className="relative z-10 container mx-auto px-4 pb-20">
+        <div className="relative z-10 container mx-auto px-4 py-14 md:py-0 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Raining Entertainment</p>
-            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+            <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 leading-[0.9]">
               <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Maui Corporate Entertainment</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Event Entertainment That Delivers</span>
+              <br /><span className="text-white/90 text-2xl md:text-5xl font-light">Event Entertainment That Delivers</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
-              From casino nights to live game shows, strolling performers to full DJ production &mdash; we make your corporate event the one everyone talks about.
+            <p className="text-lg md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
+              From Casino NITE to live Game Show NITE productions, strolling performers to full DJ production &mdash; we make your corporate event the one everyone talks about.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Get a Quote</Link>
+              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Get a Quote</Link>
               <a href="#services" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Our Services</a>
             </div>
           </motion.div>
@@ -96,8 +104,8 @@ export default function Corporate() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection>
               <div className="relative">
-                <img src="/media/cirque-jolie-gameshow-fanatics-1.jpg" alt="Brent & Jolie hosting a live event" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
-                <div className="absolute -bottom-4 -right-4 bg-coral text-white px-6 py-3 rounded-2xl font-bold text-lg shadow-lg">
+                <img src="/media/cirque-jolie-gameshow-fanatics-1.jpg" alt="Brenton and Jolie hosting a live event" loading="lazy" decoding="async" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
+                <div className="absolute -bottom-4 right-3 md:-right-4 bg-coral text-slate-950 px-6 py-3 rounded-2xl font-bold text-lg shadow-lg">
                   <Building2 className="inline w-5 h-5 mr-2 -mt-1" />Full-Service
                 </div>
               </div>
@@ -106,7 +114,7 @@ export default function Corporate() {
               <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Why Choose Us</p>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">One Team.<br />Every Detail.</h2>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                Most corporate planners hire separate vendors for entertainment, music, and production. With Raining Entertainment, you get it all under one roof. Brenton Keith and Jolie Strickland bring a full roster of services &mdash; from game shows and casino nights to stilt walkers and DJ sets &mdash; so your event runs seamlessly.
+                Most corporate planners hire separate vendors for entertainment, music, and production. With Raining Entertainment, you get it all under one roof. Brenton Keith and Jolie Strickland bring a full roster of distinct services &mdash; from Game Show NITE and Casino NITE to costumed stilt walking and DJ sets &mdash; so your event runs seamlessly.
               </p>
               <div className="space-y-3">
                 {['Single point of contact for all entertainment', 'Scalable packages for 20 to 2,000+ guests', 'Professional production with sound, lights & staging', 'Maui-based with deep local venue knowledge'].map((item) => (
@@ -135,7 +143,14 @@ export default function Corporate() {
                 <Link to={service.link} className="group block">
                   <div className="bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 hover:border-coral/30 transition-all duration-300 hover:shadow-xl hover:shadow-coral/5">
                     <div className="relative h-56 overflow-hidden">
-                      <img src={service.image} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ objectPosition: service.imagePosition }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
                       <div className="absolute bottom-4 left-4 bg-coral/90 p-3 rounded-xl">
                         <service.icon className="w-6 h-6 text-white" />
@@ -189,7 +204,7 @@ export default function Corporate() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { src: '/media/Casino-Night-32-1030x579.jpg', label: 'Casino Night' },
+              { src: '/media/Casino-Night-32-1030x579.jpg', label: 'Casino NITE' },
               { src: '/media/515925879_10164201867303825_1352723102744150605_n.jpg', label: 'Corporate Game Show' },
               { src: '/media/strolling/fire-dancing.jpg', label: 'Fire Dancing' },
               { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', label: 'Casino Team' },
@@ -198,7 +213,7 @@ export default function Corporate() {
             ].map((img, i) => (
               <FadeInSection key={img.label} delay={i * 0.08}>
                 <div className="relative group rounded-2xl overflow-hidden aspect-[4/3]">
-                  <img src={img.src} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={img.src} alt={img.label} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 left-4 text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">{img.label}</div>
                 </div>
@@ -267,7 +282,7 @@ export default function Corporate() {
             <p className="text-lg text-gray-400 leading-relaxed mb-8">
               Whether you&rsquo;re planning a 50-person team dinner or a 2,000-guest gala, we&rsquo;ll build the perfect entertainment package for your event.
             </p>
-            <Link to="/contact" className="inline-block px-10 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105 text-lg">
+            <Link to="/contact" className="inline-block px-10 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105 text-lg">
               Request a Quote
             </Link>
           </FadeInSection>

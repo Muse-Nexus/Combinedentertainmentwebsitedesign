@@ -3,6 +3,7 @@ import { Layout } from '../components/Layout';
 import { motion, useScroll, useTransform, useInView } from 'motion/react';
 import { Palette, Sparkles, Heart, Star, Wand2, Music } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SmartVimeoBackground } from '../components/SmartVimeoBackground';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
@@ -22,22 +23,12 @@ export default function BalloonTwisting() {
   return (
     <Layout title="Kids Entertainment">
       {/* HERO — Vimeo background video (autoplay, loop, muted) */}
-      <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
+      <div ref={heroRef} className="relative min-h-[calc(100svh-5rem)] overflow-hidden flex items-end md:h-[85vh]">
         <motion.div style={{ y: heroY }} className="absolute inset-0 overflow-hidden">
-          {/* Cover-fit trick: oversize the iframe so its 16:9 video
-              fills the hero on any aspect ratio without letterboxing. */}
-          <iframe
-            src="https://player.vimeo.com/video/334597801?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&dnt=1"
-            title="Balloon twisting hero"
-            allow="autoplay; fullscreen"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={{
-              border: 'none',
-              width:  'max(177.78vh, 100%)',  // 16/9 of viewport height
-              height: 'max(56.25vw, 100%)',   //  9/16 of viewport width
-              minWidth: '100%',
-              minHeight: '100%',
-            }}
+          <SmartVimeoBackground
+            videoId="334597801"
+            poster="/media/balloons/octopus-balloon-sculpture.jpg"
+            title="Cirque Jolie balloon twisting promo"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
         </motion.div>
@@ -45,18 +36,18 @@ export default function BalloonTwisting() {
           <motion.div className="absolute top-[15%] left-[5%] text-lavender/10 text-[12rem] select-none" animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>&#127880;</motion.div>
           <motion.div className="absolute top-[10%] right-[8%] text-coral/10 text-[10rem] select-none" animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}>&#127879;</motion.div>
         </div>
-        <div className="relative z-10 container mx-auto px-4 pb-20">
+        <div className="relative z-10 container mx-auto px-4 py-14 md:py-0 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-lavender font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie &mdash; Children&rsquo;s Entertainment</p>
-            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+            <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 leading-[0.9]">
               <span className="bg-gradient-to-r from-lavender via-coral to-sage bg-clip-text text-transparent">Maui Kids Party Entertainment</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Children&rsquo;s Magic</span>
+              <br /><span className="text-white/90 text-2xl md:text-5xl font-light">Balloon Twisting, Face Painting &amp; Children&rsquo;s Magic</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
+            <p className="text-lg md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
               Cirque Jolie has a professional team of face painters and balloon twisters &mdash; plus a 30-minute interactive children&rsquo;s magic show &mdash; keeping young children delighted and entertained at parties across Maui.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-lavender hover:bg-lavender/80 text-white font-bold rounded-full transition-all shadow-lg shadow-lavender/25 hover:shadow-lavender/40 hover:scale-105">Book Kids Entertainment</Link>
+              <Link to="/contact" className="px-8 py-4 bg-lavender hover:bg-lavender/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-lavender/25 hover:shadow-lavender/40 hover:scale-105">Book Kids Entertainment</Link>
               <a href="#about" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Meet Jolie</a>
             </div>
           </motion.div>
@@ -70,7 +61,7 @@ export default function BalloonTwisting() {
             <FadeInSection>
               <div className="relative">
                 <img src="/media/strolling/jolie-portrait.jpg" alt="Jolie Strickland — Cirque Jolie" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover aspect-[4/5]" />
-                <div className="absolute -bottom-6 -right-6 bg-lavender text-white px-6 py-4 rounded-2xl shadow-xl">
+                <div className="absolute -bottom-6 right-3 md:-right-6 bg-lavender text-slate-950 px-6 py-4 rounded-2xl shadow-xl">
                   <div className="text-3xl font-black">20+</div>
                   <div className="text-sm font-medium opacity-90">Years Performing</div>
                 </div>
@@ -83,10 +74,10 @@ export default function BalloonTwisting() {
                 Cirque Jolie&rsquo;s beginnings lie in Jolie&rsquo;s youth. Growing up mostly on Maui, she was part of a group trained as &ldquo;clowns&rdquo; in 2000 by Una the Clown, and they volunteered all over the island at places like Hale Makua and Kula Hospital. Una the Clown left Maui in 2004, leaving her legacy behind in &ldquo;Jolie the Clown,&rdquo; who continued to entertain at events and parties with her balloon-making, face-painting, and magic.
               </p>
               <p className="text-gray-400 leading-relaxed mb-4">
-                As the years passed and her skills expanded, Jolie the Clown evolved into Cirque Jolie. She will still wear a clown costume if requested, but enjoys the freedom to bring a diverse and colorful array of characters to events and parties. Her skills now include stilt walking and fire dancing, and she&rsquo;s thrilled to add &ldquo;prize girl&rdquo; to her ever-growing list of talents with <Link to="/casino-gameshow" className="text-lavender hover:underline">Gameshow Fanatics</Link>.
+                As the years passed and her skills expanded, Jolie the Clown evolved into Cirque Jolie. She will still wear a clown costume if requested, but enjoys the freedom to bring a diverse and colorful array of characters to events and parties. Her skills now include stilt walking and fire dancing, and she&rsquo;s thrilled to add &ldquo;prize girl&rdquo; to her ever-growing list of talents with <Link to="/game-show" className="text-lavender hover:underline">Gameshow Fanatics</Link>.
               </p>
               <p className="text-gray-400 leading-relaxed mb-8">
-                She lives in Haiku with her partner Brenton Keith and her son Jet, and performs throughout Maui and the Hawaiian islands.
+                She lives in Haiku with her partner Brenton Keith and performs throughout Maui and the Hawaiian islands.
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="bg-lavender/10 text-lavender px-4 py-2 rounded-full text-sm font-medium">Entertaining Since 2000</span>
@@ -224,7 +215,7 @@ export default function BalloonTwisting() {
                 <p className="text-white/70 mb-10">Entertainers based on the island of Maui &amp; willing to travel to outer island events</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/contact" className="px-10 py-4 bg-white text-lavender font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Kids Entertainment</Link>
-                  <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
+                  <a href="tel:+18088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">Brenton · (808) 870-2102</a>
                 </div>
               </div>
             </div>

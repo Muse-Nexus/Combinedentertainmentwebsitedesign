@@ -22,11 +22,11 @@ export default function FacePainting() {
   return (
     <Layout title="Face Painting — Maui Kids Parties">
       {/* HERO */}
-      <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
+      <div ref={heroRef} className="relative min-h-[calc(100svh-5rem)] overflow-hidden flex items-end md:h-[85vh]">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
           <img
-            src="/media/balloons/dragon-facepainting.jpg"
-            alt="Dragon face painting on a child by Cirque Jolie on Maui"
+            src="/media/face-painting/cirque-jolie-face-painting-kids-maui.webp"
+            alt="Cirque Jolie painting colorful character designs for children at a Maui event"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
@@ -35,18 +35,18 @@ export default function FacePainting() {
           <motion.div className="absolute top-[15%] left-[5%] text-coral/10 text-[12rem] select-none" animate={{ y: [0, -15, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>🎨</motion.div>
           <motion.div className="absolute top-[10%] right-[8%] text-lavender/10 text-[10rem] select-none" animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}>✨</motion.div>
         </div>
-        <div className="relative z-10 container mx-auto px-4 pb-20">
+        <div className="relative z-10 container mx-auto px-4 py-14 md:py-0 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Cirque Jolie &mdash; Professional Face Painting</p>
-            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+            <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 leading-[0.9]">
               <span className="bg-gradient-to-r from-coral via-lavender to-sage bg-clip-text text-transparent">Maui Face Painting</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">Dragons, Butterflies, Superheroes &amp; More</span>
+              <br /><span className="text-white/90 text-2xl md:text-5xl font-light">Dragons, Butterflies, Superheroes &amp; More</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
+            <p className="text-lg md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
               Hypoallergenic, professional-grade face paints applied by Cirque Jolie &mdash; intricate full-face designs in minutes, perfect for birthday parties, school events, and resort family days across Maui.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Face Painting</Link>
+              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Face Painting</Link>
               <Link to="/balloon-twisting" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">Add Balloon Twisting</Link>
             </div>
           </motion.div>
@@ -94,7 +94,7 @@ export default function FacePainting() {
               Most parties book Face Painting + Balloon Twisting together &mdash; one performer, one fee, twice the fun. Ask about the combo when you book.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Link to="/contact" className="px-10 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full text-lg transition-all shadow-lg shadow-coral/25 hover:scale-105">
+              <Link to="/contact" className="px-10 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full text-lg transition-all shadow-lg shadow-coral/25 hover:scale-105">
                 Book Now
               </Link>
               <Link to="/balloon-twisting" className="px-10 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full text-lg transition-all hover:bg-white/5">

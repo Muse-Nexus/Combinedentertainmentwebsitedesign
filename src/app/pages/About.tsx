@@ -26,7 +26,7 @@ export function About() {
               <span className="bg-gradient-to-r from-coral via-lavender to-sage bg-clip-text text-transparent">Maui&rsquo;s Entertainment Duo</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Husband &amp; wife team Brenton Keith and Jolie Strickland have been entertaining Maui for over two decades. Three brands. One mission: make your event unforgettable.
+              Husband &amp; Wife team Brenton Keith and Jolie Strickland have been entertaining Maui for over two decades. Three brands. One mission: make your event unforgettable.
             </p>
           </motion.div>
         </div>
@@ -38,27 +38,27 @@ export function About() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection>
               <div className="relative">
-                <img src="/media/about/brent-umbrella-beach.jpg" alt="Brenton Keith — Magic Brent on the beach" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/5]" />
-                <div className="absolute -bottom-6 -left-6 bg-coral text-white px-6 py-4 rounded-2xl shadow-xl">
+                <img src="/media/about/brent-umbrella-beach.jpg" alt="Brenton Keith on the beach" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/5]" />
+                <div className="absolute -bottom-6 left-3 md:-left-6 bg-coral text-slate-950 px-6 py-4 rounded-2xl shadow-xl">
                   <div className="text-3xl font-black">25+</div>
                   <div className="text-sm font-medium opacity-90">Years Performing</div>
                 </div>
               </div>
             </FadeInSection>
             <FadeInSection delay={0.2}>
-              <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Magic Brent &amp; Gameshow Fanatics</p>
+              <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Brenton Keith &amp; His Bag O&rsquo; Tricks &middot; Gameshow Fanatics</p>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Brenton<span className="text-coral"> Keith</span></h2>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">
                 Brenton Keith started performing magic at age 12 and became a house magician at 17. He performed at Universal Studios and The Magic Castle in Hollywood before bringing his act to Maui in the late &rsquo;90s. Today he&rsquo;s Hawaii&rsquo;s go-to comedy magician, game show host, MC, and DJ.
               </p>
               <p className="text-gray-400 leading-relaxed mb-6">
-                Voted &ldquo;Best Comedian on Maui&rdquo; in 2019, Brent runs a weekly magic show at Mulligan&rsquo;s on the Blue in Wailea &mdash; the longest-running live magic show on the island. He also created Gameshow Fanatics, a full-production game show and casino night company that handles corporate events, fundraisers, and celebrations across the islands.
+                Voted &ldquo;Best Comedian on Maui&rdquo; in 2019, Brenton runs a weekly magic show at Mulligan&rsquo;s on the Blue in Wailea &mdash; the longest-running live magic show on the island. He also created Gameshow Fanatics for full-production game shows and separately produces Casino NITE events for corporate groups, fundraisers, and celebrations across the islands.
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Comedy Magic</span>
                 <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Game Show Host</span>
                 <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">MC &amp; DJ</span>
-                <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Casino Night</span>
+                <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Casino NITE</span>
               </div>
             </FadeInSection>
           </div>
@@ -71,8 +71,8 @@ export function About() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection delay={0.2} className="md:order-2">
               <div className="relative">
-                <img src="/media/about/cirque-jolie-maui.jpg" alt="Jolie Strickland — Cirque Jolie" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover aspect-[4/5]" />
-                <div className="absolute -bottom-6 -right-6 bg-lavender text-white px-6 py-4 rounded-2xl shadow-xl">
+                <img src="/media/about/jolie-strickland-portrait.webp" alt="Jolie Strickland in a colorful Cirque Jolie costume" className="rounded-3xl shadow-2xl shadow-lavender/10 w-full object-cover object-center aspect-[4/5]" />
+                <div className="absolute -bottom-6 right-3 bg-lavender text-slate-950 px-6 py-4 rounded-2xl shadow-xl">
                   <div className="text-3xl font-black">20+</div>
                   <div className="text-sm font-medium opacity-90">Years as Cirque Jolie</div>
                 </div>
@@ -107,7 +107,7 @@ export function About() {
                 <img src="/media/472753445_1039860624823457_3993024156608406927_n.jpg" alt="Brenton Keith and Jolie Strickland performing together at oceanfront Maui 4th of July event" className="w-full aspect-[4/5] object-cover" />
               </div>
               <div className="rounded-3xl overflow-hidden shadow-2xl shadow-lavender/10">
-                <img src="/media/598419647_1413764607417930_4065430168744957782_n.jpg" alt="Raining Entertainment casino night crew posing with holiday balloon decor at Maui venue" className="w-full aspect-[4/5] object-cover" />
+                <img src="/media/598419647_1413764607417930_4065430168744957782_n.jpg" alt="Raining Entertainment Casino NITE crew posing with holiday balloon decor at a Maui venue" className="w-full aspect-[4/5] object-cover" />
               </div>
             </div>
           </FadeInSection>
@@ -123,9 +123,9 @@ export function About() {
           </FadeInSection>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Magic Brent', color: 'coral', desc: 'Comedy magic, MC & DJ services. Brent brings the laughs, the wonder, and the energy to every event.', link: '/magic' },
+              { name: "Brenton Keith & His Bag O' Tricks", color: 'coral', desc: 'Comedy magic, MC & DJ services. Brenton brings the laughs, the wonder, and the energy to every event.', link: '/magic' },
               { name: 'Cirque Jolie', color: 'lavender', desc: 'Stilt walking, fire dancing, kids entertainment, balloon twisting, face painting & balloon décor.', link: '/balloon-twisting' },
-              { name: 'Gameshow Fanatics', color: 'sage', desc: 'Full-production game shows, casino nights, trivia, and wedding entertainment.', link: '/casino-gameshow' },
+              { name: 'Gameshow Fanatics', color: 'sage', desc: 'Full-production Game Show NITE experiences, trivia, and interactive entertainment.', link: '/game-show' },
             ].map((brand, i) => (
               <FadeInSection key={i} delay={i * 0.15}>
                 <Link to={brand.link} className="block bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700/50 hover:border-current transition-all h-full group" style={{ color: `var(--color-${brand.color})` }}>
@@ -148,11 +148,11 @@ export function About() {
                 <MapPin className="w-12 h-12 text-coral mx-auto mb-6" />
                 <h2 className="text-4xl font-bold mb-6">Based on Maui</h2>
                 <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                  We live, work, and play on the Valley Isle. Available for events across Maui county and neighbor islands by request. From intimate backyard luaus to 500+ guest corporate galas, we scale our entertainment to fit your event perfectly.
+                  We live, work, and play on the Valley Isle. Available for events across Maui County and neighbor islands by request. From intimate backyard luaus to 500+ guest corporate galas, we scale our entertainment to fit your event perfectly.
                 </p>
                 <div className="flex flex-wrap justify-center gap-6 text-gray-400">
                   <div className="flex items-center gap-2"><Users className="w-5 h-5 text-coral" /><span>Any group size</span></div>
-                  <div className="flex items-center gap-2"><Star className="w-5 h-5 text-coral" /><span>500+ events performed</span></div>
+                  <div className="flex items-center gap-2"><Star className="w-5 h-5 text-coral" /><span>Thousands of events performed</span></div>
                   <div className="flex items-center gap-2"><Heart className="w-5 h-5 text-coral" /><span>Family owned &amp; operated</span></div>
                 </div>
               </div>

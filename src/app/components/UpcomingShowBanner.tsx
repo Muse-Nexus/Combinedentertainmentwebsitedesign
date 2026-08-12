@@ -45,7 +45,7 @@ export function UpcomingShowBanner() {
                         </div>
                     </div>
                     <p className="text-slate-400 max-w-xl">
-                        Join Magic Brent for an afternoon of wonder! Free for all ages. 
+                        Join Brenton Keith &amp; His Bag O&rsquo; Tricks for an afternoon of wonder! Free for all ages.
                         Rain or shine (we have a tent!).
                     </p>
                 </div>

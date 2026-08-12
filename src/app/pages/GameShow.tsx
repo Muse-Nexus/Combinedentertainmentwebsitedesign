@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useInView } from 'motion/react';
 import { Tv, Users, Star, Mic, Zap, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PromoVideo } from '../components/PromoVideo';
+import { SmartBackgroundVideo } from '../components/SmartBackgroundVideo';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
@@ -21,35 +22,32 @@ export default function GameShow() {
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
-    <Layout title="Gameshow Fanatics — Maui Interactive Game Show">
+    <Layout title="Game Show NITE — Maui Interactive Entertainment">
       {/* HERO */}
-      <div ref={heroRef} className="relative h-[85vh] overflow-hidden flex items-end">
-        <motion.div style={{ y: heroY }} className="absolute inset-0">
-          <iframe
-            src="https://player.vimeo.com/video/654838191?autoplay=1&loop=1&muted=1&background=1&controls=0&title=0&byline=0&portrait=0&dnt=1"
-            className="absolute inset-0 w-full h-full"
-            style={{ border: 'none', transform: 'scale(1.2)' }}
-            allow="autoplay; fullscreen"
-            title="Gameshow Fanatics promo"
+      <div ref={heroRef} className="relative min-h-[calc(100svh-5rem)] overflow-hidden flex items-end md:h-[85vh]">
+        <motion.div style={{ y: heroY }} className="absolute inset-x-0 -top-32 -bottom-32 will-change-transform">
+          <SmartBackgroundVideo
+            desktopSrc="/media/video/game-show-only.mp4"
+            poster="/media/casino-gameshow/gameshow-fanatics-crowd-maui.webp"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
         </motion.div>
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div className="absolute top-[15%] left-[5%] text-coral/10 text-[10rem] font-serif select-none" animate={{ rotate: [0, 10, -10, 0] }} transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}>★</motion.div>
           <motion.div className="absolute top-[10%] right-[10%] text-burgundy/10 text-[8rem] font-serif select-none" animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}>🎙</motion.div>
         </div>
-        <div className="relative z-10 container mx-auto px-4 pb-20">
+        <div className="relative z-10 container mx-auto px-4 py-14 md:py-0 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: 'easeOut' }}>
             <p className="text-coral font-semibold tracking-[0.3em] uppercase text-sm mb-4">Gameshow Fanatics &mdash; Where We Put You in the Game!</p>
-            <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9]">
+            <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 leading-[0.9]">
               <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Hawaii&rsquo;s Mobile Game Show</span>
-              <br /><span className="text-white/90 text-4xl md:text-5xl font-light">A Full TV Experience, Brought to You</span>
+              <br /><span className="text-white/90 text-2xl md:text-5xl font-light">A Full TV Experience, Brought to You</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
+            <p className="text-lg md:text-2xl text-gray-300 max-w-2xl leading-relaxed mb-8">
               Hawaii&rsquo;s completely unique, full-production mobile game show. We bring the complete television experience to your event — customized to your group, your guests, your moment.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Game Show Nite</Link>
+              <Link to="/contact" className="px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-coral/25 hover:shadow-coral/40 hover:scale-105">Book Game Show NITE</Link>
               <a href="#how-it-works" className="px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-full transition-all hover:bg-white/5">See How It Works</a>
             </div>
           </motion.div>
@@ -60,7 +58,12 @@ export default function GameShow() {
       <section className="py-20 bg-slate-900">
         <div className="container mx-auto px-4">
           <FadeInSection className="max-w-4xl mx-auto">
-            <PromoVideo source={{ type: 'vimeo', videoId: '654838191' }} className="shadow-2xl shadow-coral/10" />
+            <PromoVideo
+              source={{ type: 'direct', src: '/media/video/game-show-only.mp4' }}
+              poster="/media/casino-gameshow/gameshow-fanatics-crowd-maui.webp"
+              title="Play the Gameshow Fanatics promo video"
+              className="shadow-2xl shadow-coral/10"
+            />
           </FadeInSection>
         </div>
       </section>
@@ -70,7 +73,7 @@ export default function GameShow() {
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Gameshow Fanatics</p>
-            <h2 className="text-4xl md:text-5xl font-bold">What Is Game Show Nite?</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">What Is Game Show NITE?</h2>
             <p className="text-xl text-gray-400 mt-4 max-w-3xl mx-auto">
               We re-created the Family Feud, and then some. A professional set with all the bells &amp; whistles — answers &ldquo;flipping&rdquo; with the DING! just like the show from the old days.
             </p>
@@ -78,7 +81,7 @@ export default function GameShow() {
 
           <div className="grid md:grid-cols-2 gap-16 items-center mb-20">
             <FadeInSection>
-              <img src="/media/casino-gameshow/gameshow-outdoor-fullset.jpg" alt="Full outdoor game show set at night" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
+              <img src="/media/casino-gameshow/game-show-tent-maui.webp" alt="Gameshow Fanatics hosting a full audience under a Maui event tent" loading="lazy" decoding="async" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
             </FadeInSection>
             <FadeInSection delay={0.2}>
               <h3 className="text-3xl font-bold mb-6">The Full Game Show Experience</h3>
@@ -86,7 +89,7 @@ export default function GameShow() {
                 Our flagship game is a parody version of the old Family Feud shows. Unlike the real show, ours is personalized to your event, group, or guest of honor. Contestants from your party approach the podium to the music to face-off and ring the buzzer &mdash; it&rsquo;s hilarious!
               </p>
               <p className="text-gray-400 leading-relaxed mb-8">
-                Game Show Nite gets people on the edges of their seats. Laughs, interaction, and fun guaranteed &mdash; it&rsquo;s Maui party entertainment that brings people together and keeps them talking for years.
+                Game Show NITE gets people on the edges of their seats. Laughs, interaction, and fun guaranteed &mdash; it&rsquo;s Maui party entertainment that brings people together and keeps them talking for years.
               </p>
               <div className="space-y-4">
                 {[
@@ -105,19 +108,19 @@ export default function GameShow() {
             </FadeInSection>
           </div>
 
-          {/* Game Show Lite */}
+          {/* Game Show LITE */}
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <FadeInSection delay={0.1} className="order-2 md:order-1">
-              <h3 className="text-3xl font-bold mb-4">Game Show Lite</h3>
+              <h3 className="text-3xl font-bold mb-4">Game Show LITE</h3>
               <p className="text-gray-300 leading-relaxed mb-6">
-                For smaller events or tighter spaces, Game Show Lite brings the same energy with a more compact setup. Perfect for corporate team-building, cocktail hours, or when you want the fun without the full production footprint.
+                Game Show LITE brings the same custom hosting energy in a compact setup designed for smaller budgets and tighter spaces. It can engage anything from an intimate group to a crowd of 1,000, including a strolling format that moves through large events.
               </p>
               <ul className="space-y-3">
                 {[
-                  'Portable podium set — fits any venue',
+                  'Compact setup for tighter spaces and smaller budgets',
                   'Same custom questions & hosting energy',
-                  'Great for 10–50 guests',
-                  'Combines perfectly with casino tables',
+                  'Scales from intimate groups to very large crowds',
+                  'Travel-ready for off-island events',
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-gray-300">
                     <Star className="w-5 h-5 text-coral shrink-0 mt-0.5" />
@@ -127,7 +130,7 @@ export default function GameShow() {
               </ul>
             </FadeInSection>
             <FadeInSection className="order-1 md:order-2">
-              <img src="/media/casino-gameshow/gameshow-podium-street.jpg" alt="Game Show Lite mobile podium setup" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3]" />
+              <img src="/media/game-show/game-show-lite-hosts-maui.webp" alt="Brenton Keith and Jolie hosting Game Show LITE at a Maui event" loading="lazy" decoding="async" className="rounded-3xl shadow-2xl shadow-coral/10 w-full object-cover aspect-[4/3] object-top" />
             </FadeInSection>
           </div>
         </div>
@@ -147,7 +150,7 @@ export default function GameShow() {
               { icon: <Mic className="w-8 h-8" />, title: 'High-Energy Host', desc: 'Brenton Keith has 30+ years of comedy and crowd work — your guests are in great hands.' },
               { icon: <Zap className="w-8 h-8" />, title: 'Turn-Key Setup', desc: 'We bring everything — you just bring your people.' },
               { icon: <Trophy className="w-8 h-8" />, title: 'Team Building', desc: 'Perfect for corporate groups — collaborative, competitive, and laugh-out-loud fun.' },
-              { icon: <Star className="w-8 h-8" />, title: 'Maui\'s Only Mobile Show', desc: 'Hawaii\'s premiere portable game show experience. There\'s nothing else like it.' },
+              { icon: <Star className="w-8 h-8" />, title: 'Maui\'s Only Mobile Show', desc: 'Hawaii\'s premier portable game show experience. There\'s nothing else like it.' },
             ].map((item, i) => (
               <FadeInSection key={i} delay={i * 0.1}>
                 <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 hover:border-coral/30 transition-all h-full">
@@ -196,19 +199,29 @@ export default function GameShow() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { src: '/media/486560996_1186362480158145_5148907381347692652_n.jpg', alt: 'Gameshow Fanatics full outdoor set at Maui event' },
-              { src: '/media/499547445_1232949328832793_5242943925623788269_n.jpg', alt: 'Game show nite crowd interaction' },
-              { src: '/media/casino-gameshow/gameshow-outdoor-fullset.jpg', alt: 'Full game show outdoor setup at night' },
+              { src: '/media/486526077_1186074590186934_4650330950892672874_n.jpg', alt: 'Brenton Keith hosting Game Show NITE with contestants at the podiums' },
+              { src: '/media/casino-gameshow/game-show-tent-wide-maui.webp', alt: 'Wide view of the Maui game show set and audience under an event tent' },
               { src: '/media/488251977_1193147566146303_4577536044659466625_n.jpg', alt: 'Brenton Keith hosting game show on Maui' },
               { src: '/media/casino-gameshow/gameshow-indoor-teams.jpg', alt: 'Game show teams competing indoors at Maui event' },
-              { src: '/media/magic/brent-jolie-stage.jpg', alt: 'Brenton and Jolie onstage together' },
+              { src: '/media/game-show/game-show-lite-hosts-maui.webp', alt: 'Brenton Keith and Jolie at a compact Game Show LITE podium' },
             ].map((img, i) => (
               <FadeInSection key={i} delay={i * 0.07}>
                 <div className="rounded-2xl overflow-hidden group aspect-[4/3]">
-                  <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={img.src} alt={img.alt} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
               </FadeInSection>
             ))}
           </div>
+          <FadeInSection delay={0.2} className="mt-10 text-center">
+            <a
+              href="https://www.instagram.com/gameshowfanatics/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full border border-coral/40 px-7 py-3 font-semibold text-coral transition-colors hover:bg-coral/10"
+            >
+              See more Game Show NITE photos on Instagram
+            </a>
+          </FadeInSection>
         </div>
       </section>
 
@@ -241,8 +254,8 @@ export default function GameShow() {
                 </p>
                 <p className="text-white/70 mb-10">Based on Maui &bull; Available on Oahu, Kauai &amp; Big Island</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Game Show Nite</Link>
-                  <Link to="/casino-gameshow" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">Add Casino Night Too</Link>
+                  <Link to="/contact" className="px-10 py-4 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Book Game Show NITE</Link>
+                  <a href="https://www.instagram.com/gameshowfanatics/" target="_blank" rel="noopener noreferrer" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">See Gameshow Fanatics</a>
                 </div>
               </div>
             </div>

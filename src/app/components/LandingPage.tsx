@@ -1,708 +1,620 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence, useMotionValueEvent, MotionValue } from 'motion/react';
-import { RainEffect } from './RainEffect';
-import { UmbrellaNav } from './UmbrellaNav';
-import { BalloonCluster } from './BalloonCluster';
-import { ArrowDown } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  AnimatePresence,
+  motion,
+  type MotionValue,
+  useMotionTemplate,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
 import confetti from 'canvas-confetti';
+import { RainEffect } from './RainEffect';
+import { UMBRELLA_SECTIONS, UmbrellaNav } from './UmbrellaNav';
+import { Navbar } from './Navbar';
+import { HomeContent } from './HomeContent';
 
-const heroImg = '/media/hero-fairy-luau.jpg';
-const logo = '/media/logos/White Primary Logo Raining Entertainment.png';
+const HERO_DESKTOP = '/media/hero-reigning-entertainment.webp';
+const HERO_MOBILE = '/media/hero-reigning-mobile.webp';
+const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
+const CLOUD_TEXTURE = '/media/clouds-wipe.webp';
 
-// Assets
-const magicImg = '/media/magic/brent-library-show.jpg';
-const circusImg = '/media/strolling/clown-stilt-rainbow.jpg';
-const gameshowImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
-const cloudTexture = '/media/clouds-wipe.png';
-
-// Feathering Mask - Extra Heavy Soft Edges (shared by Clouds + cloud-wipe transition)
-const featherMaskGradient = 'radial-gradient(ellipse closest-side, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.2) 80%, transparent 100%)';
-const featherMask = {
-  maskImage: featherMaskGradient,
-  WebkitMaskImage: featherMaskGradient,
-  filter: 'blur(8px)'
+const SERVICE_VISUALS: Record<string, { image: string; alt: string; color: string }> = {
+  '/balloon-twisting': {
+    image: '/media/balloons/balloon-animals-fish-maui.webp',
+    alt: 'Colorful fish balloon animals prepared for a Maui party',
+    color: 'bg-pink-700',
+  },
+  '/game-show': {
+    image: '/media/casino-gameshow/gameshow-fanatics-crowd-maui.webp',
+    alt: 'Packed Gameshow Fanatics event with contestants and audience',
+    color: 'bg-purple-700',
+  },
+  '/strolling': {
+    image: '/media/strolling/cirque-jolie-balloon-stilt-maui.webp',
+    alt: 'Cirque Jolie in a dramatic balloon stilt costume on Maui',
+    color: 'bg-red-600',
+  },
+  '/magic': {
+    image: '/media/magic/magic-brent-live-show-maui.webp',
+    alt: 'Brenton Keith performing for a live Maui audience',
+    color: 'bg-teal-600',
+  },
+  '/casino': {
+    image: '/media/casino-nite/dealer-team-roulette-maui.webp',
+    alt: 'Casino NITE dealers with Roulette and casino tables at a Maui event',
+    color: 'bg-rose-800',
+  },
+  '/balloon-decor': {
+    image: '/media/balloon-decor/candy-stage-balloon-arch-maui.webp',
+    alt: 'Candy-themed balloon stage installation by Cirque Jolie',
+    color: 'bg-orange-500',
+  },
+  '/corporate': {
+    image: '/media/corporate/cirque-jolie-wing-performers.webp',
+    alt: 'Cirque Jolie gold wing performers welcoming guests at a corporate event',
+    color: 'bg-amber-600',
+  },
 };
 
-// Service Card Images
-const balloonTwistingCardImg = '/media/balloons/kid-panda-facepainting.jpg';
-const balloonDecorCardImg = '/media/balloon-decor/pastel-rainbow-arch.jpg';
-const strollingCardImg = '/media/strolling/moth-stilt-costume.jpg';
-const magicCardImg = '/media/magic/brent-umbrella-beach.jpg';
-const casinoCardImg = '/media/casino-gameshow/gameshow-outdoor-fullset.jpg';
+const SERVICE_DECK = UMBRELLA_SECTIONS.map((section) => ({
+  id: section.id,
+  title: section.label,
+  route: section.route,
+  ...SERVICE_VISUALS[section.route],
+}));
 
-// --- SUB-COMPONENTS ---
+const DESKTOP_TIMELINE = {
+  stormEnd: 900,
+  miracleEnd: 2100,
+  transitionEnd: 3000,
+  discoveryEnd: 5000,
+  cloudTwoEnd: 5800,
+  storyEnd: 6200,
+};
 
-const LightningFlash = ({ active }: { active: boolean }) => {
+const MOBILE_TIMELINE = {
+  stormEnd: 650,
+  miracleEnd: 1450,
+  transitionEnd: 2100,
+  discoveryEnd: 3300,
+  cloudTwoEnd: 3850,
+  storyEnd: 4100,
+};
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+
+  return matches;
+}
+
+function HeroImage({
+  alt,
+  className = '',
+  decorative = false,
+}: {
+  alt: string;
+  className?: string;
+  decorative?: boolean;
+}) {
+  return (
+    <picture className="absolute inset-0 block overflow-hidden">
+      <source media="(max-width: 767px)" srcSet={HERO_MOBILE} type="image/webp" />
+      <img
+        src={HERO_DESKTOP}
+        alt={decorative ? '' : alt}
+        aria-hidden={decorative || undefined}
+        width="1672"
+        height="941"
+        fetchPriority={decorative ? undefined : 'high'}
+        decoding="async"
+        className={`h-full w-full object-cover ${className}`}
+      />
+    </picture>
+  );
+}
+
+function LightningFlash({ active }: { active: boolean }) {
   const [opacity, setOpacity] = useState(0);
+
   useEffect(() => {
     if (!active) {
       setOpacity(0);
       return;
     }
+
+    let nextFlashTimer = 0;
+    let clearFlashTimer = 0;
+    let cancelled = false;
+
     const triggerFlash = () => {
-      if (!active) return;
-      setOpacity(Math.random() * 0.3 + 0.1); 
-      setTimeout(() => setOpacity(0), 50 + Math.random() * 100);
-      const nextDelay = 3000 + Math.random() * 8000;
-      setTimeout(triggerFlash, nextDelay);
+      if (cancelled) return;
+      setOpacity(Math.random() * 0.18 + 0.06);
+      clearFlashTimer = window.setTimeout(() => setOpacity(0), 60 + Math.random() * 80);
+      nextFlashTimer = window.setTimeout(triggerFlash, 4200 + Math.random() * 6500);
     };
-    const timer = setTimeout(triggerFlash, 1000);
-    return () => clearTimeout(timer);
+
+    nextFlashTimer = window.setTimeout(triggerFlash, 1200);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(nextFlashTimer);
+      window.clearTimeout(clearFlashTimer);
+    };
   }, [active]);
 
   if (!active) return null;
-
   return (
-    <div 
-      className="absolute inset-0 bg-white pointer-events-none z-50 mix-blend-soft-light"
-      style={{ opacity, transition: 'opacity 0.1s ease-out' }}
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-50 bg-white mix-blend-soft-light"
+      style={{ opacity, transition: 'opacity 100ms ease-out' }}
     />
   );
-};
+}
 
-const Rainbow = ({ active }: { active: boolean }) => {
+function Rainbow({ active, mobile }: { active: boolean; mobile: boolean }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: active ? 1 : 0, scale: active ? 1 : 0.9 }}
-      transition={{ duration: 2.5, ease: "easeOut", delay: 0.2 }}
-      className="absolute inset-0 pointer-events-none z-[45] flex items-end justify-center"
+      animate={{ opacity: active ? (mobile ? 0.58 : 0.6) : 0, scale: active ? 1 : 0.9 }}
+      transition={{ duration: mobile ? 1.3 : 2.2, ease: 'easeOut', delay: 0.1 }}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-[45] flex items-end justify-center overflow-hidden"
     >
-      <div 
-        className="w-[160vw] h-[160vw] rounded-full translate-y-[35%]"
+      <div
+        className={`${
+          mobile
+            ? 'h-[140vw] w-[140vw] -translate-y-[4%]'
+            : 'h-[min(150vw,260svh)] w-[min(150vw,260svh)] translate-y-[58%]'
+        } rounded-full`}
         style={{
-          background: `
-            radial-gradient(
-              circle at center,
-              transparent 58%,
-              rgba(148, 0, 211, 0.6) 58.5%,
-              rgba(75, 0, 130, 0.6) 59.5%,
-              rgba(0, 0, 255, 0.6) 60.5%,
-              rgba(0, 255, 0, 0.6) 61.5%,
-              rgba(255, 255, 0, 0.6) 62.5%,
-              rgba(255, 127, 0, 0.6) 63.5%,
-              rgba(255, 0, 0, 0.6) 64.5%,
-              transparent 65%
-            )
-          `,
-          maskImage: 'linear-gradient(to bottom, black 40%, transparent 60%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 60%)'
+          background: `radial-gradient(circle at center, transparent 58%, rgba(148,0,211,.55) 58.5%, rgba(75,0,130,.55) 59.5%, rgba(0,0,255,.55) 60.5%, rgba(0,255,0,.55) 61.5%, rgba(255,255,0,.55) 62.5%, rgba(255,127,0,.55) 63.5%, rgba(255,0,0,.55) 64.5%, transparent 65%)`,
+          maskImage: 'linear-gradient(to bottom, black 35%, transparent 64%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 35%, transparent 64%)',
         }}
       />
     </motion.div>
   );
-};
+}
 
-const Sun = ({ active }: { active: boolean }) => {
+function Sun({ active, mobile }: { active: boolean; mobile: boolean }) {
   if (!active) return null;
-  
+
   return (
     <motion.div
-      initial={{ y: '50vh', x: '10vw', opacity: 0 }}
-      animate={{ 
-        y: '5vh', 
-        x: '0vw',
-        opacity: 1 
-      }}
-      exit={{ y: '50vh', x: '10vw', opacity: 0 }}
-      transition={{ duration: 3, type: "spring", bounce: 0.2, delay: 0.5 }}
-      className="absolute right-[5%] top-[5%] w-64 h-64 z-[46] pointer-events-none"
+      initial={{ y: '28vh', opacity: 0 }}
+      animate={{ y: 0, opacity: mobile ? 0.65 : 1 }}
+      exit={{ y: '28vh', opacity: 0 }}
+      transition={{ duration: mobile ? 1.1 : 2.4, type: 'spring', bounce: 0.16 }}
+      aria-hidden="true"
+      className={`pointer-events-none absolute right-[4%] top-[4%] z-[46] ${mobile ? 'h-24 w-24' : 'h-64 w-64'}`}
     >
-        <div className="w-40 h-40 bg-yellow-300 rounded-full blur-md shadow-[0_0_80px_rgba(255,200,0,0.8)] relative z-10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-gradient-radial from-yellow-200/40 to-transparent blur-2xl z-0 animate-pulse" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-2 bg-yellow-100/20 blur-sm rotate-45" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-2 bg-yellow-100/20 blur-sm -rotate-45" />
+      <div className={`${mobile ? 'h-20 w-20' : 'h-40 w-40'} relative z-10 rounded-full bg-yellow-300 blur-md shadow-[0_0_80px_rgba(255,200,0,0.75)]`} />
     </motion.div>
   );
-};
+}
 
-// Cloud Crossing Component - Single "Film Wipe"
-const Clouds = ({ scrollProgress }: { scrollProgress: any }) => {
-  
-  // Opacity: Fades out aggressively at the end to clear
-  const opacity = useTransform(scrollProgress, [0, 0.1, 0.7, 0.95], [0, 1, 1, 0]);
-
-  // Horizontal Movement (Wipe Left to Right)
-  // Single massive bank moving from far left (-200%) to far right (200%)
-  const wipeX = useTransform(
-      scrollProgress, 
-      [0, 1], 
-      ["-200%", "200%"]
-  );
-  
-  const scale = useTransform(scrollProgress, [0.1, 0.5, 0.9], [1, 1.2, 1]);
+function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: boolean }) {
+  const opacity = useTransform(progress, [0, 0.1, 0.7, 0.96], [0, 1, 1, 0]);
+  const x = useTransform(progress, [0, 1], mobile ? ['-160%', '160%'] : ['-200%', '200%']);
+  const scale = useTransform(progress, [0.1, 0.5, 0.9], [1, mobile ? 1.05 : 1.18, 1]);
 
   return (
-    <motion.div style={{ opacity }} className="fixed inset-0 z-[150] pointer-events-none flex items-center justify-center overflow-hidden">
-       
-       {/* Single Massive Cloud Bank (Wiping Left -> Right) */}
-       <motion.div 
-          style={{ x: wipeX, scale }}
-          className="absolute top-0 bottom-0 left-0 w-[100vw] h-[100vh] flex items-center justify-center"
-       >
-          <div className="absolute inset-0 w-full h-full mix-blend-screen flex items-center justify-center">
-             
-             {/* Center Main Cloud */}
-             <img 
-                src={cloudTexture} 
-                className="absolute w-[180%] h-auto max-w-none opacity-100 object-contain rotate-12 scale-125" 
-                alt="cloud-main" 
-                style={featherMask}
-             />
-             
-             {/* Supporting Clouds to fill gaps and create "wall" effect */}
-             <img 
-                src={cloudTexture} 
-                className="absolute left-[-40%] top-[-20%] w-[140%] h-auto max-w-none opacity-80 object-contain -rotate-12" 
-                alt="cloud-top-left" 
-                style={featherMask}
-             />
-             <img 
-                src={cloudTexture} 
-                className="absolute left-[-30%] bottom-[-20%] w-[150%] h-auto max-w-none opacity-70 object-contain rotate-6" 
-                alt="cloud-bottom-left" 
-                style={featherMask}
-             />
-             
-             {/* Trailing Clouds */}
-             <img 
-                src={cloudTexture} 
-                className="absolute right-[-20%] top-[10%] w-[120%] h-auto max-w-none opacity-60 object-contain -rotate-6" 
-                alt="cloud-trail" 
-                style={featherMask}
-             />
-          </div>
-       </motion.div>
-
+    <motion.div
+      style={{ opacity }}
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[150] flex items-center justify-center overflow-hidden"
+    >
+      <motion.div style={{ x, scale }} className="absolute inset-0 flex items-center justify-center">
+        <img
+          src={CLOUD_TEXTURE}
+          alt=""
+          className={`${mobile ? 'w-[210%] opacity-90' : 'w-[180%] opacity-100'} absolute h-auto max-w-none rotate-6 object-contain mix-blend-screen blur-[6px]`}
+        />
+        {!mobile && (
+          <>
+            <img src={CLOUD_TEXTURE} alt="" className="absolute left-[-35%] top-[-20%] w-[135%] max-w-none -rotate-12 object-contain opacity-70 mix-blend-screen blur-[8px]" />
+            <img src={CLOUD_TEXTURE} alt="" className="absolute bottom-[-22%] right-[-30%] w-[145%] max-w-none rotate-12 object-contain opacity-65 mix-blend-screen blur-[8px]" />
+          </>
+        )}
+      </motion.div>
     </motion.div>
   );
-};
+}
 
+const DISC_INTRO_IN = [0, 0.09] as const;
+const DISC_CARDS_IN = [0.16, 0.62] as const;
+const DISC_CARDS_COLOR = [0.5, 0.82] as const;
+const DISC_CONFETTI_AT = 0.84;
+const DISC_INSTRUCT_IN = [0.86, 0.96] as const;
 
-// ───────────────────────────────────────────────────────────────────────────
-// DISCOVERY SECTION
-// A fixed, full-viewport scene that runs entirely off page-scroll progress.
-// No internal scrolling. No header / footer. No vertical motion of the page.
-// Cards drop in one-at-a-time, then colorize one-at-a-time, then a passive
-// "Scroll to continue" instruction appears. When scroll passes the end of
-// the discovery range, the second cloud transition takes over.
-// ───────────────────────────────────────────────────────────────────────────
-
-const SERVICE_DECK = [
-  { id: 'balloon-twisting', title: 'Balloon Twisting & Facepainting', img: balloonTwistingCardImg, color: 'bg-pink-700' },
-  { id: 'balloon-decor',    title: 'Balloon Decor',                   img: balloonDecorCardImg,    color: 'bg-orange-500' },
-  { id: 'strolling',        title: 'Strolling Entertainment',         img: strollingCardImg,       color: 'bg-red-600' },
-  { id: 'magic',            title: 'Magic',                           img: magicCardImg,           color: 'bg-teal-500' },
-  { id: 'casino-gameshow',  title: 'Casino & Gameshow',               img: casinoCardImg,          color: 'bg-purple-700' },
-];
-
-// Discovery sub-timeline (all values are fractions of `discoveryProgress` 0→1)
-const DISC_INTRO_IN     = [0.00, 0.08] as const;
-const DISC_SUN_COLOR    = [0.06, 0.18] as const;
-const DISC_CARDS_IN     = [0.18, 0.55] as const;   // 5 cards drop in
-const DISC_CARDS_COLOR  = [0.55, 0.82] as const;   // 5 cards colorize
-const DISC_CONFETTI_AT  = 0.83;
-const DISC_INSTRUCT_IN  = [0.85, 0.95] as const;
-
-const DiscoveryCard = ({
+function DiscoveryCard({
   index,
   count,
   progress,
-  data,
 }: {
   index: number;
   count: number;
   progress: MotionValue<number>;
-  data: { id: string; title: string; img: string; color: string };
-}) => {
-  const [inStart, inEnd] = DISC_CARDS_IN;
-  const slotIn = (inEnd - inStart) / count;
-  const cardInStart = inStart + index * slotIn;
+}) {
+  const data = SERVICE_DECK[index];
+  const slotIn = (DISC_CARDS_IN[1] - DISC_CARDS_IN[0]) / count;
+  const cardInStart = DISC_CARDS_IN[0] + index * slotIn;
   const cardInEnd = cardInStart + slotIn * 0.9;
-
-  const [colStart, colEnd] = DISC_CARDS_COLOR;
-  const slotCol = (colEnd - colStart) / count;
-  const cardColStart = colStart + index * slotCol;
-  const cardColEnd = cardColStart + slotCol * 0.9;
-
+  const slotColor = (DISC_CARDS_COLOR[1] - DISC_CARDS_COLOR[0]) / count;
+  const colorStart = DISC_CARDS_COLOR[0] + index * slotColor;
+  const colorEnd = colorStart + slotColor * 0.9;
   const opacity = useTransform(progress, [cardInStart, cardInEnd], [0, 1], { clamp: true });
-  const y       = useTransform(progress, [cardInStart, cardInEnd], [160, 0],  { clamp: true });
-  const scale   = useTransform(progress, [cardInStart, cardInEnd], [0.88, 1], { clamp: true });
-  const gray    = useTransform(progress, [cardColStart, cardColEnd], [1, 0],  { clamp: true });
-  const filter  = useMotionTemplate`grayscale(${gray}) saturate(calc(1 + (1 - ${gray}) * 0.3))`;
+  const y = useTransform(progress, [cardInStart, cardInEnd], [110, 0], { clamp: true });
+  const scale = useTransform(progress, [cardInStart, cardInEnd], [0.9, 1], { clamp: true });
+  const gray = useTransform(progress, [colorStart, colorEnd], [1, 0], { clamp: true });
+  const filter = useMotionTemplate`grayscale(${gray}) saturate(calc(1 + (1 - ${gray}) * 0.22))`;
+  const [interactive, setInteractive] = useState(() => progress.get() >= cardInStart);
+
+  useMotionValueEvent(progress, 'change', (value) => {
+    setInteractive(value >= cardInStart);
+  });
 
   return (
-    <motion.div
+    <motion.article
       style={{ opacity, y, scale }}
-      className="service-card group relative flex flex-col h-[500px] w-full rounded-3xl overflow-hidden cursor-pointer shadow-2xl origin-bottom"
+      aria-hidden={!interactive}
+      className={`service-card group relative h-[clamp(260px,44vh,460px)] w-full origin-bottom overflow-hidden rounded-3xl shadow-2xl ${interactive ? 'visible' : 'invisible pointer-events-none'}`}
     >
-      <Link to={`/${data.id}`} className="block w-full h-full">
-        <div className={`absolute inset-0 ${data.color} opacity-0 group-hover:opacity-90 transition-opacity duration-500 z-10 mix-blend-multiply`} />
-        <motion.img
-          src={data.img}
-          alt={data.title}
-          style={{ filter }}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-20" />
-        <div className="absolute bottom-0 left-0 right-0 p-8 z-30 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-          <h3 className="text-4xl font-display font-black text-white mb-2 uppercase tracking-tighter leading-none">
-            {data.title}
-          </h3>
-          <div className="h-1 w-12 bg-white rounded-full mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
-          <p className="text-white/80 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-            Explore Service &rarr;
-          </p>
+      <Link to={data.route} tabIndex={interactive ? 0 : -1} className="block h-full w-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-coral">
+        <div className={`absolute inset-0 z-10 ${data.color} opacity-0 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-75`} />
+        <motion.img src={data.image} alt={data.alt} style={{ filter }} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 z-30 p-5">
+          <h3 className="text-sm font-black uppercase leading-tight tracking-tight text-white lg:text-base xl:text-xl">{data.title}</h3>
+          <p className="mt-2 text-xs font-semibold text-white/75 xl:text-sm">Explore service</p>
         </div>
       </Link>
-    </motion.div>
+    </motion.article>
   );
-};
+}
 
-const DiscoveryScene = ({
-  visible,
+function DiscoveryScene({
   progress,
+  mobile,
+  reduceMotion,
 }: {
-  visible: boolean;
   progress: MotionValue<number>;
-}) => {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const confettiFiredRef = useRef(false);
-
-  // Intro copy
+  mobile: boolean;
+  reduceMotion: boolean;
+}) {
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const confettiFired = useRef(false);
   const introOpacity = useTransform(progress, [DISC_INTRO_IN[0], DISC_INTRO_IN[1]], [0, 1], { clamp: true });
-  const introY       = useTransform(progress, [DISC_INTRO_IN[0], DISC_INTRO_IN[1]], [40, 0], { clamp: true });
+  const introY = useTransform(progress, [DISC_INTRO_IN[0], DISC_INTRO_IN[1]], [30, 0], { clamp: true });
+  const instructionOpacity = useTransform(progress, [DISC_INSTRUCT_IN[0], DISC_INSTRUCT_IN[1]], [0, 1], { clamp: true });
 
-  // Sunshine word colorize (1 = grayscale, 0 = full color)
-  const sunMix = useTransform(progress, [DISC_SUN_COLOR[0], DISC_SUN_COLOR[1]], [1, 0], { clamp: true });
-  const sunFilter = useMotionTemplate`grayscale(${sunMix}) brightness(calc(1 - ${sunMix} * 0.4))`;
+  useMotionValueEvent(progress, 'change', (value) => {
+    const normalized = Math.max(0, Math.min(0.999, (value - 0.18) / 0.62));
+    const nextIndex = Math.min(SERVICE_DECK.length - 1, Math.floor(normalized * SERVICE_DECK.length));
+    setMobileIndex(nextIndex);
 
-  // Instruction
-  const instructOpacity = useTransform(progress, [DISC_INSTRUCT_IN[0], DISC_INSTRUCT_IN[1]], [0, 1], { clamp: true });
-
-  // Fire confetti once we cross the trigger point.
-  useMotionValueEvent(progress, 'change', (p) => {
-    if (!visible) return;
-    if (p >= DISC_CONFETTI_AT && !confettiFiredRef.current) {
-      confettiFiredRef.current = true;
-      const grid = gridRef.current;
-      const cards = grid?.querySelectorAll<HTMLElement>('.service-card');
-      const center = cards?.[Math.floor((cards?.length || 1) / 2)];
-      const r = center?.getBoundingClientRect();
-      const x = r ? (r.left + r.width / 2) / window.innerWidth : 0.5;
-      const y = r ? (r.top + r.height / 2) / window.innerHeight : 0.5;
-      const defaults = { origin: { x, y }, spread: 90, ticks: 240, gravity: 0.9, scalar: 1.1, zIndex: 200 };
-      confetti({ ...defaults, particleCount: 140, startVelocity: 60, colors: ['#fbbf24', '#f97316', '#ef4444', '#ec4899', '#a855f7', '#22d3ee'] });
-      setTimeout(() => confetti({ ...defaults, particleCount: 90, startVelocity: 42, spread: 130, scalar: 0.95 }), 180);
-      setTimeout(() => confetti({ ...defaults, particleCount: 70, startVelocity: 32, spread: 170, scalar: 0.85 }), 420);
-    } else if (p < DISC_CONFETTI_AT - 0.05) {
-      // Re-arm when scrolling back up so a return scroll re-fires.
-      confettiFiredRef.current = false;
+    if (!reduceMotion && value >= DISC_CONFETTI_AT && !confettiFired.current) {
+      confettiFired.current = true;
+      confetti({
+        origin: { x: 0.5, y: mobile ? 0.68 : 0.58 },
+        particleCount: mobile ? 36 : 100,
+        spread: mobile ? 70 : 100,
+        startVelocity: mobile ? 34 : 48,
+        ticks: 170,
+        gravity: 0.9,
+        scalar: mobile ? 0.78 : 1,
+        zIndex: 200,
+        colors: ['#fbbf24', '#f97316', '#ef4444', '#ec4899', '#a855f7', '#22d3ee'],
+      });
+    } else if (value < DISC_CONFETTI_AT - 0.08 && confettiFired.current) {
+      confetti.reset();
+      confettiFired.current = false;
     }
   });
 
+  const mobileCard = SERVICE_DECK[mobileIndex];
+
   return (
-    <motion.div
-      aria-hidden={!visible}
-      animate={{ opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-[25] overflow-hidden bg-gradient-to-b from-[#e6e9f0] to-[#eef1f5]"
-      style={{ pointerEvents: visible ? 'auto' : 'none' }}
-    >
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
-        {/* Intro Text */}
-        <motion.div
-          style={{ opacity: introOpacity, y: introY }}
-          className="text-center max-w-4xl mx-auto mb-12"
-        >
-          <h2 className="font-display font-black uppercase tracking-tighter leading-[0.95] text-slate-900">
-            <span className="block text-2xl md:text-4xl text-slate-500 font-light tracking-[0.25em] mb-2">
-              We Bring The
-            </span>
-            <motion.span
-              style={{ filter: sunFilter }}
-              className="block text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500"
-            >
-              Sunshine
-            </motion.span>
+    <div className="fixed inset-0 z-[25] overflow-hidden bg-gradient-to-b from-[#e7eaf0] to-[#f4f6f8] text-slate-950">
+      <div className="discovery-scene-inner absolute inset-0 flex flex-col items-center justify-center px-5 py-8">
+        <motion.div style={{ opacity: introOpacity, y: introY }} className={`discovery-scene-intro ${mobile ? 'mb-5' : 'mb-8'} mx-auto max-w-4xl text-center`}>
+          <h2 className="font-display font-black uppercase leading-[0.92] tracking-tighter">
+            <span className="mb-1 block text-sm font-semibold tracking-[0.24em] text-slate-500 md:text-3xl">We bring the</span>
+            <span className="discovery-sunshine block bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 bg-clip-text text-5xl text-transparent md:text-7xl">Sunshine</span>
           </h2>
-          <p className="mt-6 text-lg md:text-xl text-slate-600 leading-relaxed font-light">
-            Merging <strong className="text-slate-900">Magic Brent</strong>,{' '}
-            <strong className="text-slate-900">Cirque Jolie</strong>, and{' '}
-            <strong className="text-slate-900">Gameshow Fanatics</strong> into one spectacular experience.
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-600 md:mt-5 md:text-lg">
+            Brenton Keith &amp; His Bag O&rsquo; Tricks, Cirque Jolie, and Gameshow
+            Fanatics—together under one umbrella.
           </p>
         </motion.div>
 
-        {/* Scroll-revealed cards */}
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end w-full max-w-7xl"
-        >
-          {SERVICE_DECK.map((s, i) => (
-            <DiscoveryCard key={s.id} index={i} count={SERVICE_DECK.length} progress={progress} data={s} />
-          ))}
-        </div>
+        {mobile ? (
+          <div className="discovery-mobile-card-wrap flex h-[52svh] w-full items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.article
+                key={mobileCard.id}
+                initial={{ opacity: 0, x: 38, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -38, scale: 0.96 }}
+                transition={{ duration: 0.26, ease: 'easeOut' }}
+                className="discovery-mobile-card relative h-[min(48svh,420px)] w-[min(82vw,330px)] overflow-hidden rounded-[1.75rem] shadow-2xl"
+              >
+                <Link to={mobileCard.route} className="block h-full w-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-coral">
+                  <img src={mobileCard.image} alt={mobileCard.alt} className="absolute inset-0 h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/65">{mobileIndex + 1} of {SERVICE_DECK.length}</p>
+                    <h3 className="mt-2 text-3xl font-black leading-none">{mobileCard.title}</h3>
+                    <p className="mt-3 font-semibold text-white/80">Tap to explore</p>
+                  </div>
+                </Link>
+              </motion.article>
+            </AnimatePresence>
+          </div>
+        ) : (
+          <div className="grid w-full max-w-7xl grid-cols-7 items-end gap-3 xl:gap-4">
+            {SERVICE_DECK.map((service, index) => (
+              <DiscoveryCard key={service.id} index={index} count={SERVICE_DECK.length} progress={progress} />
+            ))}
+          </div>
+        )}
 
-        {/* Passive scroll-to-continue cue (arrow only, pinned to bottom) */}
-        <motion.div
-          style={{ opacity: instructOpacity }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center text-slate-700 pointer-events-none z-[60]"
+        <motion.p
+          style={{ opacity: instructionOpacity }}
+          aria-hidden="true"
+          className="pointer-events-none fixed bottom-5 left-1/2 z-[60] -translate-x-1/2 font-display text-sm font-medium lowercase tracking-[0.08em] text-slate-700"
         >
-          <motion.span
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <ArrowDown className="w-6 h-6" />
-          </motion.span>
-        </motion.div>
+          keep scrolling
+        </motion.p>
       </div>
-    </motion.div>
+    </div>
   );
-};
+}
 
+function ReducedMotionLanding({ mobile }: { mobile: boolean }) {
+  return (
+    <div className="bg-slate-950">
+      <Navbar />
+      <section className="relative min-h-[100svh] overflow-hidden bg-[#070b22] pt-20 text-white">
+        <div className={`absolute inset-x-0 top-20 ${mobile ? 'h-[55svh]' : 'bottom-0'}`}>
+          <HeroImage alt="Brenton Keith and Jolie Strickland entertaining guests at a Maui sunset event" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-slate-950/20 to-[#070b22]" />
+        <div className="relative z-20 mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center px-5 pt-14 text-center md:justify-center md:pt-0">
+          <img src={LOGO} alt="Raining Entertainment" width="420" height="290" className="w-48 drop-shadow-2xl md:w-72" />
+          <p className="mt-5 max-w-2xl text-lg font-medium text-white/90 md:text-2xl">Magic, circus arts, Game Show NITE, Casino NITE, balloons, and face painting—one Maui team.</p>
+          <div className="mt-auto w-full pb-4 md:mt-10 md:pb-0">
+            <UmbrellaNav displayWidth={mobile ? 'min(100vw, 620px)' : 'min(86vw, 1000px)'} />
+            <UmbrellaNav compact className="mx-auto -mt-12 max-w-6xl px-2" />
+          </div>
+        </div>
+      </section>
+      <HomeContent />
+    </div>
+  );
+}
 
-export const LandingPage = () => {
+export function LandingPage() {
   const { scrollY } = useScroll();
+  const location = useLocation();
+  const mobile = useMediaQuery('(max-width: 767px), (max-height: 620px)');
+  const reduceMotion = Boolean(useReducedMotion());
+  const timeline = mobile ? MOBILE_TIMELINE : DESKTOP_TIMELINE;
   const [isMiracle, setIsMiracle] = useState(false);
-  const [isLanded, setIsLanded] = useState(false);
-  const [revealText, setRevealText] = useState(false);
-  const [scrollVal, setScrollVal] = useState(0);
+  const [scrollValue, setScrollValue] = useState(0);
 
-  // --- SCROLL TIMELINE ---
-  //
-  //   0 ───────── STORM_END ───── MIRACLE_END ─── TRANSITION_END
-  //   storm        umbrella deploys     first cloud transition
-  //
-  //   TRANSITION_END ───────── DISCOVERY_END ───── CLOUD2_END
-  //   pinned discovery scene    second cloud transition
-  //
-  //   After CLOUD2_END: the "fully realized" Home content takes over and
-  //   the page scrolls normally with no further scripted animation.
-
-  const STORM_END = 1500;
-  const MIRACLE_END = 3800;
-  const TRANSITION_END = 5800;
-  const DISCOVERY_END = TRANSITION_END + 4200;   // pinned discovery scroll range
-  const CLOUD2_END    = DISCOVERY_END + 1600;    // second cloud transition
-
-  // Tail buffer must exceed one viewport height, otherwise `scrollY` (which
-  // tops out at documentHeight − viewportHeight) can never actually reach
-  // CLOUD2_END and the second cloud transition never fully resolves.
-  // 1200px comfortably covers any common viewport while keeping the tail
-  // short enough that it feels like a single continuous scroll.
-  const TOTAL_SCROLL_HEIGHT = CLOUD2_END + 1200;
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrollVal(latest);
-
-    // UMBRELLA/MIRACLE STATE
-    if (latest > STORM_END && !isMiracle) {
-      setIsMiracle(true);
-    } else if (latest < STORM_END && isMiracle) {
-      setIsMiracle(false);
-    }
-
-    // LANDED STATE
-    // Trigger when clouds are 40% through crossing (earlier reveal)
-    const triggerPoint = MIRACLE_END + ((TRANSITION_END - MIRACLE_END) * 0.4);
-    
-    if (latest > triggerPoint && !isLanded) {
-        setIsLanded(true);
-    } else if (latest < triggerPoint && isLanded) {
-        setIsLanded(false);
-    }
-
-    // Reveal styled text overlay once the umbrella has finished arriving
-    // at the top (slightly before the very end so the overlay can play
-    // alongside the final settle). Flips back off if the user scrolls
-    // back up so the entrance can replay.
-    const textTrigger = STORM_END * 0.92;
-    if (latest > textTrigger && !revealText) {
-        setRevealText(true);
-    } else if (latest < textTrigger && revealText) {
-        setRevealText(false);
-    }
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setScrollValue(latest);
+    setIsMiracle(latest > timeline.stormEnd);
   });
 
-  const stormRaw = useTransform(scrollY, [0, STORM_END], [0, 1], { clamp: true });
-  const stormProgress = useSpring(stormRaw, { stiffness: 45, damping: 20 });
-
-  const cloudProgress = useTransform(
-    scrollY, 
-    [MIRACLE_END, TRANSITION_END], 
-    [0, 1],
-    { clamp: true }
-  );
-
-  // Pinned-discovery phase progress (0 → 1).
-  const discoveryProgress = useTransform(
-    scrollY,
-    [TRANSITION_END, DISCOVERY_END],
-    [0, 1],
-    { clamp: true }
-  );
-
-  // Second cloud transition progress (0 → 1).
-  const cloud2Progress = useTransform(
-    scrollY,
-    [DISCOVERY_END, CLOUD2_END],
-    [0, 1],
-    { clamp: true }
-  );
-
-  const umbrellaTop = useTransform(stormProgress, [0, 1], ["100vh", "-5.5vh"]);
-  const umbrellaScale = useTransform(stormProgress, [0, 1], [1, 1.05]);
-  // Umbrella hides during cloud #1, reappears as the second cloud transition
-  // reveals the Home scene — by then it should be back on screen as the nav.
+  const stormRaw = useTransform(scrollY, [0, timeline.stormEnd], [0, 1], { clamp: true });
+  const stormProgress = useSpring(stormRaw, { stiffness: mobile ? 70 : 52, damping: 22 });
+  const cloudProgress = useTransform(scrollY, [timeline.miracleEnd, timeline.transitionEnd], [0, 1], { clamp: true });
+  const discoveryProgress = useTransform(scrollY, [timeline.transitionEnd, timeline.discoveryEnd], [0, 1], { clamp: true });
+  const cloudTwoProgress = useTransform(scrollY, [timeline.discoveryEnd, timeline.cloudTwoEnd], [0, 1], { clamp: true });
+  const umbrellaTop = useTransform(stormProgress, [0, 1], [mobile ? '112vh' : '100vh', mobile ? '-2.5vh' : '-16vh']);
+  const umbrellaScale = useTransform(stormProgress, [0, 1], [mobile ? 0.96 : 1, 1]);
   const umbrellaOpacity = useTransform(
     scrollY,
-    [MIRACLE_END + (TRANSITION_END - MIRACLE_END) * 0.3,
-     MIRACLE_END + (TRANSITION_END - MIRACLE_END) * 0.4,
-     DISCOVERY_END + (CLOUD2_END - DISCOVERY_END) * 0.55,
-     DISCOVERY_END + (CLOUD2_END - DISCOVERY_END) * 0.75],
-    [1, 0, 0, 1],
-    { clamp: true }
+    [
+      timeline.miracleEnd + (timeline.transitionEnd - timeline.miracleEnd) * 0.28,
+      timeline.miracleEnd + (timeline.transitionEnd - timeline.miracleEnd) * 0.42,
+      timeline.discoveryEnd + (timeline.cloudTwoEnd - timeline.discoveryEnd) * 0.52,
+      timeline.discoveryEnd + (timeline.cloudTwoEnd - timeline.discoveryEnd) * 0.74,
+      timeline.cloudTwoEnd,
+      timeline.storyEnd,
+    ],
+    [1, 0, 0, 1, 1, 0],
+    { clamp: true },
   );
-
-  const maskLine = useMotionTemplate`calc(${umbrellaTop} + 12vh)`;
-  const maskImage = useMotionTemplate`linear-gradient(to bottom, black ${maskLine}, transparent calc(${maskLine} + 50px))`;
-  const logoOpacity = useTransform(scrollY, [0, STORM_END * 0.3], [1, 0]);
-  // Corner controls — appear once the storm has lifted (post-miracle).
-  // The top-right reset button rewinds the scroll-driven sequence to 0.
-  const cornerOpacity = useTransform(scrollY, [STORM_END, MIRACLE_END], [0, 1], { clamp: true });
-  const resetAnimation = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // When the user lands on `/` from any inner-page logo click, jump
-  // straight to the post-animation state instead of replaying the
-  // storm → miracle → discovery sequence. The inner-page logos pass
-  // `state={{ skipAnimation: true }}` for this purpose.
-  const location = useLocation();
-  useEffect(() => {
-    if ((location.state as { skipAnimation?: boolean } | null)?.skipAnimation) {
-      // Wait one frame so the scroll spacer has rendered and the page
-      // actually has the height to receive a jump-to-bottom scroll.
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: TOTAL_SCROLL_HEIGHT, behavior: 'auto' });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.key]);
-  // Sky scene hides under cloud #1, then re-emerges as cloud #2 resolves —
-  // returning the page to the same calm post-storm state it was in just
-  // before the first cloud transition started.
   const skyOpacity = useTransform(
     scrollY,
     [
-      MIRACLE_END + (TRANSITION_END - MIRACLE_END) * 0.4,
-      MIRACLE_END + (TRANSITION_END - MIRACLE_END) * 0.5,
-      DISCOVERY_END + (CLOUD2_END - DISCOVERY_END) * 0.55,
-      DISCOVERY_END + (CLOUD2_END - DISCOVERY_END) * 0.75,
+      timeline.miracleEnd + (timeline.transitionEnd - timeline.miracleEnd) * 0.38,
+      timeline.miracleEnd + (timeline.transitionEnd - timeline.miracleEnd) * 0.52,
+      timeline.discoveryEnd + (timeline.cloudTwoEnd - timeline.discoveryEnd) * 0.52,
+      timeline.discoveryEnd + (timeline.cloudTwoEnd - timeline.discoveryEnd) * 0.76,
+      timeline.cloudTwoEnd,
+      timeline.storyEnd,
     ],
-    [1, 0, 0, 1],
-    { clamp: true }
+    [1, 0, 0, 1, 1, 0],
+    { clamp: true },
   );
+  const logoOpacity = useTransform(scrollY, [0, timeline.stormEnd * 0.36], [1, 0]);
+  const maskLine = useMotionTemplate`calc(${umbrellaTop} + ${mobile ? '10svh' : '12vh'})`;
+  const maskImage = useMotionTemplate`linear-gradient(to bottom, black ${maskLine}, transparent calc(${maskLine} + 46px))`;
+  const discoveryVisible = scrollValue >= timeline.transitionEnd - 100 && scrollValue <= timeline.discoveryEnd + 100;
+  const compactMenuVisible =
+    scrollValue > timeline.stormEnd + 80 && scrollValue < timeline.miracleEnd - 80;
+  const standardNavVisible = scrollValue >= timeline.storyEnd - 40;
+  const firstUmbrellaExit =
+    timeline.miracleEnd + (timeline.transitionEnd - timeline.miracleEnd) * 0.44;
+  const secondUmbrellaEntrance =
+    timeline.discoveryEnd + (timeline.cloudTwoEnd - timeline.discoveryEnd) * 0.48;
+  const umbrellaPresent =
+    scrollValue < firstUmbrellaExit ||
+    (scrollValue > secondUmbrellaEntrance && scrollValue < timeline.storyEnd);
+  const heroObjectPosition = mobile ? 'object-center' : 'object-top';
 
-  // Discovery scene visibility window: between the end of cloud #1 and the
-  // start of cloud #2 (with a tiny crossfade at each edge).
-  const discoveryVisible =
-    scrollVal >= TRANSITION_END - 200 && scrollVal <= DISCOVERY_END + 200;
+  useEffect(() => {
+    if ((location.state as { skipAnimation?: boolean } | null)?.skipAnimation) {
+      requestAnimationFrame(() => window.scrollTo({ top: timeline.storyEnd, behavior: 'auto' }));
+    }
+  }, [location.key, timeline.storyEnd]);
+
+  if (reduceMotion) return <ReducedMotionLanding mobile={mobile} />;
 
   return (
-    <div className="relative bg-slate-950 font-sans min-h-screen">
-
-      {/* --- TOP HEADER BAND ---
-          Solid dark-navy strip at the top of the page so the deployed
-          umbrella canopy lands here instead of covering the hero image.
-          Color matches the attached swatch (deep midnight navy). */}
-      <div
-        aria-hidden
-        className="fixed top-0 left-0 right-0 h-[10vh] z-[15] pointer-events-none"
-        style={{ backgroundColor: '#070B22' }}
-      />
-
-      {/* --- RESET CONTROL (top-right of landing) ---
-          Rewinds the scroll-driven animation back to the very beginning
-          so the user can replay the storm → miracle → discovery sequence.
-          Fades in once the storm has lifted. */}
-      <motion.button
-        onClick={resetAnimation}
-        style={{ opacity: cornerOpacity }}
-        className="fixed top-4 right-4 z-[120] px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/15 text-white text-xs font-semibold tracking-wider uppercase transition-colors"
-        aria-label="Replay animation from start"
+    <div className="relative min-h-screen bg-slate-950 font-sans">
+      <a
+        href="#home-content"
+        onClick={(event) => {
+          event.preventDefault();
+          window.scrollTo({ top: timeline.storyEnd, behavior: 'auto' });
+          requestAnimationFrame(() => document.getElementById('home-content')?.focus());
+        }}
+        className="fixed left-4 top-3 z-[200] -translate-y-24 rounded-full bg-white px-5 py-3 font-bold text-slate-950 shadow-xl transition focus:translate-y-0 focus:outline-none focus:ring-4 focus:ring-coral"
       >
-        Reset
-      </motion.button>
+        Skip intro
+      </a>
+      {standardNavVisible && <Navbar />}
 
-      {/* --- FIXED NAV --- */}
+      <motion.div style={{ opacity: skyOpacity }} aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-[15] h-[10svh] bg-[#070b22]" />
+
+      <AnimatePresence>
+        {scrollValue > timeline.stormEnd + 80 && scrollValue < timeline.storyEnd - 120 && (
+          <motion.button
+            type="button"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed right-3 top-3 z-[170] rounded-full border border-white/15 bg-slate-950/55 px-3 py-2 text-[0.64rem] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral md:right-4 md:top-4 md:px-4"
+          >
+            Replay
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {umbrellaPresent && (
+        <motion.div
+          style={{ top: umbrellaTop, scale: umbrellaScale, opacity: umbrellaOpacity }}
+          className="pointer-events-none fixed inset-x-0 z-[100] flex origin-top justify-center"
+        >
+          <div className="pointer-events-auto relative drop-shadow-2xl">
+            <UmbrellaNav displayWidth={mobile ? 'min(100vw, 620px)' : 'min(88vw, 980px)'} />
+            <AnimatePresence>
+              {isMiracle && !mobile && (
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1.45, opacity: 0.42 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2"
+                >
+                  <div className="h-full w-full rounded-full bg-amber-100 blur-[100px] mix-blend-screen" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
+
+      <AnimatePresence>
+        {compactMenuVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 12 }}
+            className="fixed inset-x-3 bottom-3 z-[115] mx-auto max-w-sm md:bottom-5 md:max-w-6xl"
+          >
+            <UmbrellaNav compact />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
-            style={{ 
-              top: umbrellaTop,
-              scale: umbrellaScale,
-              opacity: umbrellaOpacity,
-              position: 'fixed',
-              left: 0,
-              right: 0,
-              zIndex: 100 
-            }}
-            className="flex justify-center pointer-events-none origin-top" 
-        >
-            <div className="relative pointer-events-auto drop-shadow-2xl">
-               <BalloonCluster side="left" className="hidden lg:block absolute left-[-3%] xl:left-[1%] bottom-[8%] w-[6vw] max-w-[110px] z-10" />
-               <BalloonCluster side="right" className="hidden lg:block absolute right-[-3%] xl:right-[1%] bottom-[8%] w-[6vw] max-w-[110px] z-10" />
-               <UmbrellaNav revealText={revealText} />
-               <AnimatePresence>
-                 {isMiracle && (
-                    <motion.div 
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1.5, opacity: 0.6 }}
-                      exit={{ opacity: 0, duration: 0.5 }}
-                      transition={{ 
-                         duration: 2, 
-                         repeat: Infinity, 
-                         repeatType: "reverse" 
-                      }}
-                      className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] -z-10 pointer-events-none"
-                    >
-                       <div className="w-full h-full rounded-full bg-white blur-[80px]" />
-                       <div className="absolute inset-0 w-full h-full rounded-full bg-amber-200 blur-[100px] mix-blend-screen" />
-                    </motion.div>
-                 )}
-               </AnimatePresence>
-            </div>
-      </motion.div>
-
-      {/* --- SKY SCENE ---
-          Top inset matches the header band height so the hero image starts
-          below the header and the umbrella canopy sits in the header band. */}
-      <motion.div 
         style={{ opacity: skyOpacity }}
-        className="fixed top-[10vh] left-0 right-0 bottom-0 overflow-hidden pointer-events-none bg-black z-20"
+        aria-hidden={standardNavVisible || undefined}
+        className="pointer-events-none fixed inset-0 z-20 overflow-hidden bg-[#070b22]"
       >
-        
-        {/* BACKGROUND */}
-        <div className="absolute inset-0 bg-slate-900 z-0" />
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-200 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isMiracle ? 1 : 0 }}
-          transition={{ duration: 2 }}
-        />
-        <div className="absolute inset-0 z-0 overflow-hidden">
-           <div className={`absolute inset-0 scale-110 transition-all duration-2000 ${isMiracle ? 'opacity-30 blur-3xl' : 'opacity-50 blur-2xl'}`}>
-              <img src={heroImg} className="w-full h-full object-cover" alt="Background Blur" />
-           </div>
+        <div className="absolute inset-0 bg-slate-900" />
+        <motion.div className="absolute inset-0 bg-gradient-to-b from-sky-400 to-blue-200" animate={{ opacity: isMiracle ? 1 : 0 }} transition={{ duration: mobile ? 0.9 : 1.8 }} />
+
+        <div className="absolute inset-0 overflow-hidden opacity-40 blur-2xl">
+          <HeroImage decorative alt="" className="scale-110" />
         </div>
 
-        {/* STORM */}
-        <motion.div 
-           className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-1000"
-           animate={{ opacity: isMiracle ? 0 : 1 }}
-        >
-            <RainEffect intensity={2.0} /> 
-        </motion.div>
+        <div className={`absolute inset-x-0 top-0 z-20 ${mobile ? 'h-[72svh]' : 'bottom-0'}`}>
+          <motion.div className="relative h-full w-full overflow-hidden" animate={{ scale: isMiracle ? 1.015 : 1 }} transition={{ duration: 1.5 }}>
+            <HeroImage
+              alt="Brenton Keith and Jolie Strickland entertaining a cheering crowd at a Maui sunset event"
+              className={heroObjectPosition}
+            />
 
-        {/* HERO IMAGE */}
-        <div className="absolute inset-0 z-20">
-            <motion.div 
-              className="relative w-full h-full overflow-hidden bg-black"
-              initial={{ scale: 1 }}
-              animate={{ 
-                scale: isMiracle ? 1.02 : 1,
-              }}
-              transition={{ duration: 2 }}
+            <motion.div
+              className="absolute inset-0 z-20"
+              style={{ maskImage, WebkitMaskImage: maskImage }}
+              animate={{ opacity: isMiracle ? 0 : 1 }}
+              transition={{ duration: 0.8 }}
             >
-               <motion.img 
-                 src={heroImg} 
-                 className="absolute inset-0 w-full h-full object-cover transition-all duration-1000"
-                 style={{ filter: isMiracle ? 'brightness(1.15) saturate(1.2)' : 'brightness(1)' }}
-                 alt="Sunny Hero"
-               />
-               <motion.div 
-                  className="absolute inset-0 z-20"
-                  style={{ maskImage, WebkitMaskImage: maskImage }}
-                  animate={{ opacity: isMiracle ? 0 : 1 }}
-                  transition={{ duration: 1 }}
-               >
-                  <img 
-                     src={heroImg} 
-                     className="w-full h-full object-cover grayscale brightness-90 contrast-125" 
-                     alt="Storm Hero" 
-                  />
-                  <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
-                  <RainEffect intensity={4.0} />
-               </motion.div>
-               <AnimatePresence>
-                 {isMiracle && (
-                   <motion.div
-                     initial={{ opacity: 0 }}
-                     animate={{ opacity: [0, 0.8, 0] }}
-                     transition={{ duration: 1, times: [0, 0.1, 1] }}
-                     className="absolute inset-0 bg-white z-50 mix-blend-hard-light"
-                   />
-                 )}
-               </AnimatePresence>
-               <div className="absolute inset-0 border border-white/10 shadow-[inset_0_0_100px_rgba(0,0,0,0.5)] pointer-events-none z-30" />
+              <HeroImage decorative alt="" className={`${heroObjectPosition} grayscale brightness-[0.52] contrast-125`} />
+              <div className="absolute inset-0 bg-slate-950/30 mix-blend-multiply" />
+              <RainEffect active={!isMiracle} intensity={mobile ? 1.2 : 2} />
             </motion.div>
+          </motion.div>
         </div>
 
-        {/* MIRACLE ELEMENTS */}
-        <Rainbow active={isMiracle} />
-        <AnimatePresence>
-          <Sun active={isMiracle} />
-        </AnimatePresence>
+        {mobile && <div aria-hidden="true" className="absolute inset-x-0 top-0 z-[25] h-[74svh] bg-gradient-to-b from-transparent via-transparent to-[#070b22]" />}
 
-        <div className="absolute inset-0 z-30 pointer-events-none">
-             <LightningFlash active={!isMiracle} />
-        </div>
-
-        {/* HERO TEXT */}
-        <motion.div 
-            style={{ opacity: logoOpacity }}
-            className="absolute inset-0 flex flex-col items-center justify-center z-40"
-        >
-             <img 
-                src={logo} 
-                alt="Raining Entertainment" 
-                className="w-64 mb-6 drop-shadow-2xl" 
-             />
-             <div className="mt-12">
-                <motion.div 
-                  className="text-3xl font-bold text-white/90 tracking-widest drop-shadow-2xl"
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  SCROLL
-                </motion.div>
-                <motion.div 
-                  className="mt-4 flex justify-center"
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <ArrowDown className="w-8 h-8 text-white opacity-70" />
-                </motion.div>
-             </div>
+        <motion.div className="absolute inset-0 z-10" animate={{ opacity: isMiracle ? 0 : 0.72 }} transition={{ duration: 0.8 }}>
+          <RainEffect active={!isMiracle} intensity={mobile ? 0.75 : 1.3} />
         </motion.div>
 
+        <Rainbow active={isMiracle} mobile={mobile} />
+        <AnimatePresence>
+          <Sun active={isMiracle} mobile={mobile} />
+        </AnimatePresence>
+        <LightningFlash active={!isMiracle} />
+
+        <motion.div style={{ opacity: logoOpacity }} className={`absolute inset-0 z-40 flex flex-col items-center ${mobile ? 'justify-start pt-[14svh]' : 'justify-center'}`}>
+          <img src={LOGO} alt="Raining Entertainment" width="420" height="290" className={`${mobile ? 'w-48' : 'w-64'} drop-shadow-2xl`} />
+          <div className={mobile ? 'mt-8' : 'mt-12'}>
+            <motion.p
+              animate={{ opacity: [0.58, 1, 0.58] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+              className="text-center font-display text-base font-medium lowercase tracking-[0.08em] text-white/90 drop-shadow-2xl md:text-2xl"
+            >
+              scroll to open the umbrella
+            </motion.p>
+          </div>
+        </motion.div>
       </motion.div>
-      
-      {/* CLOUD TRANSITION #1 — covers the storm→discovery handoff */}
-      <Clouds scrollProgress={cloudProgress} />
 
-      {/* DISCOVERY SCENE — pinned, fully driven by scroll, no internal scroll */}
-      <DiscoveryScene visible={discoveryVisible} progress={discoveryProgress} />
+      <Clouds progress={cloudProgress} mobile={mobile} />
+      {discoveryVisible && <DiscoveryScene progress={discoveryProgress} mobile={mobile} reduceMotion={reduceMotion} />}
+      <Clouds progress={cloudTwoProgress} mobile={mobile} />
 
-      {/* CLOUD TRANSITION #2 — covers the discovery→Home handoff */}
-      <Clouds scrollProgress={cloud2Progress} />
-
-      {/* --- SCROLL TRACK SPACER ---
-          Drives every scroll-locked animation above. After CLOUD2_END the
-          page simply settles back into the post-storm landing scene
-          (sunny hero + umbrella docked at top), exactly the state we were
-          in just before the first cloud transition began. */}
-      <div style={{ height: TOTAL_SCROLL_HEIGHT }} className="w-full pointer-events-none relative" aria-hidden="true" />
+      <div style={{ height: timeline.storyEnd }} aria-hidden="true" className="pointer-events-none relative w-full" />
+      <div className="relative z-30">
+        <HomeContent />
+      </div>
     </div>
   );
-};
+}

@@ -87,7 +87,7 @@ export const ServicePage = () => {
   
   const services: Record<string, any> = {
     'magic': {
-      title: 'Magic Brent',
+      title: "Brenton Keith & His Bag O' Tricks",
       subtitle: 'Hawaii Magician Astonishing the Islands for Over 25 Years!',
       description: 'My shows are big on comedy, high on energy, and large on interaction with family-friendly jokes and laughs for all ages. This is Hawaii Comedy Magic at its finest. Brenton Keith & His Bag O\' Tricks is The Best Choice for 1st birthday parties and has amused & amazed at thousands of Maui magic shows.',
       img: '/media/magic/brent-umbrella-beach.jpg', 
@@ -96,7 +96,7 @@ export const ServicePage = () => {
       sections: [
         {
             title: "Strolling Magic",
-            body: "Perfect for cocktail hours and receptions. Magic Brent mingles with your guests, performing intimate, close-up miracles right in their hands. It's the perfect ice-breaker that gets people talking and laughing immediately.",
+            body: "Perfect for cocktail hours and receptions. Brenton Keith & His Bag O' Tricks mingles with your guests, performing intimate, close-up miracles right in their hands. It's the perfect ice-breaker that gets people talking and laughing immediately.",
             image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWdpY2lhbiUyMGNhcmQlMjB0cmlja3xlbnwxfHx8fDE3NzAzNzYwMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
             reverse: false,
             bullets: ["Interactive & Personal", "Great Ice Breaker", "No Setup Required"]
@@ -116,14 +116,14 @@ export const ServicePage = () => {
     },
     'gameshow': {
       title: 'Gameshow Fanatics',
-      subtitle: 'Game Show Nite Gets People On The Edges Of Their Seats!',
+      subtitle: 'Game Show NITE Gets People On The Edges Of Their Seats!',
       description: 'Gameshow Fanatics is a production company specializing in interactive Game Show experiences for events of all sizes in Hawaii. Based on Maui, we bring our full-scale production anywhere on the island, and have options for events on Oahu, Kauai and Hawaii Big Island. Professionally hosted and highly engaging, Gameshow Fanatics delivers personalized, impactful entertainment.',
       img: imgGameshowHero, 
       color: 'bg-blue-900',
       accent: 'text-blue-600',
       sections: [
         {
-          title: "Game Show Nite!",
+          title: "Game Show NITE!",
           body: "The idea is simple. We re-created the Family Feud, and then some. We have a professional set with all the bells & whistles. We've got the answers 'flipping' with the DING! just like in the show years ago! Lighting... check! Sound... check! A quick draw, one-liner Game Show Host throwback wearing a hideous wig... check!",
           image: imgGameShowNiteBanner,
           reverse: false,
@@ -136,8 +136,8 @@ export const ServicePage = () => {
           ]
         },
         {
-          title: "Game Show Lite",
-          body: "Game Show Lite is a totally mobile, scaled-down version of the show and easy to add to any event. Our Face-Off Podium 2.0 not only lights up, it delivers fabulous Game Show sounds too! Utilizing wheels and battery-power with a built-in microphone, the prop itself is an energetic fireball. Perfect for impromptu roaming game shows!",
+          title: "Game Show LITE",
+          body: "Game Show LITE is a totally mobile, scaled-down version of the show and easy to add to any event. Our Face-Off Podium 2.0 not only lights up, it delivers fabulous Game Show sounds too! Utilizing wheels and battery-power with a built-in microphone, the prop itself is an energetic fireball. Perfect for impromptu roaming game shows!",
           image: imgLitePodiumDetail,
           reverse: true,
           bullets: [
@@ -196,7 +196,7 @@ export const ServicePage = () => {
       clientsImage: imgClientsGrid
     },
     'casino': {
-      title: 'Casino Night',
+      title: 'Casino NITE',
       subtitle: 'Las Vegas Style Excitement in Hawaii',
       description: 'Bring the thrill of the Las Vegas strip to your next event! We provide authentic casino tables, professional dealers, and a high-energy atmosphere that will have your guests cheering. From Blackjack to Roulette, we create a fun, risk-free environment where everyone is a high roller.',
       img: imgCasinoGroup, // Using the group image as hero
@@ -252,7 +252,7 @@ export const ServicePage = () => {
       accent: 'text-pink-600',
       sections: [
         {
-           title: "Stilt Walking",
+           title: "Costumed Stilt Walking",
            body: "Stilt walking captures the imagination and inspires awe from children and adults alike. It's breathtaking and exciting to see a 9-foot tall creature stroll into sight. Cirque Jolie stilt walkers can match costumes to fit any theme! This is something unique you can do to give your event that extra pizzazz.",
            image: imgStiltWalkers,
            reverse: false
@@ -280,7 +280,7 @@ export const ServicePage = () => {
     'corporate': {
       title: 'Corporate Events',
       subtitle: 'Professional, Scalable, Unforgettable',
-      description: 'Elevate your brand with entertainment that means business. We specialize in galas, product launches, and team-building events that leave a lasting impression on your clients and employees. From high-end magic to casino nights, we have the perfect fit for your corporate culture.',
+      description: 'Elevate your brand with entertainment that means business. We specialize in galas, product launches, and team-building events that leave a lasting impression on your clients and employees. From high-end magic to Casino NITE, we have the perfect fit for your corporate culture.',
       img: '/media/magic/brent-library-show.jpg', 
       color: 'bg-slate-800',
       accent: 'text-yellow-600',
@@ -301,7 +301,7 @@ export const ServicePage = () => {
         },
         {
           title: "Holiday Parties",
-          body: "End the year on a high note. We offer a variety of packages from strolling magic and cocktail hour entertainment to full casino nights that give your employees a night to remember.",
+          body: "End the year on a high note. We offer a variety of options from strolling magic and cocktail-hour entertainment to the distinct Casino NITE experience.",
           image: imgCasinoGroup,
           reverse: false
         }
@@ -314,6 +314,7 @@ export const ServicePage = () => {
   };
 
   const data = serviceId ? services[serviceId] : services['magic'];
+  const directContact = { name: 'Brenton', phone: '(808) 870-2102', href: 'tel:+18088702102' };
 
   if (!data) return <div className="p-20 text-center">Service not found</div>;
 
@@ -592,8 +593,8 @@ export const ServicePage = () => {
                     </form>
                     
                     <div className="mt-8 pt-8 border-t border-slate-100 text-center text-slate-500 text-sm">
-                        <p>Or call us directly at</p>
-                        <a href="tel:808-874-2591" className="text-slate-900 font-bold text-lg hover:underline">(808) 874-2591</a>
+                        <p>Or call {directContact.name} directly</p>
+                        <a href={directContact.href} className="text-slate-900 font-bold text-lg hover:underline">{directContact.phone}</a>
                     </div>
                 </div>
             </div>

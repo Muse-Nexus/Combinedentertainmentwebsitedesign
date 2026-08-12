@@ -11,12 +11,12 @@ import clsx from 'clsx';
  */
 
 const services = [
-  { to: '/balloon-twisting', label: 'Balloon Twisting & Facepainting' },
+  { to: '/balloon-twisting', label: 'Balloon Twisting & Face Painting' },
   { to: '/balloon-decor',    label: 'Balloon Decor' },
-  { to: '/strolling',        label: 'Stilt & Ambient Performers' },
+  { to: '/strolling',        label: 'Costumed Stilt Walking' },
   { to: '/magic',            label: 'Magic' },
   { to: '/casino',           label: 'Casino' },
-  { to: '/game-show',        label: 'Game Show' },
+  { to: '/game-show',        label: 'Game Show NITE' },
   { to: '/corporate',        label: 'Corporate Events' },
   { to: '/additional-services', label: 'Additional & À La Carte' },
 ];
@@ -37,6 +37,15 @@ export function Navbar() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen]);
 
   return (
     <nav
@@ -64,13 +73,28 @@ export function Navbar() {
             className="relative"
             onMouseEnter={() => setServicesOpen(true)}
             onMouseLeave={() => setServicesOpen(false)}
+            onFocus={() => setServicesOpen(true)}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                setServicesOpen(false);
+              }
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                setServicesOpen(false);
+                event.currentTarget.querySelector('button')?.focus();
+              }
+            }}
           >
             <button
+              type="button"
+              onClick={() => setServicesOpen(true)}
               className="px-3 py-2 flex items-center gap-1 font-medium hover:text-coral transition-colors drop-shadow-md"
               aria-haspopup="true"
               aria-expanded={servicesOpen}
+              aria-controls="services-menu"
             >
-              Services <ChevronDown className="w-4 h-4" />
+              Services <ChevronDown className={clsx('w-4 h-4 transition-transform', servicesOpen && 'rotate-180')} />
             </button>
             <AnimatePresence>
               {servicesOpen && (
@@ -79,6 +103,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.15 }}
+                  id="services-menu"
                   className="absolute left-0 top-full pt-2 min-w-[260px]"
                 >
                   <div className="bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl overflow-hidden">
@@ -86,6 +111,7 @@ export function Navbar() {
                       <NavLink
                         key={s.to}
                         to={s.to}
+                        onClick={() => setServicesOpen(false)}
                         className={({ isActive }) =>
                           clsx(
                             'block px-4 py-2.5 text-sm font-medium transition-colors',
@@ -121,7 +147,7 @@ export function Navbar() {
 
           <Link
             to="/contact"
-            className="ml-3 px-5 py-2 bg-coral hover:bg-coral/80 rounded-full font-bold transition-colors shadow-lg"
+            className="ml-3 px-5 py-2 bg-coral hover:bg-coral/80 text-slate-950 rounded-full font-bold transition-colors shadow-lg"
           >
             Book Now
           </Link>
@@ -132,6 +158,8 @@ export function Navbar() {
           className="lg:hidden text-white z-10 p-2"
           onClick={() => setIsOpen((o) => !o)}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+          aria-controls="mobile-navigation"
         >
           {isOpen ? <X /> : <Menu />}
         </button>
@@ -141,10 +169,11 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-navigation"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden absolute top-full left-0 right-0 bg-slate-900 p-4 flex flex-col gap-3 shadow-xl border-b border-slate-800"
+            className="lg:hidden absolute top-full left-0 right-0 max-h-[calc(100svh-5rem)] overflow-y-auto overscroll-contain bg-slate-900 p-4 pb-6 flex flex-col gap-3 shadow-xl border-b border-slate-800"
           >
             {services.map((s) => (
               <Link
@@ -170,7 +199,7 @@ export function Navbar() {
             <Link
               to="/contact"
               onClick={() => setIsOpen(false)}
-              className="mt-2 p-3 bg-coral text-white rounded-lg text-center font-bold"
+              className="mt-2 p-3 bg-coral text-slate-950 rounded-lg text-center font-bold"
             >
               Book Now
             </Link>

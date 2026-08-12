@@ -31,19 +31,18 @@ interface PricingCategory {
 const pricingData: PricingCategory[] = [
   {
     title: "Brenton Keith & His Bag O' Tricks",
-    performer: "Magic · Game Show · Casino Night",
+    performer: "Magic · Game Show NITE · Casino NITE",
     accentColor: "text-coral",
     borderColor: "border-coral/30",
     items: [
       { name: "Live Magic Show (30 min)", price: "Call for pricing" },
       { name: "Live Magic Show (60 min)", price: "Call for pricing" },
-      { name: "Game Show Nite — Full Production", price: "Call for pricing", note: "4 teams, 20 players, full podium set + host" },
-      { name: "Game Show Lite", price: "Call for pricing", note: "Compact setup, great for smaller events" },
-      { name: "Casino Night (per table)", price: "Call for pricing", note: "Blackjack, Poker, or Craps" },
-      { name: "Casino Night Package (3 tables)", price: "Call for pricing", note: "Includes dealers, chips, sound & lighting" },
+      { name: "Game Show NITE — Full Production", price: "Call for pricing", note: "4 teams, 20 players, full podium set + host" },
+      { name: "Game Show LITE", price: "Call for pricing", note: "Compact setup for tighter spaces and budgets" },
+      { name: "Casino NITE (per table)", price: "Call for pricing", note: "Blackjack, Poker, Craps, or Roulette" },
+      { name: "Casino NITE Package (3 tables)", price: "Call for pricing", note: "Includes dealers, chips, sound & lighting" },
       { name: "Magic + Casino Combo", price: "Call for pricing", note: "Bundle discount available" },
       { name: "Magic + Game Show Combo", price: "Call for pricing", note: "Bundle discount available" },
-      { name: "Full Night Package (Magic + Game Show + Casino)", price: "Best Value — Call Us", note: "The ultimate Raining Entertainment experience" },
     ],
   },
   {
@@ -150,10 +149,9 @@ export default function Pricing() {
                     Booking multiple services together always unlocks a discount. The more you bundle, the better the deal — and the more unforgettable the night.
                   </p>
                   <ul className="space-y-2 text-gray-400">
-                    <li>✦ Magic + Casino Night — always better together</li>
-                    <li>✦ Magic + Game Show Nite — the crowd goes wild</li>
+                    <li>✦ Magic + Casino NITE — always better together</li>
+                    <li>✦ Magic + Game Show NITE — the crowd goes wild</li>
                     <li>✦ Kids magic + balloon twisting + face painting — the full Cirque Jolie experience</li>
-                    <li>✦ Full Night: Magic + Game Show + Casino — the ultimate Raining Entertainment evening</li>
                   </ul>
                 </div>
               </div>

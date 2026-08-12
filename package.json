@@ -4,8 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite"
+    "airtable:setup": "node scripts/setup-airtable.mjs",
+    "build": "vite build && node scripts/generate-route-html.mjs && node scripts/verify-seo-build.mjs",
+    "dev": "vite",
+    "verify:seo": "node scripts/verify-seo-build.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

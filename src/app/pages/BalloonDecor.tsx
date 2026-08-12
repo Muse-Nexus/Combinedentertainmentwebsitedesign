@@ -31,7 +31,7 @@ export default function BalloonDecor() {
             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
               Balloon garland, balloon arches, balloon columns, numbered birthday balloon arrangements, balloon bouquets, surprise balloon deliveries, and balloon centerpieces. It totally transforms any space into a party!
             </p>
-            <Link to="/contact" className="inline-block px-8 py-4 bg-sage hover:bg-sage/80 text-white font-bold rounded-full transition-all shadow-lg shadow-sage/25 hover:shadow-sage/40 hover:scale-105">Get a Free Quote</Link>
+            <Link to="/contact" className="inline-block px-8 py-4 bg-sage hover:bg-sage/80 text-slate-950 font-bold rounded-full transition-all shadow-lg shadow-sage/25 hover:shadow-sage/40 hover:scale-105">Get a Free Quote</Link>
           </motion.div>
         </div>
       </section>
@@ -46,21 +46,21 @@ export default function BalloonDecor() {
           <FadeInSection delay={0.15}>
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/tropical-arch-resort.jpg" alt="Tropical balloon arch at Maui resort" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/tropical-arch-resort.jpg" alt="Tropical balloon arch at Maui resort" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/pastel-rainbow-arch.jpg" alt="Pastel rainbow balloon arch for birthday" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/pastel-rainbow-arch.jpg" alt="Pastel rainbow balloon arch for birthday" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
             </div>
             <div className="grid grid-cols-3 gap-6">
               <div className="aspect-square rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/arch-red-gold-black.jpg" alt="Red, gold, and black balloon arch" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/arch-red-gold-black.jpg" alt="Red, gold, and black balloon arch" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="aspect-square rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/gold-silver-column.jpg" alt="Gold and silver balloon column" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/gold-silver-column.jpg" alt="Gold and silver balloon column" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="aspect-square rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/rainbow-store-install.jpg" alt="Rainbow balloon installation at storefront" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/rainbow-store-install.jpg" alt="Rainbow balloon installation at storefront" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
             </div>
           </FadeInSection>
@@ -98,10 +98,10 @@ export default function BalloonDecor() {
           <FadeInSection>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/easter-bunny-wreath.jpg" alt="Easter bunny balloon wreath" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/easter-bunny-wreath.jpg" alt="Easter bunny balloon wreath" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="aspect-[4/3] rounded-2xl overflow-hidden group">
-                <img src="/media/balloon-decor/tropical-arch-resort-2.jpg" alt="Tropical balloon arch at resort entrance" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="/media/balloon-decor/monster-storefront-arch-maui.webp" alt="Playful monster-themed balloon arch installed at a Maui storefront" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
             </div>
           </FadeInSection>
@@ -155,7 +155,7 @@ export default function BalloonDecor() {
                   </p>
                 </div>
                 <div className="rounded-2xl overflow-hidden">
-                  <img src="/media/balloon-decor/balloons-of-aloha.jpg" alt="Balloons of Aloha delivery bouquet" className="w-full h-full object-cover" />
+                  <img src="/media/balloon-decor/balloons-of-aloha.jpg" alt="Balloons of Aloha delivery bouquet" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </div>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function BalloonDecor() {
                 <p className="text-white/70 mb-10">Entertainers based on the island of Maui &amp; willing to travel to outer island events</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link to="/contact" className="px-10 py-4 bg-white text-sage font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">Get a Free Quote</Link>
-                  <a href="tel:8088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">(808) 870-2102</a>
+                  <a href="tel:+18088702102" className="px-10 py-4 border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">Brenton · (808) 870-2102</a>
                 </div>
               </div>
             </div>

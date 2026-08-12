@@ -19,7 +19,7 @@ export function CloudReveal() {
   // Using the composite image focused on the woman (Jolie) on stilts
   // The composite has her on the right side.
   const jolieImage = "/media/strolling/silver-white-stilt.jpg"; 
-  const cloudImage = "/media/clouds-wipe.png";
+  const cloudImage = "/media/clouds-wipe.webp";
 
   return (
     <div ref={containerRef} className="relative h-[150vh] overflow-hidden bg-sky-300">

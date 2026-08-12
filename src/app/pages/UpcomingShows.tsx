@@ -1,8 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { motion, useInView } from 'motion/react';
 import { Calendar, MapPin, Ticket, Clock, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  UPCOMING_SHOWS_FALLBACK,
+  type EventType,
+  type ShowEvent,
+} from '../../../shared/site-content';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
@@ -13,44 +18,6 @@ const FadeInSection = ({ children, className = '', delay = 0 }: { children: Reac
     </motion.div>
   );
 };
-
-type EventType = 'Public' | 'Ticketed' | 'Private';
-
-interface ShowEvent {
-  id: number;
-  title: string;
-  performer: string;
-  date: string;
-  time: string;
-  doors?: string;
-  location: string;
-  locationLink?: string;
-  type: EventType;
-  price?: string;
-  description: string;
-  bookingLink?: string;
-  image: string;
-  tag?: string;
-}
-
-const events: ShowEvent[] = [
-  {
-    id: 1,
-    title: "The Mulligan's Magic Show",
-    performer: "Brenton Keith & His Bag O' Tricks",
-    date: "Thu, May 7",
-    time: "6:30 PM",
-    doors: "Close-up tableside magic starts ~5:30 PM",
-    location: "Mulligans on the Blue, Maui",
-    locationLink: "https://www.mulligansontheblue.com",
-    type: "Ticketed",
-    price: "Only $10! Kids under 5 free",
-    description: "Brenton Keith's signature high-energy comedy magic show — live goldfish, fire, and your friends onstage. Reserve your table at Mulligans on the Blue.",
-    bookingLink: "https://www.mulligansontheblue.com",
-    image: "/media/magic/brent-library-show.jpg",
-    tag: "Recurring Show"
-  },
-];
 
 const filterOptions: { label: string; value: EventType | 'All' }[] = [
   { label: 'All', value: 'All' },
@@ -66,6 +33,34 @@ const typeColors: Record<EventType, string> = {
 
 export function UpcomingShows() {
   const [filter, setFilter] = useState<EventType | 'All'>('All');
+  const [events, setEvents] = useState<ShowEvent[]>(UPCOMING_SHOWS_FALLBACK);
+  const [usingFallback, setUsingFallback] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadEvents() {
+      try {
+        const response = await fetch('/api/events', {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        });
+        if (!response.ok) return;
+        const payload = (await response.json()) as { ok?: boolean; events?: ShowEvent[] };
+        if (payload.ok && Array.isArray(payload.events)) {
+          setEvents(payload.events);
+          setUsingFallback(false);
+        }
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === 'AbortError')) {
+          // The recurring checked-in schedule is the intentional offline/error state.
+        }
+      }
+    }
+
+    void loadEvents();
+    return () => controller.abort();
+  }, []);
 
   const filtered = filter === 'All' ? events : events.filter(e => e.type === filter);
 
@@ -96,11 +91,13 @@ export function UpcomingShows() {
               <div className="flex gap-2">
                 {filterOptions.map(opt => (
                   <button
+                    type="button"
                     key={opt.value}
                     onClick={() => setFilter(opt.value)}
+                    aria-pressed={filter === opt.value}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                       filter === opt.value
-                        ? 'bg-coral text-white border-coral'
+                        ? 'bg-coral text-slate-950 border-coral'
                         : 'bg-slate-800/80 border-slate-700/50 text-gray-300 hover:border-coral/40 hover:text-coral'
                     }`}
                   >
@@ -116,6 +113,11 @@ export function UpcomingShows() {
       {/* SHOWS LIST */}
       <section className="py-16 bg-slate-900 min-h-[50vh]">
         <div className="container mx-auto px-4">
+          {usingFallback && (
+            <p className="mb-6 rounded-xl border border-slate-700/60 bg-slate-800/60 px-5 py-3 text-sm text-slate-300" role="status">
+              Showing the regular weekly listing. Please confirm current availability with the venue before heading out.
+            </p>
+          )}
           {filtered.length === 0 ? (
             <div className="text-center py-24 text-gray-500">
               <p className="text-2xl mb-4">No {filter} shows coming up right now.</p>
@@ -128,7 +130,7 @@ export function UpcomingShows() {
                   <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl overflow-hidden hover:border-coral/30 transition-all group flex flex-col md:flex-row">
                     {/* Image */}
                     <div className="w-full md:w-64 h-48 md:h-auto flex-shrink-0 overflow-hidden">
-                      <img src={event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={event.image} alt={event.title} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
 
                     {/* Content */}
@@ -142,7 +144,15 @@ export function UpcomingShows() {
                           <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${typeColors[event.type]}`}>{event.type}</span>
                         </div>
 
-                        <h3 className="text-2xl font-black mb-1">{event.title}</h3>
+                        <h2 className="text-2xl font-black mb-1">
+                          {event.detailsPath ? (
+                            <Link to={event.detailsPath} className="transition-colors hover:text-coral">
+                              {event.title}
+                            </Link>
+                          ) : (
+                            event.title
+                          )}
+                        </h2>
                         <p className="text-coral font-semibold mb-3">{event.performer}</p>
 
                         {/* Meta */}
@@ -183,12 +193,20 @@ export function UpcomingShows() {
 
                       {/* CTA */}
                       <div className="flex-shrink-0 flex flex-row md:flex-col gap-3 items-start md:items-end justify-start md:justify-center">
+                        {event.detailsPath && (
+                          <Link
+                            to={event.detailsPath}
+                            className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/20 px-6 py-3 font-bold text-white transition-all hover:border-coral/50 hover:text-coral"
+                          >
+                            Show details
+                          </Link>
+                        )}
                         {event.type !== 'Private' && event.bookingLink && (
                           <a
                             href={event.bookingLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-6 py-3 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all hover:scale-105 whitespace-nowrap"
+                            className="flex items-center gap-2 px-6 py-3 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all hover:scale-105 whitespace-nowrap"
                           >
                             <Ticket className="w-4 h-4" />
                             Reserve a Table
@@ -212,7 +230,7 @@ export function UpcomingShows() {
                 Most of Brenton&rsquo;s shows are private events &mdash; corporate parties, weddings, birthday luaus, and more.
               </p>
               <p className="text-gray-500 mb-6">Want your own show? Let&rsquo;s talk.</p>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-coral hover:bg-coral/80 text-white font-bold rounded-full transition-all hover:scale-105">
+              <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-coral hover:bg-coral/80 text-slate-950 font-bold rounded-full transition-all hover:scale-105">
                 Book a Private Show
               </Link>
             </div>
@@ -229,7 +247,7 @@ export function UpcomingShows() {
               <div className="relative z-10">
                 <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Book Brenton for Your Event</h2>
                 <p className="text-xl text-white/90 mb-4 max-w-2xl mx-auto">
-                  Magic shows, game shows, casino nights, corporate events, birthday luaus &mdash; Brenton Keith &amp; His Bag O&rsquo; Tricks has been astonishing Maui for over 25 years.
+                  Magic shows, Game Show NITE, Casino NITE, corporate events, birthday luaus &mdash; Brenton Keith &amp; His Bag O&rsquo; Tricks has been astonishing Maui for over 25 years.
                 </p>
                 <p className="text-white/70 mb-10">Based on Maui &bull; brentonkeith@magicbrent.com &bull; (808) 870-2102</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">

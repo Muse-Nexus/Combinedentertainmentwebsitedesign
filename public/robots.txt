@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /gallery-view
+Disallow: /gallery-view.html
+
+Sitemap: https://www.rainingentertainment.com/sitemap.xml

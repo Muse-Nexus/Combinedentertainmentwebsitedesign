@@ -1,0 +1,18 @@
+# Local source media; production-ready assets live in public/media.
+/media/
+.choros-video/
+visual-contact-sheets/
+file.png
+
+# Vercel builds this directory from source.
+dist/
+node_modules/
+
+# Local-only and generated debris.
+.DS_Store
+**/.DS_Store
+.git/
+.vercel/
+public/media/uploads/
+public/media/video/frames/
+*.psd

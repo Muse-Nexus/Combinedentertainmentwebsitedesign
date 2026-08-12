@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { AlphaVideoPlayer } from '../components/AlphaVideoPlayer';
+import { createPortal } from 'react-dom';
 import { Layout } from '../components/Layout';
-import { motion, useInView, AnimatePresence } from 'motion/react';
+import { motion, useInView, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import {
   DndContext,
@@ -24,7 +24,6 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const ACTIVE_VARIANT: 'float-center' | 'hero-bg' = 'float-center';
 const LS_KEY = 'strolling-page-config-v4';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -45,15 +44,15 @@ interface PageConfig {
 
 // ── Defaults ───────────────────────────────────────────────────────────────
 const DEFAULT_CONFIG: PageConfig = {
-  headlineBrenton: 'Magic Brent — Walk-Around Magic & Gameshow',
-  subheadBrenton: 'Table magic that stops conversation, gameshow energy that owns the room. Brenton works the crowd so you don\'t have to.',
+  headlineBrenton: "Brenton Keith & His Bag O' Tricks — Up-Close Magic & Game Show NITE",
+  subheadBrenton: 'Up-close magic that stops conversation, game-show energy that owns the room. Brenton works the crowd so you don\'t have to.',
   headlineJolie: 'Cirque Jolie — Stilt Walking & Fire Dancing',
   subheadJolie: 'Rainbow stilts, fire fans, costumed characters — Jolie transforms any venue into a spectacle people talk about for years.',
   brentonPhotos: [
-    { id: 'b1', src: '/media/brenton/gameshow-crowd.jpg', alt: 'Brenton running walk-around gameshow for huge Lahaina street crowd' },
+    { id: 'b1', src: '/media/brenton/gameshow-crowd.jpg', alt: 'Brenton hosting an interactive game show for a large Lahaina street crowd' },
     { id: 'b2', src: '/media/brenton/patriotic-stilt.jpg', alt: 'Jolie on stilts in patriotic stars & stripes costume at Maui resort' },
     { id: 'b3', src: '/media/brenton/lawn-magic.jpg', alt: 'Brenton producing fire at outdoor gala' },
-    { id: 'b4', src: '/media/brenton/brent-fire-portrait.png', alt: 'Magic Brent fire portrait' },
+    { id: 'b4', src: '/media/brenton/brent-fire-portrait.png', alt: 'Brenton Keith fire portrait' },
   ],
   joliePhotos: [
     { id: 'j1', src: '/media/strolling/clown-stilt-rainbow.jpg', alt: 'Rainbow clown stilt performer with kids' },
@@ -83,15 +82,7 @@ function saveConfig(cfg: PageConfig) {
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
-// Reserved center-column width. Kept very narrow on purpose — just her torso.
-// Balloons spill freely over the flanks and across the photos.
-const JOLIE_W = 'clamp(90px, 9vw, 150px)';
-
-/**
- * Section row that flanks the floating Jolie:
- *   [ left content ] [ reserved Jolie zone ] [ right content ]
- * Collapses to a single column on mobile (Jolie just sits on top).
- */
+/** Standard two-column section row used below the feature composition. */
 function Flank({
   left,
   right,
@@ -105,11 +96,10 @@ function Flank({
 }) {
   return (
     <div
-      className={`mx-auto px-6 grid md:grid-cols-[1fr_var(--jolie-w)_1fr] grid-cols-1 ${className}`}
+      className={`mx-auto px-6 grid grid-cols-1 md:grid-cols-2 ${className}`}
       style={{ maxWidth: '1500px', columnGap: gap, rowGap: '2rem' }}
     >
       <div className="min-w-0">{left}</div>
-      <div className="hidden md:block" aria-hidden="true" />
       <div className="min-w-0">{right}</div>
     </div>
   );
@@ -118,30 +108,47 @@ function Flank({
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const reduceMotion = useReducedMotion();
   return (
-    <motion.div ref={ref} initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay, ease: 'easeOut' }} className={className}>
+    <motion.div
+      ref={ref}
+      initial={reduceMotion ? false : { opacity: 0, y: 40 }}
+      animate={reduceMotion || isInView ? { opacity: 1, y: 0 } : {}}
+      transition={reduceMotion ? { duration: 0 } : { duration: 0.7, delay, ease: 'easeOut' }}
+      className={className}
+    >
       {children}
     </motion.div>
   );
 };
 
 function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    closeButtonRef.current?.focus();
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handler);
     document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', handler); document.body.style.overflow = ''; };
+    return () => {
+      window.removeEventListener('keydown', handler);
+      document.body.style.overflow = '';
+      previousFocusRef.current?.focus();
+    };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <AnimatePresence>
-      <motion.div key="lb-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={onClose}>
+      <motion.div key="lb-backdrop" role="dialog" aria-modal="true" aria-label={`Expanded photo: ${alt}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={onClose}>
         <motion.div key="lb-img" initial={{ scale: 0.88, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.88, opacity: 0 }} transition={{ duration: 0.25 }} className="relative max-w-[92vw] max-h-[92vh]" onClick={e => e.stopPropagation()}>
-          <img src={src} alt={alt} className="max-w-full max-h-[88vh] rounded-2xl shadow-2xl object-contain" />
-          <button onClick={onClose} className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-black/60 hover:bg-black/90 text-white rounded-full text-xl font-bold transition-all">×</button>
+          <img src={src} alt={alt} decoding="async" className="max-w-full max-h-[88vh] rounded-2xl shadow-2xl object-contain" />
+          <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close expanded photo" className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-black/60 hover:bg-black/90 text-white rounded-full text-xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">×</button>
         </motion.div>
       </motion.div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
 
@@ -150,6 +157,7 @@ function SortablePhoto({ item, editMode, onRemove }: { item: PhotoItem; editMode
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [errored, setErrored] = useState(false);
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -202,13 +210,32 @@ function SortablePhoto({ item, editMode, onRemove }: { item: PhotoItem; editMode
           </button>
         )}
 
-        <img
-          src={item.src}
-          alt={item.alt}
-          className={`w-full h-auto block transition-transform duration-500 ${!editMode ? 'group-hover:scale-[1.03] cursor-zoom-in' : 'cursor-default'}`}
-          onError={() => setErrored(true)}
-          onClick={() => { if (!editMode) setLightboxOpen(true); }}
-        />
+        {editMode ? (
+          <img
+            src={item.src}
+            alt={item.alt}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-auto block cursor-default"
+            onError={() => setErrored(true)}
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            aria-label={`View full photo: ${item.alt}`}
+            className="block w-full cursor-zoom-in focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-coral"
+          >
+            <img
+              src={item.src}
+              alt={item.alt}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.03]"
+              onError={() => setErrored(true)}
+            />
+          </button>
+        )}
 
         {/* hover hint (non-edit only) */}
         {!editMode && (
@@ -220,7 +247,7 @@ function SortablePhoto({ item, editMode, onRemove }: { item: PhotoItem; editMode
         )}
       </div>
 
-      {lightboxOpen && <Lightbox src={item.src} alt={item.alt} onClose={() => setLightboxOpen(false)} />}
+      {lightboxOpen && <Lightbox src={item.src} alt={item.alt} onClose={closeLightbox} />}
     </>
   );
 }
@@ -537,7 +564,7 @@ function TwoColumnEditor({
         left={
           <div className="space-y-4">
             <FadeInSection className="md:text-left mb-2">
-              <p className="text-coral uppercase tracking-[0.25em] text-xs font-bold mb-2">Magic Brent</p>
+              <p className="text-coral uppercase tracking-[0.25em] text-xs font-bold mb-2">Brenton Keith &amp; His Bag O&rsquo; Tricks</p>
               <EditableText value={config.headlineBrenton} onChange={v => update({ headlineBrenton: v })} editMode={true} as="h2" className="text-3xl md:text-4xl font-bold mb-3 text-white leading-tight" />
               <EditableText value={config.subheadBrenton} onChange={v => update({ subheadBrenton: v })} editMode={true} className="text-gray-400 text-base" />
             </FadeInSection>
@@ -609,7 +636,7 @@ function EditToolbar({ editMode, onToggle, onReset }: { editMode: boolean; onTog
         onClick={onToggle}
         className={`px-5 py-2.5 rounded-full shadow-xl text-sm font-bold transition-all border ${
           editMode
-            ? 'bg-coral text-white border-coral hover:bg-coral/80'
+            ? 'bg-coral text-slate-950 border-coral hover:bg-coral/80'
             : 'bg-slate-800/90 text-white border-slate-600 hover:bg-slate-700 backdrop-blur-sm'
         }`}
       >
@@ -619,31 +646,84 @@ function EditToolbar({ editMode, onToggle, onReset }: { editMode: boolean; onTog
   );
 }
 
-// ── Floating girl ──────────────────────────────────────────────────────────
-// Stilt-walker cinemagraph, anchored off to the right edge (no longer centered).
-// Demo placement — sits as a side accent rather than dominating the page.
-function FloatingGirl() {
+// ── Jolie feature column ───────────────────────────────────────────────────
+// Keep both treatments available: the live page uses the free-floating alpha
+// version, while `variant="boxed"` restores the previously approved card.
+type JolieFeatureVariant = 'floating' | 'boxed';
+
+function JolieFeature({ variant = 'floating' }: { variant?: JolieFeatureVariant }) {
+  const reduceMotion = useReducedMotion();
+  const saveData =
+    typeof navigator !== 'undefined' &&
+    Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+  const boxed = variant === 'boxed';
+  const stillSrc = boxed
+    ? '/media/strolling/red-striped-stilt-performer-night.webp'
+    : '/media/strolling/jolie-balloons-poster.webp';
+
   return (
-    <div
-      className="fixed inset-0 pointer-events-none overflow-hidden flex items-end justify-end"
-      style={{ zIndex: 9999 }}
-      aria-hidden="true"
-    >
-      <video
-        src="/media/video/jolie-balloons-v4.webm"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="h-[78vh] md:h-[88vh]"
-        style={{
-          width: 'auto',
-          maxWidth: '55vw',
-          display: 'block',
-          transform: 'translateX(10vw)',
-        }}
-      />
-    </div>
+    <aside className="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-stretch" aria-label="Cirque Jolie featured performer">
+      <div className="lg:sticky lg:top-28">
+        <figure
+          className={
+            boxed
+              ? 'relative overflow-hidden rounded-[2rem] border border-lavender/25 bg-[radial-gradient(circle_at_50%_28%,rgba(179,157,219,0.25),rgba(15,23,42,0.96)_66%)] shadow-2xl shadow-black/30'
+              : 'relative overflow-visible lg:origin-bottom lg:scale-[1.06]'
+          }
+        >
+          <div className="relative h-[68svh] min-h-[440px] max-h-[680px] lg:h-[72vh] lg:max-h-[800px]">
+            {reduceMotion || saveData ? (
+              <img
+                src={stillSrc}
+                alt="Cirque Jolie greeting guests on stilts at a Maui event"
+                className={
+                  boxed
+                    ? 'h-full w-full object-cover object-top'
+                    : 'pointer-events-none h-full w-full select-none object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.5)]'
+                }
+              />
+            ) : (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                poster={stillSrc}
+                disablePictureInPicture
+                aria-label="Cirque Jolie performing on stilts beneath a balloon sculpture"
+                className={
+                  boxed
+                    ? 'h-full w-full object-contain object-bottom'
+                    : 'pointer-events-none h-full w-full select-none object-contain object-bottom drop-shadow-[0_24px_30px_rgba(0,0,0,0.5)]'
+                }
+              >
+                <source src="/media/video/jolie-balloons-v4.webm" type="video/webm" />
+                <img
+                  src={stillSrc}
+                  alt="Cirque Jolie greeting guests on stilts at a Maui event"
+                  className={
+                    boxed
+                      ? 'h-full w-full object-cover object-top'
+                      : 'h-full w-full object-contain object-bottom'
+                  }
+                />
+              </video>
+            )}
+            {boxed && (
+              <>
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
+                <figcaption className="absolute inset-x-0 bottom-0 z-10 p-6">
+                  <p className="text-lavender text-xs font-bold uppercase tracking-[0.25em]">Cirque Jolie</p>
+                  <p className="mt-1 text-xl font-bold text-white">A spectacle in every room</p>
+                  <p className="mt-1 text-sm text-slate-300">Stilts · Characters · Fire · Ambient performance</p>
+                </figcaption>
+              </>
+            )}
+          </div>
+        </figure>
+      </div>
+    </aside>
   );
 }
 
@@ -672,65 +752,51 @@ export default function StrollingEntertainment() {
 
   return (
     <>
-      <FloatingGirl />
       {EDIT_ENABLED && <EditToolbar editMode={editMode} onToggle={toggleEdit} onReset={resetConfig} />}
 
-      <Layout title="Stilt & Ambient Performers">
-        {/* Reserve dead-zone width for the floating Jolie on every section */}
-        <div style={{ ['--jolie-w' as any]: JOLIE_W }}>
+      <Layout title="Costumed Stilt Walking">
+        {/* ── HERO + GALLERY + JOLIE FEATURE ── */}
+        <section className="relative bg-slate-900">
+          <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-x-8 gap-y-12 px-6 py-20 sm:py-24 lg:grid-cols-[minmax(0,3fr)_minmax(280px,1fr)] lg:grid-rows-[auto_1fr] lg:items-start lg:gap-x-10 lg:py-28 xl:gap-x-14">
+            <FadeInSection className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-coral/80">Maui · Stilts · Ambient · Walk-Around · Fire</p>
+              <h1 className="text-5xl font-bold leading-[0.95] sm:text-6xl lg:text-7xl xl:text-8xl">
+                Costumed Stilt<br /><span className="text-coral">Walking</span>
+              </h1>
+              <p className="mt-8 max-w-3xl text-lg text-gray-300 md:text-xl">
+                The magic that moves through the crowd — towering stilt walkers and costumed ambient characters that turn your event into a spectacle people talk about for years.
+              </p>
+              <Link to="/contact" className="mt-8 inline-block rounded-full bg-coral px-8 py-3.5 font-bold text-slate-950 shadow-xl transition-all hover:scale-105 hover:bg-coral/80">
+                Book Costumed Stilt Walking
+              </Link>
+            </FadeInSection>
 
-        {/* ── HERO ── */}
-        <section className="relative py-32 bg-slate-900 overflow-hidden">
-          <Flank
-            className="relative z-20"
-            left={
-              <FadeInSection className="md:text-left">
-                <p className="text-coral/80 uppercase tracking-[0.3em] text-xs font-bold mb-4">Maui · Stilts · Ambient · Walk-Around · Fire</p>
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95]">
-                  Stilt &amp; Ambient<br /><span className="text-coral">Performers</span>
-                </h1>
-              </FadeInSection>
-            }
-            right={
-              <FadeInSection delay={0.1} className="md:text-right">
-                <p className="text-lg md:text-xl text-gray-300 mb-8">
-                  The magic that moves through the crowd — towering stilt walkers and costumed ambient characters that turn your event into a spectacle people talk about for years.
-                </p>
-                <Link to="/contact" className="inline-block px-8 py-3.5 bg-coral text-white font-bold rounded-full hover:bg-coral/80 transition-all shadow-xl hover:scale-105">
-                  Book Stilt &amp; Ambient Performers
-                </Link>
-              </FadeInSection>
-            }
-          />
-        </section>
+            <JolieFeature />
 
-        {/* ── BRENTON (LEFT)  │  JOLIE (RIGHT) ── */}
-        <section className="py-24 bg-slate-900 relative z-20">
-          {editMode ? (
-            <div className="container mx-auto">
-              <TwoColumnEditor config={config} update={update} />
-            </div>
-          ) : (
-            <Flank
-              gap="1.5rem"
-              left={
-                <div className="space-y-4">
-                  <FadeInSection className="md:text-left">
-                    <p className="text-lavender uppercase tracking-[0.25em] text-xs font-bold mb-2">Cirque Jolie</p>
-                    <EditableText value={config.headlineJolie} onChange={v => update({ headlineJolie: v })} editMode={editMode} as="h2" className="text-3xl md:text-4xl font-bold mb-3 text-white leading-tight" />
-                    <EditableText value={config.subheadJolie} onChange={v => update({ subheadJolie: v })} editMode={editMode} className="text-gray-400 text-base" />
-                  </FadeInSection>
+            {!editMode && (
+              <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+                <FadeInSection className="mt-2 border-t border-slate-700/70 pt-12 lg:mt-14">
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-lavender">Cirque Jolie</p>
+                  <EditableText value={config.headlineJolie} onChange={v => update({ headlineJolie: v })} editMode={editMode} as="h2" className="mb-3 text-3xl font-bold leading-tight text-white md:text-4xl" />
+                  <EditableText value={config.subheadJolie} onChange={v => update({ subheadJolie: v })} editMode={editMode} className="max-w-3xl text-base text-gray-400" />
+                </FadeInSection>
+                <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {config.joliePhotos.slice(0, 6).map((item, i) => (
                     <FadeInSection key={item.id} delay={i * 0.05}>
                       <SortablePhoto item={item} editMode={false} />
                     </FadeInSection>
                   ))}
                 </div>
-              }
-              right={<div aria-hidden="true" />}
-            />
-          )}
+              </div>
+            )}
+          </div>
         </section>
+
+        {editMode && (
+          <section className="relative z-20 bg-slate-900 pb-24">
+            <TwoColumnEditor config={config} update={update} />
+          </section>
+        )}
 
         {/* ── PERFECT FOR ── */}
         <section className="py-24 bg-slate-950 relative z-20">
@@ -749,9 +815,7 @@ export default function StrollingEntertainment() {
               </FadeInSection>
             }
             right={
-              <FadeInSection delay={0.15}>
-                <h2 className="text-4xl font-bold mb-4 opacity-0 md:opacity-100">&nbsp;</h2>
-                <p className="text-gray-400 text-lg mb-6 opacity-0 md:opacity-100">&nbsp;</p>
+              <FadeInSection delay={0.15} className="md:pt-[7.25rem]">
                 <div className="flex flex-wrap gap-2">
                   {['Resort Entertainment','Cocktail Hours','Festivals','Grand Openings','Luaus','Private Parties'].map((event, i) => (
                     <span key={i} className="bg-slate-800/80 border border-slate-700/50 px-4 py-2 rounded-full text-gray-300 text-sm font-medium hover:border-coral/40 hover:text-coral transition-all cursor-default">
@@ -776,7 +840,7 @@ export default function StrollingEntertainment() {
                     Stilt walkers and ambient characters — tell us your vision and we'll match the perfect performers.
                   </p>
                   <Link to="/contact" className="inline-block px-8 py-3.5 bg-white text-coral font-bold rounded-full hover:bg-white/90 transition-all shadow-xl hover:scale-105">
-                    Book Stilt &amp; Ambient Performers
+                    Book Costumed Stilt Walking
                   </Link>
                 </div>
               </FadeInSection>
@@ -786,8 +850,8 @@ export default function StrollingEntertainment() {
                 <div className="relative bg-gradient-to-br from-burgundy to-lavender md:rounded-r-[2rem] rounded-[2rem] md:rounded-l-none p-10 md:p-12 h-full">
                   <p className="text-white/80 uppercase tracking-[0.25em] text-xs font-bold mb-3">Maui Based · Outer Islands Available</p>
                   <p className="text-2xl md:text-3xl font-bold text-white mb-6 leading-tight">Call us and we'll talk through your vision.</p>
-                  <a href="tel:8088702102" className="inline-block px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/10 transition-all">
-                    (808) 870-2102
+                  <a href="tel:+18088702102" className="inline-block px-8 py-3.5 border-2 border-white/40 text-white font-bold rounded-full hover:bg-white/10 transition-all">
+                    Brenton · (808) 870-2102
                   </a>
                   <p className="text-white/80 text-sm mt-6">
                     Looking for fire &amp; LED, characters, or other extras?{' '}
@@ -801,7 +865,6 @@ export default function StrollingEntertainment() {
           />
         </section>
 
-        </div>
       </Layout>
     </>
   );

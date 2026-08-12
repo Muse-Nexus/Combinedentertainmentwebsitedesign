@@ -53,7 +53,7 @@ export default function AdditionalServices() {
               <span className="bg-gradient-to-r from-coral via-burgundy to-lavender bg-clip-text text-transparent">Additional &amp; À La Carte</span>
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              Special touches to layer onto any booking. Mix and match these add-ons with our magic, casino, game show, stilt, and balloon services to build the perfect event.
+              Special touches to layer onto the service you book. Brenton will help you choose add-ons that fit your event without blurring the distinct Game Show NITE and Casino NITE experiences.
             </p>
           </FadeInSection>
         </div>

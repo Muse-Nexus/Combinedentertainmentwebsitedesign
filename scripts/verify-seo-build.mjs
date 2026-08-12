@@ -1,0 +1,58 @@
+import { access, readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  INDEXED_ROUTES,
+  SITE,
+  absoluteUrl,
+  getRouteMetadata,
+} from '../src/app/seo/routeMetadata.js';
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const distDir = path.join(projectRoot, 'dist');
+
+function outputPathForRoute(route) {
+  return route === '/'
+    ? path.join(distDir, 'index.html')
+    : path.join(distDir, `${route.slice(1)}.html`);
+}
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+const sitemap = await readFile(path.join(distDir, 'sitemap.xml'), 'utf8');
+const robots = await readFile(path.join(distDir, 'robots.txt'), 'utf8');
+const config = JSON.parse(await readFile(path.join(projectRoot, 'vercel.json'), 'utf8'));
+
+assert(
+  robots.includes(`Sitemap: ${SITE.origin}/sitemap.xml`),
+  'robots.txt does not advertise the canonical sitemap',
+);
+assert(config.cleanUrls === true, 'vercel.json must enable cleanUrls for generated route HTML');
+assert(!config.rewrites?.length, 'vercel.json must not contain a catch-all SPA rewrite');
+
+for (const route of INDEXED_ROUTES) {
+  const metadata = getRouteMetadata(route);
+  const outputPath = outputPathForRoute(route);
+  await access(outputPath);
+  const html = await readFile(outputPath, 'utf8');
+  const canonical = absoluteUrl(route);
+
+  assert(html.includes(`<title data-raining-head="true">${metadata.title.replaceAll('&', '&amp;')}</title>`), `Wrong title for ${route}`);
+  assert(html.includes(`rel="canonical" href="${canonical}"`), `Missing canonical for ${route}`);
+  assert(html.includes('name="description"'), `Missing description for ${route}`);
+  assert(html.includes('property="og:title"'), `Missing Open Graph tags for ${route}`);
+  assert(html.includes('id="raining-structured-data"'), `Missing structured data for ${route}`);
+  assert(!html.includes('Combined Entertainment Website Design'), `Generic title leaked into ${route}`);
+  assert(sitemap.includes(`<loc>${canonical}</loc>`), `Sitemap is missing ${route}`);
+}
+
+const notFound = await readFile(path.join(distDir, '404.html'), 'utf8');
+assert(notFound.includes('name="robots" content="noindex, nofollow"'), '404.html must be noindex');
+assert(!notFound.includes('rel="canonical"'), '404.html must not claim a canonical URL');
+assert(notFound.includes('This page isn’t here'), '404.html is missing branded fallback content');
+
+console.log(
+  `SEO build verified: ${INDEXED_ROUTES.length} canonical HTML documents, valid discovery files, and branded 404 output.`,
+);

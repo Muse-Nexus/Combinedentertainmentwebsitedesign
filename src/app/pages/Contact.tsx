@@ -29,42 +29,77 @@ interface FormData {
   guests: string;
   kids: string;
   message: string;
+  website: string;
 }
 
 export function Contact() {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({ defaultValues: { website: '' } });
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 5000);
+  const onSubmit = async (data: FormData) => {
+    setSubmitted(false);
+    setSubmitError('');
+
+    try {
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Please wait a few minutes before sending another inquiry.');
+        }
+        throw new Error('We could not deliver the form right now. Your details are still here below.');
+      }
+
+      setSubmitted(true);
+      reset();
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : 'We could not deliver the form right now. Your details are still here below.',
+      );
+    }
   };
 
   const contactInfo = [
     {
       icon: Phone,
-      label: 'Call or Text',
-      value: '(808) 283-7469',
-      href: 'tel:+18082837469',
+      label: 'All Bookings',
+      value: 'Brenton Keith · (808) 870-2102',
+      href: 'tel:+18088702102',
+      description: 'Call or text Brenton for every Raining Entertainment service',
     },
     {
       icon: Mail,
       label: 'Email',
-      value: 'info@rainingentertainment.com',
-      href: 'mailto:info@rainingentertainment.com',
+      value: 'brentonkeith@magicbrent.com',
+      href: 'mailto:brentonkeith@magicbrent.com',
+      description: 'General questions and event details',
     },
     {
       icon: MapPin,
       label: 'Based In',
       value: 'Maui, Hawai\u02BBi',
       href: null,
+      description: 'Available across the Hawaiian Islands and beyond',
     },
   ];
 
   const socials = [
-    { icon: Instagram, href: 'https://www.instagram.com/magicbrent/', label: 'Magic Brent' },
+    { icon: Instagram, href: 'https://www.instagram.com/magicbrent/', label: "Brenton Keith & His Bag O' Tricks" },
     { icon: Instagram, href: 'https://www.instagram.com/cirquejolie/', label: 'Cirque Jolie' },
     { icon: Facebook, href: 'https://www.facebook.com/MagicBrent/', label: 'Facebook' },
     { icon: Youtube, href: 'https://www.youtube.com/@magicbrent', label: 'YouTube' },
@@ -115,6 +150,7 @@ export function Contact() {
                           ) : (
                             <p className="text-white font-semibold">{item.value}</p>
                           )}
+                          <p className="mt-1 text-xs text-slate-500">{item.description}</p>
                         </div>
                       </div>
                     ))}
@@ -156,8 +192,8 @@ export function Contact() {
                   <div className="border-t border-slate-800 pt-8">
                     <h3 className="text-white font-bold mb-3">Response Time</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      We typically respond within 24 hours. For events within 48 hours,
-                      please call or text directly.
+                      Brenton typically responds within 24 hours. For events within 48 hours,
+                      please call or text him directly.
                     </p>
                   </div>
                 </FadeInSection>
@@ -171,7 +207,7 @@ export function Contact() {
                       Request a Quote
                     </h2>
                     <p className="text-slate-400 mb-8">
-                      Tell us about your event and we'll put together a custom entertainment package.
+                      Tell us about your event and Brenton will put together a custom entertainment package.
                     </p>
 
                     {submitted && (
@@ -179,45 +215,84 @@ export function Contact() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="mb-6 p-4 rounded-xl bg-sage/20 border border-sage/40 text-sage"
+                        role="status"
+                        aria-live="polite"
                       >
-                        Thanks for reaching out! We'll get back to you within 24 hours.
+                        Your inquiry was delivered to Brenton. He&rsquo;ll get back to you as soon as he can.
                       </motion.div>
                     )}
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    {submitError && (
+                      <div className="mb-6 rounded-xl border border-coral/40 bg-coral/10 p-4 text-slate-100" role="alert">
+                        <p className="font-semibold">{submitError}</p>
+                        <p className="mt-2 text-sm text-slate-300">
+                          For every Raining Entertainment booking, call or text Brenton at{' '}
+                          <a className="font-bold text-white underline" href="tel:+18088702102">(808) 870-2102</a>.
+                        </p>
+                      </div>
+                    )}
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="relative space-y-6" noValidate>
+                      <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                        <label htmlFor="website">Website</label>
+                        <input id="website" tabIndex={-1} autoComplete="off" {...register('website')} />
+                      </div>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-slate-300">Name *</label>
+                          <label htmlFor="name" className="text-sm font-semibold text-slate-300">Name *</label>
                           <input
-                            {...register('name', { required: true })}
+                            id="name"
+                            required
+                            autoComplete="name"
+                            aria-required="true"
+                            aria-invalid={errors.name ? 'true' : 'false'}
+                            aria-describedby={errors.name ? 'name-error' : undefined}
+                            {...register('name', { required: 'Please enter your name.' })}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                             placeholder="Your name"
                           />
+                          {errors.name && <p id="name-error" className="text-sm text-coral" role="alert">{errors.name.message}</p>}
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-slate-300">Email *</label>
+                          <label htmlFor="email" className="text-sm font-semibold text-slate-300">Email *</label>
                           <input
+                            id="email"
                             type="email"
-                            {...register('email', { required: true })}
+                            required
+                            autoComplete="email"
+                            aria-required="true"
+                            aria-invalid={errors.email ? 'true' : 'false'}
+                            aria-describedby={errors.email ? 'email-error' : undefined}
+                            {...register('email', {
+                              required: 'Please enter your email.',
+                              pattern: {
+                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                message: 'Please enter a valid email address.',
+                              },
+                            })}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                             placeholder="you@example.com"
                           />
+                          {errors.email && <p id="email-error" className="text-sm text-coral" role="alert">{errors.email.message}</p>}
                         </div>
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-slate-300">Phone</label>
+                          <label htmlFor="phone" className="text-sm font-semibold text-slate-300">Phone</label>
                           <input
+                            id="phone"
                             type="tel"
+                            autoComplete="tel"
                             {...register('phone')}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                             placeholder="(808) 555-1234"
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-slate-300">Event Date</label>
+                          <label htmlFor="date" className="text-sm font-semibold text-slate-300">Event Date</label>
                           <input
+                            id="date"
                             type="date"
                             {...register('date')}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
@@ -227,26 +302,31 @@ export function Contact() {
 
                       <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-slate-300">Event Type</label>
+                          <label htmlFor="type" className="text-sm font-semibold text-slate-300">Event Type</label>
                           <select
+                            id="type"
                             {...register('type')}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                           >
                             <option value="">Select type...</option>
                             <option value="kids-party">Kids Birthday Party</option>
                             <option value="magic">Magic Show</option>
-                            <option value="gameshow">Game Show</option>
-                            <option value="casino">Casino Night</option>
-                            <option value="strolling">Stilt &amp; Ambient Performers</option>
+                            <option value="gameshow">Game Show NITE</option>
+                            <option value="casino">Casino NITE</option>
+                            <option value="strolling">Costumed Stilt Walking</option>
                             <option value="balloon-decor">Balloon Decor</option>
+                            <option value="balloon-animals">Balloon Twisting</option>
+                            <option value="face-painting">Face Painting</option>
                             <option value="corporate">Corporate Event</option>
                             <option value="wedding">Wedding</option>
                             <option value="combo">Custom Package</option>
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-slate-300">Expected Guests</label>
+                          <label htmlFor="guests" className="text-sm font-semibold text-slate-300">Expected Guests</label>
                           <input
+                            id="guests"
+                            inputMode="numeric"
                             {...register('guests')}
                             className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                             placeholder="Approx. number"
@@ -255,8 +335,10 @@ export function Contact() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-300">Of Those, How Many Kids?</label>
+                        <label htmlFor="kids" className="text-sm font-semibold text-slate-300">Of Those, How Many Kids?</label>
                         <input
+                          id="kids"
+                          inputMode="numeric"
                           {...register('kids')}
                           className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all"
                           placeholder="Approx. number of children"
@@ -264,8 +346,9 @@ export function Contact() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-slate-300">Tell Us About Your Event</label>
+                        <label htmlFor="message" className="text-sm font-semibold text-slate-300">Tell Us About Your Event</label>
                         <textarea
+                          id="message"
                           {...register('message')}
                           rows={5}
                           className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-coral focus:ring-1 focus:ring-coral outline-none transition-all resize-none"
@@ -275,9 +358,11 @@ export function Contact() {
 
                       <button
                         type="submit"
-                        className="w-full py-4 bg-coral hover:bg-coral/85 text-white font-bold rounded-xl text-lg transition-colors shadow-lg shadow-coral/20"
+                        disabled={isSubmitting}
+                        aria-busy={isSubmitting}
+                        className="w-full py-4 bg-coral hover:bg-coral/85 disabled:cursor-wait disabled:opacity-60 text-slate-950 font-bold rounded-xl text-lg transition-colors shadow-lg shadow-coral/20"
                       >
-                        Send Inquiry
+                        {isSubmitting ? 'Sending…' : 'Send Inquiry'}
                       </button>
                     </form>
                   </div>
