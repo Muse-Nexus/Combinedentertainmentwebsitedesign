@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const CONSENT_STORAGE_KEY = 'raining.analytics-consent.v1';
+export const ANALYTICS_CONSENT_STORAGE_KEY = 'raining.analytics-consent.v1';
 const CAMPAIGN_PARAMETERS = [
   'utm_id',
   'utm_source',
@@ -33,6 +33,15 @@ export const isGoogleAnalyticsConfigured = /^G-[A-Z0-9]+$/i.test(measurementId);
 let initializationPromise: Promise<void> | null = null;
 let consentDefaultsSet = false;
 let runtimeConsent: AnalyticsConsent = null;
+
+function parseAnalyticsConsent(value: string | null): AnalyticsConsent {
+  return value === 'granted' || value === 'denied' ? value : null;
+}
+
+export function syncAnalyticsConsentFromStorage(value: string | null): AnalyticsConsent {
+  runtimeConsent = parseAnalyticsConsent(value);
+  return runtimeConsent;
+}
 
 function ensureGtagQueue() {
   window.dataLayer = window.dataLayer ?? [];
@@ -65,9 +74,9 @@ export function getStoredAnalyticsConsent(): AnalyticsConsent {
   if (runtimeConsent) return runtimeConsent;
 
   try {
-    const stored = window.localStorage.getItem(CONSENT_STORAGE_KEY);
-    runtimeConsent = stored === 'granted' || stored === 'denied' ? stored : null;
-    return runtimeConsent;
+    return syncAnalyticsConsentFromStorage(
+      window.localStorage.getItem(ANALYTICS_CONSENT_STORAGE_KEY),
+    );
   } catch {
     return runtimeConsent;
   }
@@ -76,7 +85,7 @@ export function getStoredAnalyticsConsent(): AnalyticsConsent {
 function persistConsent(consent: Exclude<AnalyticsConsent, null>) {
   runtimeConsent = consent;
   try {
-    window.localStorage.setItem(CONSENT_STORAGE_KEY, consent);
+    window.localStorage.setItem(ANALYTICS_CONSENT_STORAGE_KEY, consent);
   } catch {
     // Consent still applies for this page even when storage is unavailable.
   }

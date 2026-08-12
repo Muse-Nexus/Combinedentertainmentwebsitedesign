@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
+  ANALYTICS_CONSENT_STORAGE_KEY,
   buildAnalyticsLocation,
   denyAnalytics,
   enableAnalytics,
@@ -8,10 +9,27 @@ import {
   initializeConsentMode,
   isGoogleAnalyticsConfigured,
   sanitizeAnalyticsReferrer,
+  syncAnalyticsConsentFromStorage,
   trackAnalyticsEvent,
   trackPageView,
   type AnalyticsConsent,
 } from './googleAnalytics';
+
+const TRACKABLE_SERVICES = new Set([
+  'kids-party',
+  'magic',
+  'gameshow',
+  'casino',
+  'casino-gameshow',
+  'strolling',
+  'led-performers',
+  'balloon-decor',
+  'balloon-animals',
+  'face-painting',
+  'corporate',
+  'wedding',
+  'combo',
+]);
 
 function networkFromHostname(hostname: string) {
   if (hostname.includes('instagram.com')) return 'instagram';
@@ -41,8 +59,19 @@ export function AnalyticsController() {
     if (!isGoogleAnalyticsConfigured) return;
 
     const openPreferences = () => setPreferencesOpen(true);
+    const syncConsent = (event: StorageEvent) => {
+      if (event.key !== ANALYTICS_CONSENT_STORAGE_KEY) return;
+
+      const nextConsent = syncAnalyticsConsentFromStorage(event.newValue);
+      setConsent(nextConsent);
+      setPreferencesOpen(nextConsent === null);
+    };
     window.addEventListener('raining:analytics-preferences', openPreferences);
-    return () => window.removeEventListener('raining:analytics-preferences', openPreferences);
+    window.addEventListener('storage', syncConsent);
+    return () => {
+      window.removeEventListener('raining:analytics-preferences', openPreferences);
+      window.removeEventListener('storage', syncConsent);
+    };
   }, []);
 
   useEffect(() => {
@@ -104,7 +133,8 @@ export function AnalyticsController() {
         return;
       }
 
-      const service = destination.searchParams.get('service');
+      const requestedService = destination.searchParams.get('service')?.trim() ?? '';
+      const service = TRACKABLE_SERVICES.has(requestedService) ? requestedService : null;
       if (
         service &&
         destination.origin === window.location.origin &&

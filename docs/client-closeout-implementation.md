@@ -33,6 +33,8 @@ No production deployment, external form submission, analytics-provider activatio
 - Updated compatible dependencies until the production dependency audit reported zero known vulnerabilities.
 - Added consent-gated GA4 wiring for manual SPA page views, service CTA clicks, successful inquiries, phone, email, and social clicks without sending inquiry PII.
 - Added a persistent privacy-choice control, with all advertising storage and personalization remaining denied.
+- Made analytics-consent withdrawal propagate across open tabs and restricted service-event values to the same known booking intents used by the site.
+- Gave the Casino-versus-Game-Show comparison CTA its own `Help Me Choose` inquiry value instead of silently classifying an undecided visitor as a custom-package lead.
 - Added a factual privacy-and-analytics notice and excluded bot-honeypot acknowledgements from `generate_lead` reporting.
 - Added build-time Search Console HTML-tag verification support, consistent public phone/contact schema, and environment-aware preview `noindex` behavior.
 - Audited the live Search Console, GA4, and Google Business Profile account state without changing it; the exact gaps and dated receipts are in `docs/google-platform-readiness.md`.
@@ -72,6 +74,6 @@ No production deployment, external form submission, analytics-provider activatio
 
 - Haiku: mechanical asset inventory and duplicate audit, corrected to 98 source files and zero exact duplicates.
 - Fable: visual hierarchy, hero candidates, client-selected image placement, and duplication cautions.
-- Opus: route/nav/form/SEO coupling review, redirect-shadow risk, stale code paths, and production bundle risk.
+- Opus: route/nav/form/SEO coupling review, redirect-shadow risk, stale code paths, production bundle risk, and a final adversarial analytics/privacy review that returned PASS with no remaining code blockers.
 - Sonnet: bounded implementation of the core service pages, optimized derivatives, galleries, and editor removal.
 - Codex foreman: source reconciliation, all shared-system integration, challenge/correction of model claims, authentic hero decision, security updates, browser QA, release gates, and final accountability.

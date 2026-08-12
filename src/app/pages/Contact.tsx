@@ -11,6 +11,7 @@ const SERVICE_OPTIONS = [
   ['magic', 'Magic Show'],
   ['gameshow', 'Game Show NITE'],
   ['casino', 'Casino NITE'],
+  ['casino-gameshow', 'Help Me Choose: Casino or Game Show'],
   ['strolling', 'Stilt Walkers'],
   ['led-performers', 'LED Performers'],
   ['balloon-decor', 'Balloon Decor'],
