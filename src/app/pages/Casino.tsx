@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { PromoVideo } from '../components/PromoVideo';
 import { SmartBackgroundVideo } from '../components/SmartBackgroundVideo';
 import { CasinoPackages } from '../components/CasinoPackages';
+import { GalleryLightbox } from '../components/GalleryLightbox';
 
 const FadeInSection = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   const ref = useRef(null);
@@ -182,19 +183,22 @@ export default function Casino() {
             <p className="text-coral font-semibold tracking-widest uppercase text-sm mb-3">Real Maui Events</p>
             <h2 className="text-4xl font-bold">Casino NITE in Action</h2>
           </FadeInSection>
-          <div className="grid gap-5 md:grid-cols-3">
-            {[
-              { src: '/media/casino-nite/dealer-team-roulette-maui.webp', alt: 'Casino NITE dealer team around a Roulette table at a Maui event' },
-              { src: '/media/casino-nite/tables-overhead-maui.webp', alt: 'Overhead view of a busy Maui Casino NITE with multiple game tables' },
-              { src: '/media/casino-nite/hosts-backdrop-maui.webp', alt: 'Brenton Keith and a Casino NITE host in front of the event backdrop' },
-            ].map((photo, i) => (
-              <FadeInSection key={photo.src} delay={i * 0.08}>
-                <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-800">
-                  <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
+          <FadeInSection delay={0.08}>
+            <GalleryLightbox
+              images={[
+                { src: '/media/client-selected/casino/roulette-dealer-portrait.webp', alt: 'Casino NITE dealer welcoming guests behind a glowing roulette table on Maui' },
+                { src: '/media/client-selected/casino/casino-table-display.webp', alt: 'Casino NITE table presented with chips, lighting, speakers, and a branded Maui event backdrop' },
+                { src: '/media/client-selected/casino/blackjack-guests-action.webp', alt: 'Guests gathered around a Casino NITE table with an entertaining professional dealer' },
+                { src: '/media/casino-nite/hosts-backdrop-maui.webp', alt: 'Casino NITE hosts posing in front of the decorated event backdrop' },
+                { src: '/media/casino-nite/tables-overhead-maui.webp', alt: 'Overhead view of a busy Maui Casino NITE with multiple game tables' },
+                { src: '/media/client-selected/casino/casino-room-evening.webp', alt: 'Casino NITE tables arranged for an evening event with lighting and a branded backdrop' },
+                { src: '/media/client-selected/casino/casino-red-carpet-full-room.webp', alt: 'Full Casino NITE event layout with gaming tables, red carpet, seating, and decor' },
+              ]}
+              className="grid grid-cols-2 gap-4 md:grid-cols-3"
+              itemClassName="aspect-[4/3] overflow-hidden rounded-2xl border border-slate-800"
+              eagerCount={2}
+            />
+          </FadeInSection>
         </div>
       </section>
 

@@ -45,6 +45,10 @@
   }
 }
 
+html {
+  position: relative;
+}
+
 body {
   @apply bg-slate-950 text-white font-sans antialiased;
   overflow-x: hidden;

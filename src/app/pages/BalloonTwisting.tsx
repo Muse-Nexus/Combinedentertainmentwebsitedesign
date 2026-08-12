@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Layout } from '../components/Layout';
 import { motion, useScroll, useTransform, useInView } from 'motion/react';
-import { Palette, Sparkles, Star, Users } from 'lucide-react';
+import { Palette, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SmartVimeoBackground } from '../components/SmartVimeoBackground';
 import { GalleryLightbox, type GalleryImage } from '../components/GalleryLightbox';
@@ -134,35 +134,8 @@ export default function BalloonTwisting() {
         </div>
       </section>
 
-      {/* WHAT'S INCLUDED */}
-      <section className="py-24 bg-slate-900">
-        <div className="container mx-auto px-4">
-          <FadeInSection>
-            <div className="relative bg-gradient-to-br from-lavender/10 via-slate-800/80 to-coral/10 rounded-[2rem] p-12 md:p-16 border border-lavender/20 overflow-hidden">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-lavender/5 rounded-full blur-3xl" />
-              <div className="relative z-10">
-                <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center">What&rsquo;s Included</h2>
-                <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                  {[
-                    { icon: <Sparkles className="w-6 h-6" />, text: 'Balloon twisting for every guest' },
-                    { icon: <Palette className="w-6 h-6" />, text: 'Professional face painting (skin-safe paints)' },
-                    { icon: <Users className="w-6 h-6" />, text: 'Sized to your group — intimate parties to large events' },
-                    { icon: <Star className="w-6 h-6" />, text: 'Custom themes available' },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div className="text-lavender mt-1 shrink-0">{item.icon}</div>
-                      <p className="text-gray-300 text-lg">{item.text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
       {/* GALLERY */}
-      <section className="py-24 bg-slate-950">
+      <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
         <div className="container mx-auto px-4">
           <FadeInSection className="text-center mb-16">
             <p className="text-lavender font-semibold tracking-widest uppercase text-sm mb-3">Cirque Jolie in Action</p>

@@ -64,7 +64,7 @@ function ServiceButtons({ className = '' }: { className?: string }) {
             <Link
               key={section.id}
               to={section.route}
-              className={`flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-slate-950/82 px-4 py-2.5 text-center text-sm font-semibold leading-tight tracking-[0.01em] text-white shadow-xl backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/45 hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral sm:min-h-12 sm:min-w-40 sm:max-w-56 sm:flex-1 sm:basis-44 sm:text-base ${
+              className={`flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-slate-950/82 px-4 py-2.5 text-center font-display text-sm font-medium leading-tight tracking-[0.01em] text-white shadow-xl backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/45 hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral sm:min-h-12 sm:min-w-40 sm:max-w-56 sm:flex-1 sm:basis-44 sm:text-base ${
                 isLastOddItem
                   ? 'col-span-2 mx-auto w-[calc(50%-0.25rem)] sm:mx-0 sm:w-auto'
                   : ''

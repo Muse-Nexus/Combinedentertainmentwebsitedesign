@@ -20,7 +20,7 @@ import { HomeContent } from './HomeContent';
 const HERO_DESKTOP = '/media/hero-real-brenton-jolie.webp';
 const HERO_MOBILE = '/media/hero-real-brenton-jolie-mobile.webp';
 const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
-const CLOUD_TEXTURE = '/media/clouds-wipe.webp';
+const CLOUD_TEXTURE = '/media/clouds-wipe-feathered.webp';
 
 const SERVICE_VISUALS: Record<string, { image: string; alt: string; color: string }> = {
   '/balloon-twisting': {
@@ -207,9 +207,9 @@ function Sun({ active, mobile }: { active: boolean; mobile: boolean }) {
 }
 
 function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: boolean }) {
-  const opacity = useTransform(progress, [0, 0.1, 0.7, 0.96], [0, 1, 1, 0]);
-  const x = useTransform(progress, [0, 1], mobile ? ['-160%', '160%'] : ['-200%', '200%']);
-  const scale = useTransform(progress, [0.1, 0.5, 0.9], [1, mobile ? 1.05 : 1.18, 1]);
+  const opacity = useTransform(progress, [0, 0.08, 0.82, 0.98], [0, 1, 1, 0]);
+  const x = useTransform(progress, [0, 1], mobile ? ['-130%', '130%'] : ['-120%', '120%']);
+  const scale = useTransform(progress, [0.1, 0.5, 0.9], [1, mobile ? 1.08 : 1.16, 1]);
 
   return (
     <motion.div
@@ -217,11 +217,20 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[150] flex items-center justify-center overflow-hidden"
     >
-      <motion.div style={{ x, scale }} className="absolute inset-0 flex items-center justify-center">
+      <motion.div
+        style={{ x, scale }}
+        className="absolute inset-0 flex items-center justify-center blur-[6px]"
+      >
         <img
           src={CLOUD_TEXTURE}
           alt=""
-          className={`${mobile ? 'w-[225%] opacity-90' : 'w-[195%] opacity-95'} absolute h-auto max-w-none object-contain mix-blend-screen blur-[10px]`}
+          style={{
+            maskImage:
+              'radial-gradient(ellipse 66% 56% at 50% 50%, black 0%, rgba(0,0,0,.96) 36%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.24) 72%, transparent 90%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse 66% 56% at 50% 50%, black 0%, rgba(0,0,0,.96) 36%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.24) 72%, transparent 90%)',
+          }}
+          className={`${mobile ? 'w-[240%] opacity-90 blur-[10px]' : 'w-[205%] opacity-95 blur-[12px]'} absolute h-auto max-w-none object-contain mix-blend-screen`}
         />
       </motion.div>
     </motion.div>
@@ -428,7 +437,7 @@ function ReducedMotionLanding({ mobile }: { mobile: boolean }) {
 export function LandingPage() {
   const { scrollY } = useScroll();
   const location = useLocation();
-  const mobile = useMediaQuery('(max-width: 767px), (max-height: 620px)');
+  const mobile = useMediaQuery('(max-width: 1023px), (max-height: 620px)');
   const reduceMotion = Boolean(useReducedMotion());
   const timeline = mobile ? MOBILE_TIMELINE : DESKTOP_TIMELINE;
   const [isMiracle, setIsMiracle] = useState(false);

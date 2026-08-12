@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
@@ -27,6 +27,7 @@ const utility = [
 ];
 
 export function Navbar() {
+  const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -57,8 +58,18 @@ export function Navbar() {
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between gap-6">
-        {/* Logo — lands on `/` already past the scroll-driven animations */}
-        <Link to="/" state={{ skipAnimation: true }} className="flex items-center gap-2 z-10 drop-shadow-lg shrink-0">
+        {/* Inner routes land past the intro; clicking the logo on home replays it. */}
+        <Link
+          to="/"
+          state={pathname === '/' ? undefined : { skipAnimation: true }}
+          onClick={(event) => {
+            if (pathname !== '/') return;
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          aria-label={pathname === '/' ? 'Replay the Raining Entertainment intro' : 'Raining Entertainment home'}
+          className="flex items-center gap-2 z-10 drop-shadow-lg shrink-0"
+        >
           <img
             src="/media/logos/Horizontal White Raining Entertainment Secondary Logo.png"
             alt="Raining Entertainment"
