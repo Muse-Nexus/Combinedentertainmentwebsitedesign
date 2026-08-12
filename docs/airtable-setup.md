@@ -173,7 +173,7 @@ For a one-time public show, fill `Start` and optionally `End`. For a weekly list
 
 For Casino NITE, edit the package name, numeric pre-tax price, short tax label, badge, accent, and one-per-line inclusions. `Sort Order` controls card order. Keep `Slug` stable and check `Published` only when ready.
 
-For `Moments`, upload an image or provide a permanent image URL, write a short caption and alt text, add the original social post URL if desired, choose the service, and check `Published`. This is a curated gallery, not an automatic Instagram scrape.
+For `Moments`, upload an image or provide a permanent image URL, write a short caption and alt text, add the original social post URL if desired, choose the service, and check `Published`. These approved records are now the first fallback behind the Meta-powered live Instagram feed; they remain useful whenever credentials expire or a post should be held back from the automatic feed.
 
 Public API responses are cached briefly, so live-table changes normally appear on the website within about five minutes.
 

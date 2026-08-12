@@ -27,6 +27,8 @@ export interface LatestMoment {
   href?: string;
   account?: string;
   service?: string;
+  timestamp?: string;
+  mediaType?: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM';
 }
 
 export type CasinoPackageAccent = 'classic' | 'deluxe' | 'full';

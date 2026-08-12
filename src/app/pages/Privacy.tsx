@@ -86,6 +86,14 @@ export function Privacy() {
                 under their own terms and privacy policies. We do not sell the personal information
                 submitted through this website.
               </p>
+              <p className="mt-3">
+                The homepage may show recent public posts from Brenton and Jolie&rsquo;s professional
+                Instagram accounts. The website server retrieves that public post information and
+                serves the thumbnails from this website, so simply viewing the gallery does not load
+                Instagram&rsquo;s embedded player or send the inquiry form&rsquo;s contents to Meta. If you
+                choose a post or profile link, you leave this website and Instagram&rsquo;s own privacy
+                terms apply.
+              </p>
             </section>
 
             <section>

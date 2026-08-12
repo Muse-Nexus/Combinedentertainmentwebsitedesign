@@ -1,7 +1,9 @@
 export interface ApiRequest {
   method?: string;
+  url?: string;
   headers: Record<string, string | string[] | undefined>;
   body?: unknown;
+  query?: Record<string, string | string[] | undefined>;
   socket?: { remoteAddress?: string };
 }
 
@@ -9,7 +11,7 @@ export interface ApiResponse {
   status(code: number): ApiResponse;
   setHeader(name: string, value: string): ApiResponse;
   json(value: unknown): void;
-  end(value?: string): void;
+  end(value?: string | Uint8Array): void;
 }
 
 interface RateLimitEntry {
