@@ -20,7 +20,7 @@ import { HomeContent } from './HomeContent';
 const HERO_DESKTOP = '/media/client-selected/home/brenton-jolie-patriotic-hero-hd.webp';
 const HERO_MOBILE = '/media/client-selected/home/brenton-jolie-patriotic-mobile-hd.webp';
 const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
-const CLOUD_TEXTURE = '/media/clouds-wipe-feathered.webp';
+const CLOUD_TEXTURE = '/media/clouds-wipe-alpha.webp';
 
 const SERVICE_VISUALS: Record<string, { image: string; alt: string; color: string }> = {
   '/balloon-twisting': {
@@ -217,10 +217,8 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
   const xEcho = useTransform(progress, [0, 1], mobile ? ['-138%', '72%'] : ['-112%', '52%']);
   const scale = useTransform(progress, [0.1, 0.5, 0.9], [1.08, mobile ? 1.22 : 1.32, 1.08]);
 
-  const featherMask =
-    'radial-gradient(ellipse 56% 56% at 50% 50%, black 0%, black 48%, rgba(0,0,0,.9) 60%, rgba(0,0,0,.5) 74%, rgba(0,0,0,.14) 88%, transparent 100%)';
-  const primaryCloudSize = mobile ? 'max(145svh, 160svw)' : 'max(138svh, 112svw)';
-  const echoCloudSize = mobile ? 'max(132svh, 148svw)' : 'max(126svh, 104svw)';
+  const primaryCloudWidth = mobile ? 'max(250svh, 180svw)' : 'max(190svh, 118svw)';
+  const echoCloudWidth = mobile ? 'max(228svh, 166svw)' : 'max(174svh, 108svw)';
 
   return (
     <div
@@ -239,12 +237,9 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
           src={CLOUD_TEXTURE}
           alt=""
           style={{
-            width: primaryCloudSize,
-            height: primaryCloudSize,
-            maskImage: featherMask,
-            WebkitMaskImage: featherMask,
+            width: primaryCloudWidth,
           }}
-          className="absolute max-w-none object-cover opacity-95 brightness-125 saturate-50 mix-blend-screen"
+          className="absolute h-auto max-w-none object-contain opacity-95 brightness-110"
         />
       </motion.div>
       <motion.div
@@ -255,13 +250,10 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
           src={CLOUD_TEXTURE}
           alt=""
           style={{
-            width: echoCloudSize,
-            height: echoCloudSize,
-            maskImage: featherMask,
-            WebkitMaskImage: featherMask,
+            width: echoCloudWidth,
             transform: 'scaleX(-1)',
           }}
-          className="absolute max-w-none object-cover opacity-70 brightness-125 saturate-50 mix-blend-screen"
+          className="absolute h-auto max-w-none object-contain opacity-70 brightness-110"
         />
       </motion.div>
     </div>
