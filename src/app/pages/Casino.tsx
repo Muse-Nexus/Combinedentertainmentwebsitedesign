@@ -85,7 +85,7 @@ export default function Casino() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {[
               { src: '/media/casino-gameshow/casino-craps-table.jpg', alt: 'Craps table at casino event', title: 'Craps', desc: 'The most social game in the house — the whole table cheers together.' },
-              { src: '/media/client-selected/casino/roulette-dealer-portrait.webp', alt: 'Casino NITE dealer welcoming guests behind a glowing game table on Maui', title: 'Blackjack', desc: 'Fast, fun, and friendly. Our dealers keep the energy high and the game moving.' },
+              { src: '/media/client-selected/casino/casino-guests-at-blackjack.webp', alt: 'Casino NITE dealer welcoming guests around a full blackjack table on Maui', title: 'Blackjack', desc: 'Fast, fun, and friendly. Our dealers keep the energy high and the game moving.' },
               { src: '/media/casino-nite/roulette-action-maui.webp', alt: 'Roulette table at a Maui Casino NITE event', title: 'Roulette', desc: 'A classic crowd favorite with colorful chips, quick rounds, and plenty of suspense.' },
               { src: '/media/client-selected/casino/christmas-poker-table.webp', alt: 'Octagonal poker table decorated for Christmas with a holiday tree at a Maui Casino NITE party', title: 'Poker', desc: 'For the strategists in the room. Texas Hold\'Em style tournament play.' },
             ].map((table, i) => (
@@ -193,7 +193,7 @@ export default function Casino() {
                 { src: '/media/casino-nite/tables-overhead-maui.webp', alt: 'Overhead view of a busy Maui Casino NITE with multiple game tables' },
                 { src: '/media/client-selected/casino/casino-room-evening.webp', alt: 'Casino NITE tables arranged for an evening event with lighting and a branded backdrop' },
                 { src: '/media/client-selected/casino/casino-red-carpet-full-room.webp', alt: 'Full Casino NITE event layout with gaming tables, red carpet, seating, and decor' },
-                { src: '/media/client-selected/casino/casino-guests-at-blackjack.webp', alt: 'Casino NITE dealer keeping a full blackjack table of guests engaged' },
+                { src: '/media/client-selected/casino/roulette-dealer-portrait.webp', alt: 'Casino NITE dealer standing behind a brightly lit craps table on Maui' },
                 { src: '/media/client-selected/casino/casino-red-carpet-venue.webp', alt: 'Casino NITE red-carpet setup at a distinctive open-air Maui venue' },
                 { src: '/media/client-selected/casino/casino-full-venue-setup-email.webp', alt: 'Full Casino NITE setup showing multiple game tables in another Maui event space' },
                 { src: '/media/client-selected/casino/casino-dealer-team-selfie.webp', alt: 'Casino NITE dealer team together in front of the illuminated event sign' },

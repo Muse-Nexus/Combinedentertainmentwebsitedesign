@@ -17,8 +17,8 @@ import { UMBRELLA_SECTIONS, UmbrellaNav } from './UmbrellaNav';
 import { Navbar } from './Navbar';
 import { HomeContent } from './HomeContent';
 
-const HERO_DESKTOP = '/media/client-selected/home/brenton-jolie-swing-stilts-hero.webp';
-const HERO_MOBILE = '/media/client-selected/home/brenton-jolie-swing-stilts-mobile.webp';
+const HERO_DESKTOP = '/media/client-selected/home/brenton-jolie-patriotic-hero-hd.webp';
+const HERO_MOBILE = '/media/client-selected/home/brenton-jolie-patriotic-mobile-hd.webp';
 const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
 const CLOUD_TEXTURE = '/media/clouds-wipe-feathered.webp';
 
@@ -435,7 +435,7 @@ function ReducedMotionLanding({ mobile }: { mobile: boolean }) {
       <Navbar />
       <section className="relative min-h-[100svh] overflow-hidden bg-[#070b22] pt-20 text-white">
         <div className={`absolute inset-x-0 top-20 ${mobile ? 'h-[55svh]' : 'bottom-0'}`}>
-          <HeroImage alt="Brenton Keith and Jolie Strickland in matching black-and-white swing costumes, with Jolie on stilts" />
+          <HeroImage alt="Brenton Keith and Jolie Strickland performing together in red, white, and blue, with Jolie on stilts" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-slate-950/20 to-[#070b22]" />
         <div className="relative z-20 mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center px-5 pt-14 text-center md:justify-center md:pt-0">
@@ -630,7 +630,7 @@ export function LandingPage() {
         <div className={`absolute inset-x-0 top-0 z-20 ${mobile ? 'h-[72svh]' : 'bottom-0'}`}>
           <motion.div className="relative h-full w-full overflow-hidden" animate={{ scale: isMiracle ? 1.015 : 1 }} transition={{ duration: 1.5 }}>
             <HeroImage
-              alt="Brenton Keith and Jolie Strickland in matching black-and-white swing costumes, with Jolie on stilts"
+              alt="Brenton Keith and Jolie Strickland performing together in red, white, and blue, with Jolie on stilts"
               className={heroObjectPosition}
             />
 

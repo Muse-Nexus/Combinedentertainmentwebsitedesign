@@ -78,7 +78,7 @@ const expectedCounts = new Map([
   ['corporate', 3],
   ['face-painting', 14],
   ['game-show', 1],
-  ['home', 2],
+  ['home', 4],
   ['led-performers', 6],
   ['stilt-walkers', 15],
 ]);
@@ -86,7 +86,7 @@ for (const [folder, expected] of expectedCounts) {
   const actual = clientAssets.filter((file) => path.basename(path.dirname(file)) === folder).length;
   assert(actual === expected, `Expected ${expected} approved ${folder} images, found ${actual}`);
 }
-assert(clientAssets.length === 89, `Expected 89 optimized client-selected images, found ${clientAssets.length}`);
+assert(clientAssets.length === 91, `Expected 91 optimized client-selected images, found ${clientAssets.length}`);
 
 console.log(
   `Content verified: ${validRoutes.size} routable paths, ${mediaReferences.size} referenced media files, and ${clientAssets.length} client-selected derivatives.`,
