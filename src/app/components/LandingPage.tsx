@@ -20,7 +20,7 @@ import { HomeContent } from './HomeContent';
 const HERO_DESKTOP = '/media/client-selected/home/brenton-jolie-patriotic-hero-hd.webp';
 const HERO_MOBILE = '/media/client-selected/home/brenton-jolie-patriotic-mobile-hd.webp';
 const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
-const CLOUD_TEXTURE = '/media/clouds-wipe-alpha.webp';
+const CLOUD_TEXTURE = '/media/clouds-wipe-adobe-alpha.png';
 
 const SERVICE_VISUALS: Record<string, { image: string; alt: string; color: string }> = {
   '/balloon-twisting': {
