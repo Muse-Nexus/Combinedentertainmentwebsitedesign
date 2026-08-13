@@ -218,7 +218,9 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
   const scale = useTransform(progress, [0.1, 0.5, 0.9], [1.08, mobile ? 1.22 : 1.32, 1.08]);
 
   const featherMask =
-    'radial-gradient(ellipse 78% 68% at 50% 50%, black 0%, black 54%, rgba(0,0,0,.72) 72%, rgba(0,0,0,.18) 90%, transparent 100%)';
+    'radial-gradient(ellipse 56% 56% at 50% 50%, black 0%, black 48%, rgba(0,0,0,.9) 60%, rgba(0,0,0,.5) 74%, rgba(0,0,0,.14) 88%, transparent 100%)';
+  const primaryCloudSize = mobile ? 'max(145svh, 160svw)' : 'max(138svh, 112svw)';
+  const echoCloudSize = mobile ? 'max(132svh, 148svw)' : 'max(126svh, 104svw)';
 
   return (
     <div
@@ -236,8 +238,13 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
         <img
           src={CLOUD_TEXTURE}
           alt=""
-          style={{ maskImage: featherMask, WebkitMaskImage: featherMask }}
-          className={`${mobile ? 'h-[145svh] w-auto' : 'h-[138svh] w-auto'} absolute max-w-none object-cover opacity-95 brightness-125 saturate-50 mix-blend-screen`}
+          style={{
+            width: primaryCloudSize,
+            height: primaryCloudSize,
+            maskImage: featherMask,
+            WebkitMaskImage: featherMask,
+          }}
+          className="absolute max-w-none object-cover opacity-95 brightness-125 saturate-50 mix-blend-screen"
         />
       </motion.div>
       <motion.div
@@ -247,8 +254,14 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
         <img
           src={CLOUD_TEXTURE}
           alt=""
-          style={{ maskImage: featherMask, WebkitMaskImage: featherMask, transform: 'scaleX(-1)' }}
-          className={`${mobile ? 'h-[132svh] w-auto' : 'h-[126svh] w-auto'} absolute max-w-none object-cover opacity-70 brightness-125 saturate-50 mix-blend-screen`}
+          style={{
+            width: echoCloudSize,
+            height: echoCloudSize,
+            maskImage: featherMask,
+            WebkitMaskImage: featherMask,
+            transform: 'scaleX(-1)',
+          }}
+          className="absolute max-w-none object-cover opacity-70 brightness-125 saturate-50 mix-blend-screen"
         />
       </motion.div>
     </div>
