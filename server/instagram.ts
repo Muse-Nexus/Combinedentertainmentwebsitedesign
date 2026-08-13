@@ -8,8 +8,7 @@ export interface InstagramAccount {
   label: string;
   profileUrl: string;
   serviceLabel: string;
-  userId: string;
-  accessToken: string;
+  connectionId: string;
 }
 
 interface InstagramAccountDefinition {
@@ -18,8 +17,7 @@ interface InstagramAccountDefinition {
   label: string;
   profileUrl: string;
   serviceLabel: string;
-  userIdEnvironmentName: string;
-  accessTokenEnvironmentName: string;
+  connectionIdEnvironmentName: string;
 }
 
 const ACCOUNT_DEFINITIONS: InstagramAccountDefinition[] = [
@@ -29,8 +27,7 @@ const ACCOUNT_DEFINITIONS: InstagramAccountDefinition[] = [
     label: "Brenton Keith & His Bag O' Tricks",
     profileUrl: 'https://www.instagram.com/magicbrent/',
     serviceLabel: 'Magic · Game Shows · Casino',
-    userIdEnvironmentName: 'INSTAGRAM_MAGICBRENT_USER_ID',
-    accessTokenEnvironmentName: 'INSTAGRAM_MAGICBRENT_ACCESS_TOKEN',
+    connectionIdEnvironmentName: 'SOCIALFANOUT_MAGICBRENT_CONNECTION_ID',
   },
   {
     key: 'cirquejolie',
@@ -38,26 +35,26 @@ const ACCOUNT_DEFINITIONS: InstagramAccountDefinition[] = [
     label: 'Cirque Jolie',
     profileUrl: 'https://www.instagram.com/cirquejolie/',
     serviceLabel: 'Stilts · LED · Balloons',
-    userIdEnvironmentName: 'INSTAGRAM_CIRQUEJOLIE_USER_ID',
-    accessTokenEnvironmentName: 'INSTAGRAM_CIRQUEJOLIE_ACCESS_TOKEN',
+    connectionIdEnvironmentName: 'SOCIALFANOUT_CIRQUEJOLIE_CONNECTION_ID',
   },
 ];
 
-export class InstagramRequestError extends Error {
+export class SocialFanoutRequestError extends Error {
   status: number;
 
   constructor(status: number) {
-    super(`Instagram request failed with status ${status}`);
-    this.name = 'InstagramRequestError';
+    super(`SocialFanout request failed with status ${status}`);
+    this.name = 'SocialFanoutRequestError';
     this.status = status;
   }
 }
 
 export function configuredInstagramAccounts(): InstagramAccount[] {
+  if (!socialFanoutConfiguration()) return [];
+
   return ACCOUNT_DEFINITIONS.map((definition) => {
-    const userId = optionalEnvironmentValue(definition.userIdEnvironmentName);
-    const accessToken = optionalEnvironmentValue(definition.accessTokenEnvironmentName);
-    if (!userId || !accessToken) return null;
+    const connectionId = optionalEnvironmentValue(definition.connectionIdEnvironmentName);
+    if (!connectionId || !isConnectionId(connectionId)) return null;
 
     return {
       key: definition.key,
@@ -65,8 +62,7 @@ export function configuredInstagramAccounts(): InstagramAccount[] {
       label: definition.label,
       profileUrl: definition.profileUrl,
       serviceLabel: definition.serviceLabel,
-      userId,
-      accessToken,
+      connectionId,
     };
   }).filter((account): account is InstagramAccount => account !== null);
 }
@@ -76,10 +72,13 @@ export function configuredInstagramAccount(key: string): InstagramAccount | unde
 }
 
 export async function signInstagramMedia(account: InstagramAccount, mediaId: string) {
+  const configuration = socialFanoutConfiguration();
+  if (!configuration) throw new Error('SocialFanout Instagram feed is not configured');
+
   const encoder = new TextEncoder();
   const key = await globalThis.crypto.subtle.importKey(
     'raw',
-    encoder.encode(account.accessToken),
+    encoder.encode(configuration.signingSecret),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
     ['sign'],
@@ -87,7 +86,7 @@ export async function signInstagramMedia(account: InstagramAccount, mediaId: str
   const signature = await globalThis.crypto.subtle.sign(
     'HMAC',
     key,
-    encoder.encode(`${account.key}:${mediaId}`),
+    encoder.encode(`${account.key}:${account.connectionId}:${mediaId}`),
   );
 
   return Array.from(new Uint8Array(signature), (byte) => byte.toString(16).padStart(2, '0')).join('');
@@ -108,28 +107,29 @@ export async function verifyInstagramMediaSignature(
   return difference === 0;
 }
 
-export async function instagramGraphRequest<T>(
-  account: InstagramAccount,
+export async function socialFanoutRequest<T>(
   path: string,
-  parameters: Record<string, string>,
+  parameters: Record<string, string> = {},
 ): Promise<T> {
-  const host = instagramGraphHost();
-  const version = instagramGraphVersion();
+  const configuration = socialFanoutConfiguration();
+  if (!configuration) throw new Error('SocialFanout Instagram feed is not configured');
   const normalizedPath = path.replace(/^\/+/, '');
-  const url = new URL(`https://${host}/${version}/${normalizedPath}`);
-
+  const url = new URL(normalizedPath, `${configuration.baseUrl}/`);
   Object.entries(parameters).forEach(([name, value]) => url.searchParams.set(name, value));
-  url.searchParams.set('access_token', account.accessToken);
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8_000);
 
   try {
     const response = await fetch(url, {
-      headers: { Accept: 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'x-api-key': configuration.apiKey,
+      },
+      redirect: 'error',
       signal: controller.signal,
     });
-    if (!response.ok) throw new InstagramRequestError(response.status);
+    if (!response.ok) throw new SocialFanoutRequestError(response.status);
     return (await response.json()) as T;
   } finally {
     clearTimeout(timeout);
@@ -170,14 +170,54 @@ export function safeInstagramAssetUrl(value: unknown): string | undefined {
   }
 }
 
-function instagramGraphHost() {
-  const configured = optionalEnvironmentValue('INSTAGRAM_GRAPH_HOST')?.toLowerCase();
-  return configured === 'graph.instagram.com' ? configured : 'graph.facebook.com';
+interface InstagramDisplayAssetCandidate {
+  mediaType?: unknown;
+  mediaUrl?: unknown;
+  thumbnailUrl?: unknown;
 }
 
-function instagramGraphVersion() {
-  const configured = optionalEnvironmentValue('INSTAGRAM_GRAPH_API_VERSION');
-  if (!configured) return 'v25.0';
-  const normalized = configured.startsWith('v') ? configured : `v${configured}`;
-  return /^v\d+\.\d+$/.test(normalized) ? normalized : 'v25.0';
+/** Select an image-safe display asset consistently for list and proxy paths. */
+export function instagramDisplayAssetUrl(
+  media: InstagramDisplayAssetCandidate & { children?: InstagramDisplayAssetCandidate[] },
+): string | undefined {
+  const candidates = [media, ...(Array.isArray(media.children) ? media.children : [])];
+
+  for (const candidate of candidates) {
+    const mediaType = typeof candidate.mediaType === 'string' ? candidate.mediaType.toUpperCase() : '';
+    const thumbnail = safeInstagramAssetUrl(candidate.thumbnailUrl);
+    if (thumbnail) return thumbnail;
+    if (mediaType !== 'VIDEO') {
+      const mediaUrl = safeInstagramAssetUrl(candidate.mediaUrl);
+      if (mediaUrl) return mediaUrl;
+    }
+  }
+
+  return undefined;
+}
+
+function socialFanoutConfiguration() {
+  const apiKey = optionalEnvironmentValue('SOCIALFANOUT_API_KEY');
+  const signingSecret = optionalEnvironmentValue('INSTAGRAM_FEED_SIGNING_SECRET');
+  const baseUrl = safeSocialFanoutBaseUrl(
+    optionalEnvironmentValue('SOCIALFANOUT_API_URL') || 'https://socialfanout.com',
+  );
+  if (!apiKey || !signingSecret || signingSecret.length < 32 || !baseUrl) return undefined;
+  return { apiKey, signingSecret, baseUrl };
+}
+
+function safeSocialFanoutBaseUrl(value: string): string | undefined {
+  try {
+    const url = new URL(value);
+    const isLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+    if (url.protocol !== 'https:' && !(isLocal && url.protocol === 'http:')) return undefined;
+    if (url.username || url.password || url.search || url.hash) return undefined;
+    url.pathname = url.pathname.replace(/\/+$/, '');
+    return url.toString().replace(/\/$/, '');
+  } catch {
+    return undefined;
+  }
+}
+
+function isConnectionId(value: string) {
+  return /^[A-Za-z0-9][A-Za-z0-9_-]{5,127}$/.test(value);
 }

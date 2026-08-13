@@ -38,11 +38,16 @@ No production deployment, external form submission, analytics-provider activatio
 - Added a factual privacy-and-analytics notice and excluded bot-honeypot acknowledgements from `generate_lead` reporting.
 - Added build-time Search Console HTML-tag verification support, consistent public phone/contact schema, and environment-aware preview `noindex` behavior.
 - Audited the live Search Console, GA4, and Google Business Profile account state without changing it; the exact gaps and dated receipts are in `docs/google-platform-readiness.md`.
+- Replaced the proposed direct-Meta Instagram feed with a tenant-scoped
+  SocialFanout path, a signed same-origin image proxy, and the existing
+  Airtable/checked-in fallback. Meta approval remains the external gate; after
+  approval the clients need only authorize their two Instagram Publishing
+  accounts under the dedicated website key.
 
 ## Verified locally
 
 - Production build passes with 15 canonical sitemap pages, two intentional noindex pages, and branded 404 output.
-- Content verifier passes for 26 routable paths, 122 referenced media files, and all 68 optimized client-selected derivatives.
+- Content verifier passes for 26 routable paths, 147 referenced media files, and all 94 optimized client-selected derivatives.
 - Browser QA passes at desktop and mobile sizes with no console warnings/errors, no error overlay, no broken images, and no horizontal overflow.
 - Responsive checks pass at 360, 390, 768, 1024, 1280, and 1440 CSS pixels. Tablets use the focused one-card discovery sequence; the complete seven-card sequence is legible from 1024px upward.
 - The cloud wipe was inspected at multiple scroll positions after moving the feather mask onto the traveling image; no viewport-sized crop edge remains.
@@ -52,6 +57,10 @@ No production deployment, external form submission, analytics-provider activatio
 - `/contact?service=led-performers` preselects LED Performers; an unknown service leaves the form unselected.
 - `/additional-services` resolves to the current contact page in the application, and the build verifier confirms the hosting redirect is not shadowed by generated HTML.
 - `npm audit --omit=dev` reports zero known vulnerabilities.
+- Instagram contract tests pass for two-account blending, secret containment,
+  signed image refresh, weak-secret fail-closed behavior, numeric media ids,
+  video-thumbnail safety, honest contributing-account receipts, and tampered
+  signatures.
 
 ## Release sequence requiring external authority or receipts
 
@@ -61,6 +70,10 @@ No production deployment, external form submission, analytics-provider activatio
 4. Run a final client content review on the private preview, especially the About biography, seasonal hero, service names, and the separation of Stilt Walkers from LED Performers.
 5. After approval, deploy the reviewed commit, smoke-test the canonical routes and redirect on the real domain, submit the updated sitemap, and retain the deployment URL and production receipts in the closeout record.
 6. Complete the Search Console, Business Profile, and legacy-domain migration gates in `docs/google-platform-readiness.md`; do not confuse code readiness with provider ownership or collection proof.
+7. After Meta grants the required access, deploy the reviewed SocialFanout
+   media routes, authorize `@magicbrent` and `@cirquejolie` under one dedicated
+   website key, add the server-only Preview values, and collect every receipt
+   in `docs/instagram-feed-setup.md` before copying them to Production.
 
 ## Optional send-off polish after approval
 

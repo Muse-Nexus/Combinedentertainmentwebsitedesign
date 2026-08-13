@@ -1,7 +1,8 @@
 import {
   configuredInstagramAccount,
-  instagramGraphRequest,
+  instagramDisplayAssetUrl,
   safeInstagramAssetUrl,
+  socialFanoutRequest,
   verifyInstagramMediaSignature,
 } from '../server/instagram.js';
 import {
@@ -19,16 +20,19 @@ const MAX_IMAGE_BYTES = 4_000_000;
 const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
 
 interface InstagramMediaAsset {
-  media_type?: unknown;
-  media_url?: unknown;
-  thumbnail_url?: unknown;
-  children?: {
-    data?: Array<{
-      media_type?: unknown;
-      media_url?: unknown;
-      thumbnail_url?: unknown;
-    }>;
-  };
+  mediaType?: unknown;
+  mediaUrl?: unknown;
+  thumbnailUrl?: unknown;
+  children?: Array<{
+    mediaType?: unknown;
+    mediaUrl?: unknown;
+    thumbnailUrl?: unknown;
+  }>;
+}
+
+interface InstagramMediaAssetResponse {
+  ok?: unknown;
+  media?: InstagramMediaAsset;
 }
 
 export default async function handler(request: ApiRequest, response: ApiResponse) {
@@ -42,9 +46,16 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   const signature = cleanText(request.query?.signature, 200);
   const account = configuredInstagramAccount(accountKey);
 
+  const limit = checkRateLimit(`instagram-image:${getClientIp(request)}`, 120, 60_000);
+  if (!limit.allowed) {
+    response.setHeader('Cache-Control', 'no-store');
+    response.setHeader('Retry-After', String(limit.retryAfterSeconds));
+    return response.status(429).end();
+  }
+
   if (
     !account ||
-    !/^\d+$/.test(mediaId) ||
+    !/^\d{1,64}$/.test(mediaId) ||
     !signature ||
     !hasCanonicalImageQuery(request.url, accountKey, mediaId, signature)
   ) {
@@ -54,18 +65,13 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     return invalidImageRequest(response);
   }
 
-  const limit = checkRateLimit(`instagram-image:${getClientIp(request)}`, 120, 60_000);
-  if (!limit.allowed) {
-    response.setHeader('Cache-Control', 'no-store');
-    response.setHeader('Retry-After', String(limit.retryAfterSeconds));
-    return response.status(429).end();
-  }
-
   try {
-    const media = await instagramGraphRequest<InstagramMediaAsset>(account, encodeURIComponent(mediaId), {
-      fields: 'media_type,media_url,thumbnail_url,children{media_type,media_url,thumbnail_url}',
-    });
-    const assetUrl = displayAssetUrl(media);
+    const mediaPath = `v1/connections/${encodeURIComponent(account.connectionId)}/media/${encodeURIComponent(mediaId)}`;
+    const payload = await socialFanoutRequest<InstagramMediaAssetResponse>(mediaPath);
+    if (payload.ok !== true) return imageNotFound(response);
+    const media = payload.media;
+    if (!media) return imageNotFound(response);
+    const assetUrl = instagramDisplayAssetUrl(media);
     if (!assetUrl) return imageNotFound(response);
 
     const upstream = await fetchInstagramAsset(assetUrl);
@@ -125,24 +131,6 @@ function hasCanonicalImageQuery(
   } catch {
     return false;
   }
-}
-
-function displayAssetUrl(media: InstagramMediaAsset) {
-  const candidates = [
-    media,
-    ...(Array.isArray(media.children?.data) ? media.children.data : []),
-  ];
-
-  for (const candidate of candidates) {
-    const mediaType = cleanText(candidate.media_type, 40).toUpperCase();
-    const asset =
-      (mediaType === 'VIDEO' ? safeInstagramAssetUrl(candidate.thumbnail_url) : undefined) ||
-      safeInstagramAssetUrl(candidate.media_url) ||
-      safeInstagramAssetUrl(candidate.thumbnail_url);
-    if (asset) return asset;
-  }
-
-  return undefined;
 }
 
 function imageNotFound(response: ApiResponse) {

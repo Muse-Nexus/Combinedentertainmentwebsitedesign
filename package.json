@@ -7,6 +7,8 @@
     "airtable:setup": "node scripts/setup-airtable.mjs",
     "build": "vite build && node scripts/generate-route-html.mjs && node scripts/verify-seo-build.mjs && node scripts/verify-site-content.mjs",
     "dev": "vite",
+    "test": "npm run test:instagram",
+    "test:instagram": "node --test --import tsx tests/instagram-feed.test.ts",
     "verify:seo": "node scripts/verify-seo-build.mjs",
     "verify:content": "node scripts/verify-site-content.mjs"
   },
@@ -73,6 +75,7 @@
     "@types/canvas-confetti": "^1.9.0",
     "@vitejs/plugin-react": "4.7.0",
     "tailwindcss": "4.1.12",
+    "tsx": "^4.23.1",
     "vite": "^6.4.3"
   },
   "peerDependencies": {
