@@ -55,6 +55,36 @@ const perfectFor = [
   'Appreciation Events', 'Resort Entertainment', 'Trade Shows', 'Retreats',
 ];
 
+const corporateGallery = [
+  { src: '/media/Casino-Night-32-1030x579.jpg', label: 'Casino NITE', alt: 'Casino NITE tables ready for a Maui corporate event' },
+  { src: '/media/515925879_10164201867303825_1352723102744150605_n.jpg', label: 'Corporate Game Show', alt: 'Guests taking part in an interactive corporate game show on Maui' },
+  {
+    src: '/media/client-selected/corporate/brenton-jolie-black-white-stilt-duo-email.webp',
+    label: 'Brenton & Jolie — Black & White Duo',
+    alt: 'Brenton Keith performing with Jolie Strickland on stilts in coordinated black-and-white costumes',
+    objectPosition: 'center 27%',
+  },
+  { src: '/media/client-selected/corporate/winged-trio-tent-resort.webp', label: 'Stilt Walkers', alt: 'Winged stilt walkers greeting guests at a Maui resort event' },
+  { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', label: 'Casino Team', alt: 'The Casino NITE team together at a holiday corporate event' },
+  {
+    src: '/media/client-selected/corporate/brenton-jolie-gala-host-duo-email.webp',
+    label: 'Brenton & Jolie — Gala Hosts',
+    alt: 'Brenton Keith and Jolie Strickland in coordinated gala costumes at a Maui venue',
+    objectPosition: 'center 25%',
+  },
+  { src: '/media/503698188_1245363894258003_1463121886193686301_n.jpg', label: 'Resort Game Show Setup', alt: 'Game Show NITE production set up for a Maui resort event' },
+  { src: '/media/client-selected/corporate/casino-gameshow-overhead-crowd.webp', label: 'Full-Room Casino & Game Show', alt: 'Overhead view of a full corporate casino and game show event' },
+  {
+    src: '/media/client-selected/corporate/brenton-jolie-rainbow-host-selfie-email.webp',
+    label: 'Brenton & Jolie — Event Hosts',
+    alt: 'Jolie Strickland and Brenton Keith smiling together in colorful event costumes',
+    objectPosition: 'center 42%',
+  },
+  { src: '/media/client-selected/corporate/casino-overhead-busy-room.webp', label: 'Packed Casino NITE Crowd', alt: 'Packed corporate Casino NITE room viewed from above' },
+  { src: '/media/500194188_1237146738413052_2903309702033879195_n.jpg', label: 'Casino Guests Under the Tent', alt: 'Corporate guests playing casino games under a Maui event tent' },
+  { src: '/media/500304533_1237146601746399_8139464562412602121_n.jpg', label: 'Corporate Celebration Crowd', alt: 'A lively crowd enjoying a Maui corporate celebration' },
+];
+
 export default function Corporate() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
@@ -202,20 +232,17 @@ export default function Corporate() {
           </FadeInSection>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { src: '/media/Casino-Night-32-1030x579.jpg', label: 'Casino NITE' },
-              { src: '/media/515925879_10164201867303825_1352723102744150605_n.jpg', label: 'Corporate Game Show' },
-              { src: '/media/client-selected/corporate/winged-trio-tent-resort.webp', label: 'Stilt Walkers' },
-              { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', label: 'Casino Team' },
-              { src: '/media/503698188_1245363894258003_1463121886193686301_n.jpg', label: 'Resort Game Show Setup' },
-              { src: '/media/client-selected/corporate/casino-gameshow-overhead-crowd.webp', label: 'Full-Room Casino & Game Show' },
-              { src: '/media/client-selected/corporate/casino-overhead-busy-room.webp', label: 'Packed Casino NITE Crowd' },
-              { src: '/media/500194188_1237146738413052_2903309702033879195_n.jpg', label: 'Casino Guests Under the Tent' },
-              { src: '/media/500304533_1237146601746399_8139464562412602121_n.jpg', label: 'Corporate Celebration Crowd' },
-            ].map((img, i) => (
+            {corporateGallery.map((img, i) => (
               <FadeInSection key={img.label} delay={i * 0.08}>
                 <div className="relative group rounded-2xl overflow-hidden aspect-[4/3]">
-                  <img src={img.src} alt={img.label} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ objectPosition: img.objectPosition ?? 'center' }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-4 left-4 text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">{img.label}</div>
                 </div>
