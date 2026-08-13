@@ -207,11 +207,11 @@ function Sun({ active, mobile }: { active: boolean; mobile: boolean }) {
 }
 
 function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: boolean }) {
-  const cloudOpacity = useTransform(progress, [0, 0.08, 0.88, 1], [0, 1, 1, 0]);
+  const cloudOpacity = useTransform(progress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
   const whiteoutOpacity = useTransform(
     progress,
-    [0, 0.14, 0.36, 0.64, 0.86, 1],
-    [0, 0.12, 1, 1, 0.12, 0],
+    [0, 0.12, 0.32, 0.88, 1],
+    [0, 0.18, 1, 1, 0],
   );
   const x = useTransform(progress, [0, 1], mobile ? ['-105%', '105%'] : ['-82%', '82%']);
   const xEcho = useTransform(progress, [0, 1], mobile ? ['-138%', '72%'] : ['-112%', '52%']);
@@ -238,6 +238,7 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
           alt=""
           style={{
             width: primaryCloudWidth,
+            transform: `scaleY(${mobile ? 1.5 : 1.45})`,
           }}
           className="absolute h-auto max-w-none object-contain opacity-95 brightness-110"
         />
@@ -251,7 +252,7 @@ function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: b
           alt=""
           style={{
             width: echoCloudWidth,
-            transform: 'scaleX(-1)',
+            transform: `scale(-1, ${mobile ? 1.42 : 1.38})`,
           }}
           className="absolute h-auto max-w-none object-contain opacity-70 brightness-110"
         />
@@ -519,7 +520,11 @@ export function LandingPage() {
   const logoOpacity = useTransform(scrollY, [0, timeline.stormEnd * 0.36], [1, 0]);
   const maskLine = useMotionTemplate`calc(${umbrellaTop} + ${mobile ? '10svh' : '12vh'})`;
   const maskImage = useMotionTemplate`linear-gradient(to bottom, black ${maskLine}, transparent calc(${maskLine} + 46px))`;
-  const discoveryVisible = scrollValue >= timeline.transitionEnd - 100 && scrollValue <= timeline.discoveryEnd + 100;
+  const discoveryVisible =
+    scrollValue >=
+      timeline.miracleEnd + (timeline.transitionEnd - timeline.miracleEnd) * 0.42 &&
+    scrollValue <=
+      timeline.discoveryEnd + (timeline.cloudTwoEnd - timeline.discoveryEnd) * 0.56;
   const compactMenuVisible =
     scrollValue > timeline.stormEnd + 80 && scrollValue < timeline.miracleEnd - 80;
   const standardNavVisible = scrollValue >= timeline.storyEnd - 40;
@@ -666,14 +671,14 @@ export function LandingPage() {
 
         <motion.div
           style={{ opacity: logoOpacity }}
-          className={`absolute z-40 flex flex-col ${mobile ? 'left-4 top-[38svh] items-start' : 'inset-0 items-start justify-center pl-[12vw]'}`}
+          className={`absolute z-40 flex flex-col items-center text-center ${mobile ? 'inset-x-0 top-[38svh]' : 'inset-0 justify-center'}`}
         >
           <img src={LOGO} alt="Raining Entertainment" width="420" height="290" className={`${mobile ? 'w-28' : 'w-64'} drop-shadow-2xl`} />
           <div className={mobile ? 'mt-3 max-w-40' : 'mt-10'}>
             <motion.p
               animate={{ opacity: [0.58, 1, 0.58] }}
               transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-              className={`${mobile ? 'text-left text-sm' : 'text-center text-2xl'} font-display font-medium lowercase tracking-[0.08em] text-white/90 drop-shadow-2xl`}
+              className={`${mobile ? 'text-sm' : 'text-2xl'} text-center font-display font-medium lowercase tracking-[0.08em] text-white/90 drop-shadow-2xl`}
             >
               scroll to open the umbrella
             </motion.p>
