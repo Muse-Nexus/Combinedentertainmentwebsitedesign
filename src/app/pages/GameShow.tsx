@@ -204,8 +204,13 @@ export default function GameShow() {
               { src: '/media/488251977_1193147566146303_4577536044659466625_n.jpg', alt: 'Brenton Keith hosting game show on Maui' },
               { src: '/media/casino-gameshow/gameshow-indoor-teams.jpg', alt: 'Game show teams competing indoors at Maui event' },
               { src: '/media/game-show/game-show-lite-hosts-maui.webp', alt: 'Brenton Keith and Jolie at a compact Game Show LITE podium' },
-            ].map((img, i) => (
-              <FadeInSection key={i} delay={i * 0.07}>
+              { src: '/media/client-selected/game-show/brenton-jolie-hosts-email.webp', alt: 'Brenton Keith and Jolie together at the illuminated Game Show NITE podium' },
+            ].map((img, i, images) => (
+              <FadeInSection
+                key={i}
+                delay={i * 0.07}
+                className={i === images.length - 1 ? 'col-span-2 md:col-span-1 md:col-start-2' : ''}
+              >
                 <div className="rounded-2xl overflow-hidden group aspect-[4/3]">
                   <img src={img.src} alt={img.alt} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>

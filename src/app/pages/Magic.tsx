@@ -196,7 +196,7 @@ export default function Magic() {
               { src: '/media/612882638_1340946144714902_8080228191261112022_n.jpg', alt: 'Brenton Keith post-show group photo with audience holding Aloha sign at Mulligan\'s Wailea' },
               { src: '/media/481786657_1083132067162979_5746383137781139010_n.jpg', alt: 'Brenton Keith performing magic for kids with Bag O Tricks at Maui community event' },
               { src: '/media/magic/brent-kids-bag-of-tricks.jpg', alt: 'Brenton Keith kids birthday magic show on Maui' },
-              { src: '/media/magic/brent-jolie-stage.jpg', alt: 'Brenton Keith and Jolie Strickland performing live on stage in Maui' },
+              { src: '/media/magic/brent-library-show.jpg', alt: 'Brenton Keith performing an interactive magic show for a packed Maui audience' },
             ].map((photo, i) => (
               <FadeInSection key={i} delay={i * 0.08}>
                 <div className="rounded-2xl overflow-hidden group aspect-[4/3]">

@@ -73,10 +73,12 @@ const clientAssets = (await walk(clientAssetRoot)).filter((file) => file.endsWit
 const expectedCounts = new Map([
   ['about', 1],
   ['balloon-decor', 28],
-  ['balloon-twisting', 5],
-  ['casino', 6],
-  ['corporate', 1],
-  ['face-painting', 6],
+  ['balloon-twisting', 9],
+  ['casino', 10],
+  ['corporate', 3],
+  ['face-painting', 14],
+  ['game-show', 1],
+  ['home', 2],
   ['led-performers', 6],
   ['stilt-walkers', 15],
 ]);
@@ -84,7 +86,7 @@ for (const [folder, expected] of expectedCounts) {
   const actual = clientAssets.filter((file) => path.basename(path.dirname(file)) === folder).length;
   assert(actual === expected, `Expected ${expected} approved ${folder} images, found ${actual}`);
 }
-assert(clientAssets.length === 68, `Expected 68 optimized client-selected images, found ${clientAssets.length}`);
+assert(clientAssets.length === 89, `Expected 89 optimized client-selected images, found ${clientAssets.length}`);
 
 console.log(
   `Content verified: ${validRoutes.size} routable paths, ${mediaReferences.size} referenced media files, and ${clientAssets.length} client-selected derivatives.`,

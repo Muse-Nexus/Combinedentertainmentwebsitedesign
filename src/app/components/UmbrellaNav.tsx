@@ -75,15 +75,6 @@ function ServiceButtons({ className = '' }: { className?: string }) {
           );
         })}
       </nav>
-      <div className="mx-auto mt-3 flex max-w-2xl items-center justify-center gap-3 rounded-2xl border border-coral/45 bg-slate-950/85 px-4 py-3 text-center shadow-lg backdrop-blur-md">
-        <span className="text-sm font-medium text-white sm:text-base">Planning a corporate event?</span>
-        <Link
-          to="/corporate"
-          className="shrink-0 font-bold text-coral underline decoration-coral/40 underline-offset-4 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral"
-        >
-          Start here
-        </Link>
-      </div>
     </div>
   );
 }

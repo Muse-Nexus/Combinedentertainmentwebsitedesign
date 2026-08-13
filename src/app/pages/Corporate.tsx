@@ -208,6 +208,10 @@ export default function Corporate() {
               { src: '/media/client-selected/corporate/winged-trio-tent-resort.webp', label: 'Stilt Walkers' },
               { src: '/media/598419647_1413764607417930_4065430168744957782_n.jpg', label: 'Casino Team' },
               { src: '/media/503698188_1245363894258003_1463121886193686301_n.jpg', label: 'Resort Game Show Setup' },
+              { src: '/media/client-selected/corporate/casino-gameshow-overhead-crowd.webp', label: 'Full-Room Casino & Game Show' },
+              { src: '/media/client-selected/corporate/casino-overhead-busy-room.webp', label: 'Packed Casino NITE Crowd' },
+              { src: '/media/500194188_1237146738413052_2903309702033879195_n.jpg', label: 'Casino Guests Under the Tent' },
+              { src: '/media/500304533_1237146601746399_8139464562412602121_n.jpg', label: 'Corporate Celebration Crowd' },
             ].map((img, i) => (
               <FadeInSection key={img.label} delay={i * 0.08}>
                 <div className="relative group rounded-2xl overflow-hidden aspect-[4/3]">

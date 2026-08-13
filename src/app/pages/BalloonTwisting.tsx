@@ -19,17 +19,29 @@ const FadeInSection = ({ children, className = '', delay = 0 }: { children: Reac
 // Balanced, alternating gallery drawn from Jolie's selected balloon-twisting
 // and face-painting assets — no balloon-decor imagery on this page.
 const GALLERY_IMAGES: GalleryImage[] = [
-  { src: '/media/client-selected/balloon-twisting/twisting-01-mermaid-doll-balloon.webp', alt: 'Girl beaming beside a mermaid-doll balloon sculpture by Cirque Jolie' },
-  { src: '/media/client-selected/face-painting/face-01-artist-with-child.webp', alt: 'Jolie in a flower crown beside a child with freshly painted face art' },
+  { src: '/media/client-selected/balloon-twisting/twisting-01-mermaid-doll-balloon.webp', alt: 'Girl beaming beside a mermaid-doll balloon sculpture by Cirque Jolie', objectPosition: 'center top' },
+  { src: '/media/client-selected/face-painting/face-01-artist-with-child.webp', alt: 'Two friends showing colorful blue, gold, and red face-painting designs' },
   { src: '/media/client-selected/balloon-twisting/twisting-02-parent-toddler-lion.webp', alt: 'Parent and toddler with a custom lion balloon creation' },
   { src: '/media/client-selected/face-painting/face-02-rainbow-butterfly-girl.webp', alt: 'Girl with a rainbow butterfly face painting design outdoors' },
   { src: '/media/client-selected/balloon-twisting/twisting-03-senior-guest-monkey-flower.webp', alt: 'Senior guest smiling with a monkey and flower balloon twist' },
-  { src: '/media/client-selected/face-painting/face-03-adult-grinch-face.webp', alt: 'Adult guest with a Grinch-themed face painting design' },
+  { src: '/media/client-selected/face-painting/face-03-adult-grinch-face.webp', alt: 'Jolie smiling with a child wearing an intricate floral-crown face-painting design' },
   { src: '/media/client-selected/balloon-twisting/twisting-04-boy-monkey-palm-indoor.webp', alt: 'Boy holding a monkey-and-palm-tree balloon at a large indoor Maui event' },
   { src: '/media/client-selected/face-painting/face-04-matching-tiger-pair.webp', alt: 'Two guests with matching tiger face painting designs' },
   { src: '/media/client-selected/balloon-twisting/twisting-05-jolie-stitch-balloon.webp', alt: 'Jolie posing with a Stitch character balloon sculpture' },
   { src: '/media/client-selected/face-painting/face-05-koi-arm-art.webp', alt: 'Painted koi fish arm art by a Cirque Jolie face painter' },
+  { src: '/media/client-selected/balloon-twisting/twisting-06-motorcycle-sculpture.webp', alt: 'Guest holding a full-size custom motorcycle balloon sculpture' },
   { src: '/media/client-selected/face-painting/face-06-beachfront-mermaid-face.webp', alt: 'Mermaid-scale face painting design at a Maui beachfront event' },
+  { src: '/media/client-selected/balloon-twisting/twisting-07-flower-balloon-guest.webp', alt: 'Smiling guest holding a bright flower character balloon at a Maui event' },
+  { src: '/media/client-selected/face-painting/face-07-zebra-cat-design.webp', alt: 'Girl with a detailed black-and-white zebra cat face-painting design' },
+  { src: '/media/client-selected/balloon-twisting/twisting-08-character-display.webp', alt: 'Display of elaborate balloon characters, flowers, and vehicles by Cirque Jolie' },
+  { src: '/media/client-selected/face-painting/face-08-green-creature-boy.webp', alt: 'Boy with a vivid green fantasy-creature face-painting design' },
+  { src: '/media/client-selected/balloon-twisting/twisting-09-grinch-balloon-selfie.webp', alt: 'Jolie posing with a large holiday Grinch balloon sculpture' },
+  { src: '/media/client-selected/face-painting/face-09-adult-group-designs.webp', alt: 'Three adult guests showing coordinated tropical face-painting designs' },
+  { src: '/media/client-selected/face-painting/face-10-blue-superhero-boy.webp', alt: 'Boy showing a bold blue-and-gold superhero face-painting design' },
+  { src: '/media/client-selected/face-painting/face-11-painted-adult-pair.webp', alt: 'Two adult guests smiling with colorful forehead and cheek art' },
+  { src: '/media/client-selected/face-painting/face-12-keiki-design-pair.webp', alt: 'Two young guests showing playful floral and mask face-painting designs' },
+  { src: '/media/client-selected/face-painting/face-13-best-friends-glitter.webp', alt: 'Two friends wearing coordinated glittering mermaid face art' },
+  { src: '/media/client-selected/face-painting/face-14-green-creature-design.webp', alt: 'Guest smiling with a bright green fantasy-creature face design' },
 ];
 
 export default function BalloonTwisting() {

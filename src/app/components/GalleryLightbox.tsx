@@ -6,6 +6,8 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 export interface GalleryImage {
   src: string;
   alt: string;
+  /** Optional thumbnail crop anchor. The expanded lightbox always shows the full image. */
+  objectPosition?: string;
 }
 
 interface LightboxProps {
@@ -224,6 +226,7 @@ export function GalleryLightbox({
               alt={img.alt}
               loading={i < eagerCount ? 'eager' : 'lazy'}
               decoding="async"
+              style={{ objectPosition: img.objectPosition }}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <span className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />

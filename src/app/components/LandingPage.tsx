@@ -17,8 +17,8 @@ import { UMBRELLA_SECTIONS, UmbrellaNav } from './UmbrellaNav';
 import { Navbar } from './Navbar';
 import { HomeContent } from './HomeContent';
 
-const HERO_DESKTOP = '/media/hero-real-brenton-jolie.webp';
-const HERO_MOBILE = '/media/hero-real-brenton-jolie-mobile.webp';
+const HERO_DESKTOP = '/media/client-selected/home/brenton-jolie-swing-stilts-hero.webp';
+const HERO_MOBILE = '/media/client-selected/home/brenton-jolie-swing-stilts-mobile.webp';
 const LOGO = '/media/logos/White Primary Logo Raining Entertainment.png';
 const CLOUD_TEXTURE = '/media/clouds-wipe-feathered.webp';
 
@@ -117,8 +117,8 @@ function HeroImage({
         src={HERO_DESKTOP}
         alt={decorative ? '' : alt}
         aria-hidden={decorative || undefined}
-        width="1672"
-        height="941"
+        width="1920"
+        height="1080"
         decoding="async"
         className={`h-full w-full object-cover ${className}`}
       />
@@ -176,13 +176,13 @@ function Rainbow({ active, mobile }: { active: boolean; mobile: boolean }) {
       <div
         className={`${
           mobile
-            ? 'h-[140vw] w-[140vw] -translate-y-[4%]'
-            : 'h-[min(150vw,260svh)] w-[min(150vw,260svh)] translate-y-[58%]'
+            ? 'h-[140vw] w-[140vw] -translate-y-[10%]'
+            : 'h-[min(150vw,260svh)] w-[min(150vw,260svh)] translate-y-[50%]'
         } rounded-full`}
         style={{
           background: `radial-gradient(circle at center, transparent 58%, rgba(148,0,211,.55) 58.5%, rgba(75,0,130,.55) 59.5%, rgba(0,0,255,.55) 60.5%, rgba(0,255,0,.55) 61.5%, rgba(255,255,0,.55) 62.5%, rgba(255,127,0,.55) 63.5%, rgba(255,0,0,.55) 64.5%, transparent 65%)`,
-          maskImage: 'linear-gradient(to bottom, black 35%, transparent 64%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 35%, transparent 64%)',
+          maskImage: 'linear-gradient(to bottom, black 38%, transparent 72%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 38%, transparent 72%)',
         }}
       />
     </motion.div>
@@ -207,33 +207,51 @@ function Sun({ active, mobile }: { active: boolean; mobile: boolean }) {
 }
 
 function Clouds({ progress, mobile }: { progress: MotionValue<number>; mobile: boolean }) {
-  const opacity = useTransform(progress, [0, 0.08, 0.82, 0.98], [0, 1, 1, 0]);
-  const x = useTransform(progress, [0, 1], mobile ? ['-160%', '160%'] : ['-120%', '120%']);
-  const scale = useTransform(progress, [0.1, 0.5, 0.9], [1, mobile ? 1.08 : 1.16, 1]);
+  const cloudOpacity = useTransform(progress, [0, 0.08, 0.88, 1], [0, 1, 1, 0]);
+  const whiteoutOpacity = useTransform(
+    progress,
+    [0, 0.14, 0.36, 0.64, 0.86, 1],
+    [0, 0.12, 1, 1, 0.12, 0],
+  );
+  const x = useTransform(progress, [0, 1], mobile ? ['-105%', '105%'] : ['-82%', '82%']);
+  const xEcho = useTransform(progress, [0, 1], mobile ? ['-138%', '72%'] : ['-112%', '52%']);
+  const scale = useTransform(progress, [0.1, 0.5, 0.9], [1.08, mobile ? 1.22 : 1.32, 1.08]);
+
+  const featherMask =
+    'radial-gradient(ellipse 78% 68% at 50% 50%, black 0%, black 54%, rgba(0,0,0,.72) 72%, rgba(0,0,0,.18) 90%, transparent 100%)';
 
   return (
-    <motion.div
-      style={{ opacity }}
+    <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[150] flex items-center justify-center overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-[150] overflow-hidden"
     >
       <motion.div
-        style={{ x, scale }}
-        className="absolute inset-0 flex items-center justify-center blur-[6px]"
+        style={{ opacity: whiteoutOpacity }}
+        className="absolute inset-0 bg-[#fffdf7]"
+      />
+      <motion.div
+        style={{ x, scale, opacity: cloudOpacity }}
+        className="absolute inset-0 flex items-center justify-center blur-[8px]"
       >
         <img
           src={CLOUD_TEXTURE}
           alt=""
-          style={{
-            maskImage:
-              'radial-gradient(ellipse 66% 56% at 50% 50%, black 0%, rgba(0,0,0,.96) 36%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.24) 72%, transparent 90%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse 66% 56% at 50% 50%, black 0%, rgba(0,0,0,.96) 36%, rgba(0,0,0,.72) 54%, rgba(0,0,0,.24) 72%, transparent 90%)',
-          }}
-          className={`${mobile ? 'h-[120svh] w-auto opacity-90 blur-[10px]' : 'h-auto w-[205%] opacity-95 blur-[12px]'} absolute max-w-none object-contain mix-blend-screen`}
+          style={{ maskImage: featherMask, WebkitMaskImage: featherMask }}
+          className={`${mobile ? 'h-[145svh] w-auto' : 'h-[138svh] w-auto'} absolute max-w-none object-cover opacity-95 brightness-125 saturate-50 mix-blend-screen`}
         />
       </motion.div>
-    </motion.div>
+      <motion.div
+        style={{ x: xEcho, scale, opacity: cloudOpacity }}
+        className="absolute inset-0 flex items-center justify-center blur-[14px]"
+      >
+        <img
+          src={CLOUD_TEXTURE}
+          alt=""
+          style={{ maskImage: featherMask, WebkitMaskImage: featherMask, transform: 'scaleX(-1)' }}
+          className={`${mobile ? 'h-[132svh] w-auto' : 'h-[126svh] w-auto'} absolute max-w-none object-cover opacity-70 brightness-125 saturate-50 mix-blend-screen`}
+        />
+      </motion.div>
+    </div>
   );
 }
 
@@ -417,14 +435,14 @@ function ReducedMotionLanding({ mobile }: { mobile: boolean }) {
       <Navbar />
       <section className="relative min-h-[100svh] overflow-hidden bg-[#070b22] pt-20 text-white">
         <div className={`absolute inset-x-0 top-20 ${mobile ? 'h-[55svh]' : 'bottom-0'}`}>
-          <HeroImage alt="Brenton Keith and Jolie Strickland performing together at an oceanfront Maui event" />
+          <HeroImage alt="Brenton Keith and Jolie Strickland in matching black-and-white swing costumes, with Jolie on stilts" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/15 via-slate-950/20 to-[#070b22]" />
         <div className="relative z-20 mx-auto flex min-h-[100svh] max-w-5xl flex-col items-center px-5 pt-14 text-center md:justify-center md:pt-0">
           <img src={LOGO} alt="Raining Entertainment" width="420" height="290" className="w-48 drop-shadow-2xl md:w-72" />
           <p className="mt-5 max-w-2xl text-lg font-medium text-white/90 md:text-2xl">Magic, circus arts, Game Show NITE, Casino NITE, balloons, and face painting—one Maui team.</p>
           <div className="mt-auto w-full pb-4 md:mt-10 md:pb-0">
-            <UmbrellaNav displayWidth={mobile ? 'min(100vw, 620px)' : 'min(86vw, 1000px)'} />
+            <UmbrellaNav displayWidth={mobile ? 'min(98vw, 600px)' : 'min(84vw, 920px)'} />
             <UmbrellaNav compact className="mx-auto -mt-12 max-w-6xl px-2" />
           </div>
         </div>
@@ -465,7 +483,7 @@ export function LandingPage() {
   const cloudProgress = useTransform(scrollY, [timeline.miracleEnd, timeline.transitionEnd], [0, 1], { clamp: true });
   const discoveryProgress = useTransform(scrollY, [timeline.transitionEnd, timeline.discoveryEnd], [0, 1], { clamp: true });
   const cloudTwoProgress = useTransform(scrollY, [timeline.discoveryEnd, timeline.cloudTwoEnd], [0, 1], { clamp: true });
-  const umbrellaTop = useTransform(stormProgress, [0, 1], [mobile ? '112vh' : '100vh', mobile ? '-2.5vh' : '-16vh']);
+  const umbrellaTop = useTransform(stormProgress, [0, 1], [mobile ? '112vh' : '100vh', mobile ? '1.5vh' : '-7vh']);
   const umbrellaScale = useTransform(stormProgress, [0, 1], [mobile ? 0.96 : 1, 1]);
   const umbrellaOpacity = useTransform(
     scrollY,
@@ -536,16 +554,26 @@ export function LandingPage() {
 
       <AnimatePresence>
         {scrollValue > timeline.stormEnd + 80 && scrollValue < timeline.storyEnd - 120 && (
-          <motion.button
-            type="button"
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed right-3 top-3 z-[170] rounded-full border border-white/15 bg-slate-950/55 px-3 py-2 text-[0.64rem] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral md:right-4 md:top-4 md:px-4"
+            className="fixed right-3 top-3 z-[170] flex items-center gap-2 md:right-4 md:top-4"
           >
-            Replay
-          </motion.button>
+            <Link
+              to="/corporate"
+              className="rounded-full border border-coral/45 bg-slate-950/65 px-3 py-2 text-[0.64rem] font-bold uppercase tracking-[0.14em] text-coral backdrop-blur-md transition hover:bg-slate-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral md:px-4"
+            >
+              Corporate
+            </Link>
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="rounded-full border border-white/15 bg-slate-950/55 px-3 py-2 text-[0.64rem] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral md:px-4"
+            >
+              Replay
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -555,7 +583,7 @@ export function LandingPage() {
           className="pointer-events-none fixed inset-x-0 z-[100] flex origin-top justify-center"
         >
           <div className="pointer-events-auto relative drop-shadow-2xl">
-            <UmbrellaNav displayWidth={mobile ? 'min(100vw, 620px)' : 'min(88vw, 980px)'} />
+            <UmbrellaNav displayWidth={mobile ? 'min(98vw, 600px)' : 'min(84vw, 920px)'} />
             <AnimatePresence>
               {isMiracle && !mobile && (
                 <motion.div
@@ -602,7 +630,7 @@ export function LandingPage() {
         <div className={`absolute inset-x-0 top-0 z-20 ${mobile ? 'h-[72svh]' : 'bottom-0'}`}>
           <motion.div className="relative h-full w-full overflow-hidden" animate={{ scale: isMiracle ? 1.015 : 1 }} transition={{ duration: 1.5 }}>
             <HeroImage
-              alt="Brenton Keith and Jolie Strickland performing together at an oceanfront Maui event"
+              alt="Brenton Keith and Jolie Strickland in matching black-and-white swing costumes, with Jolie on stilts"
               className={heroObjectPosition}
             />
 
@@ -631,13 +659,16 @@ export function LandingPage() {
         </AnimatePresence>
         <LightningFlash active={!isMiracle} />
 
-        <motion.div style={{ opacity: logoOpacity }} className={`absolute inset-0 z-40 flex flex-col items-center ${mobile ? 'justify-start pt-[14svh]' : 'justify-center'}`}>
-          <img src={LOGO} alt="Raining Entertainment" width="420" height="290" className={`${mobile ? 'w-48' : 'w-64'} drop-shadow-2xl`} />
-          <div className={mobile ? 'mt-8' : 'mt-12'}>
+        <motion.div
+          style={{ opacity: logoOpacity }}
+          className={`absolute z-40 flex flex-col ${mobile ? 'left-4 top-[38svh] items-start' : 'inset-0 items-start justify-center pl-[12vw]'}`}
+        >
+          <img src={LOGO} alt="Raining Entertainment" width="420" height="290" className={`${mobile ? 'w-28' : 'w-64'} drop-shadow-2xl`} />
+          <div className={mobile ? 'mt-3 max-w-40' : 'mt-10'}>
             <motion.p
               animate={{ opacity: [0.58, 1, 0.58] }}
               transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-              className="text-center font-display text-base font-medium lowercase tracking-[0.08em] text-white/90 drop-shadow-2xl md:text-2xl"
+              className={`${mobile ? 'text-left text-sm' : 'text-center text-2xl'} font-display font-medium lowercase tracking-[0.08em] text-white/90 drop-shadow-2xl`}
             >
               scroll to open the umbrella
             </motion.p>
