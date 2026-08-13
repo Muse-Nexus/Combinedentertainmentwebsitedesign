@@ -339,6 +339,91 @@ async function seedCasinoPackages(table) {
   }
 }
 
+const momentSeeds = [
+  {
+    Caption: 'Comedy magic that puts the audience in the middle of the fun.',
+    'Image URL': 'https://www.rainingentertainment.com/media/magic/magic-brent-live-show-maui.webp',
+    'Post URL': 'https://www.instagram.com/magicbrent/',
+    Account: '@magicbrent',
+    'Alt Text': "Brenton Keith performing the Mulligan's Magic Show in Wailea",
+    Service: 'Magic',
+    'Sort Order': 1,
+    Published: true,
+  },
+  {
+    Caption: 'Living color and character with a little Maui magic.',
+    'Image URL': 'https://www.rainingentertainment.com/media/about/jolie-strickland-portrait.webp',
+    'Post URL': 'https://www.instagram.com/cirquejolie/',
+    Account: '@cirquejolie',
+    'Alt Text': 'Jolie Strickland in a colorful Cirque Jolie costume',
+    Service: 'Cirque',
+    'Sort Order': 2,
+    Published: true,
+  },
+  {
+    Caption: 'Balloon decor built to belong in the room and in the photos.',
+    'Image URL': 'https://www.rainingentertainment.com/media/balloon-decor/tropical-arch-resort.jpg',
+    'Post URL': 'https://www.instagram.com/cirquejolie/',
+    Account: '@cirquejolie',
+    'Alt Text': 'Tropical balloon arch installation at a Maui resort',
+    Service: 'Balloon Decor',
+    'Sort Order': 3,
+    Published: true,
+  },
+  {
+    Caption: 'Big reactions and friendly competition make an instant party.',
+    'Image URL': 'https://www.rainingentertainment.com/media/casino-gameshow/casino-group-photo.jpg',
+    'Post URL': 'https://www.instagram.com/magicbrent/',
+    Account: '@magicbrent',
+    'Alt Text': 'Guests gathered around a lively casino entertainment table',
+    Service: 'Game Shows & Casino',
+    'Sort Order': 4,
+    Published: true,
+  },
+  {
+    Caption: 'Tiny transformations with plenty of personality.',
+    'Image URL': 'https://www.rainingentertainment.com/media/balloons/dragon-facepainting.jpg',
+    'Post URL': 'https://www.instagram.com/cirquejolie/',
+    Account: '@cirquejolie',
+    'Alt Text': 'Detailed dragon face painting created for a child',
+    Service: 'Face Painting',
+    'Sort Order': 5,
+    Published: true,
+  },
+  {
+    Caption: 'A roaming spectacle guests cannot help but follow.',
+    'Image URL': 'https://www.rainingentertainment.com/media/strolling/moth-stilt-costume.jpg',
+    'Post URL': 'https://www.instagram.com/cirquejolie/',
+    Account: '@cirquejolie',
+    'Alt Text': 'Cirque Jolie performer in an illuminated moth stilt costume',
+    Service: 'Stilt Walkers',
+    'Sort Order': 6,
+    Published: true,
+  },
+];
+
+async function seedMoments(table) {
+  if (DRY_RUN) {
+    for (const fields of momentSeeds) {
+      console.log(`[dry-run] seed only if missing: Moments.${fields.Caption}`);
+    }
+    return;
+  }
+
+  const existingRecords = await listAllRecords(table, ['Caption']);
+  const existingCaptions = new Set(
+    existingRecords
+      .map(record => record?.fields?.Caption)
+      .filter(Boolean)
+      .map(value => String(value).trim().toLowerCase()),
+  );
+  const missing = momentSeeds.filter(
+    fields => !existingCaptions.has(fields.Caption.trim().toLowerCase()),
+  );
+  await createRecords(table, missing);
+  if (missing.length) console.log(`Seeded ${missing.length} missing Moments records.`);
+}
+
 async function seedMulligansShow(table) {
   if (DRY_RUN) {
     console.log(`[dry-run] seed only if missing: Public Events.${mulligansSeed.Title}`);
@@ -725,6 +810,7 @@ const transactions = await ensureTable({
 
 await seedCasinoPackages(casinoPackages);
 await seedMulligansShow(publicEvents);
+await seedMoments(moments);
 
 console.log(`Airtable setup ${DRY_RUN ? 'planned' : 'complete'} for base ${ACTIVE_BASE_ID}.`);
 console.log(
