@@ -25,6 +25,11 @@ const profileLinks = [
     handle: '@cirquejolie',
     accent: 'hover:border-lavender/70 hover:bg-lavender/10',
   },
+  {
+    href: 'https://www.instagram.com/gameshowfanatics/',
+    handle: '@gameshowfanatics',
+    accent: 'hover:border-coral/70 hover:bg-coral/10',
+  },
 ];
 
 export function LatestMoments() {

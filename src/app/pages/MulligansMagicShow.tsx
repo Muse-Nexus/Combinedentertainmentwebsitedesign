@@ -76,6 +76,12 @@ export default function MulligansMagicShow() {
               Because the public schedule can change, confirm the current performance and
               reservation details directly with Mulligan’s before traveling.
             </p>
+            <div className="mt-6 flex items-start gap-3 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5">
+              <CalendarDays className="mt-1 h-5 w-5 shrink-0 text-amber-300" />
+              <p className="text-amber-100">
+                <span className="font-bold">Schedule note:</span> The show is on hiatus Aug. 27 – Sep. 17, 2026 — confirm current dates with Mulligan’s on the Blue before planning your visit.
+              </p>
+            </div>
             <div className="mt-8 rounded-2xl border border-coral/25 bg-coral/10 p-6">
               <div className="flex items-start gap-4">
                 <Sparkles className="mt-1 h-6 w-6 shrink-0 text-coral" />

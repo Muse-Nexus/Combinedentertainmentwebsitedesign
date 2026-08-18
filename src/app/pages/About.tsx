@@ -52,7 +52,7 @@ export function About() {
                 Brenton Keith started performing magic at age 12 and became a house magician at 17. He performed at Universal Studios and The Magic Castle in Hollywood before bringing his act to Maui in the late &rsquo;90s. Today he&rsquo;s Hawaii&rsquo;s go-to comedy magician, game show host, MC, and DJ.
               </p>
               <p className="text-gray-400 leading-relaxed mb-6">
-                Voted &ldquo;Best Comedian on Maui&rdquo; in 2019, Brenton runs a weekly magic show at Mulligan&rsquo;s on the Blue in Wailea &mdash; the longest-running live magic show on the island. He also created Gameshow Fanatics for full-production game shows and separately produces Casino NITE events for corporate groups, fundraisers, and celebrations across the islands.
+                Voted &ldquo;Best Comedian on Maui&rdquo; in 2019, Brenton runs a weekly magic show at Mulligan&rsquo;s on the Blue in Wailea &mdash; South Maui&rsquo;s longest-running live magic show. He also created Gameshow Fanatics for full-production game shows and separately produces Casino NITE events for corporate groups, fundraisers, and celebrations across the islands.
               </p>
               <div className="flex flex-wrap gap-3">
                 <span className="bg-coral/10 text-coral px-4 py-2 rounded-full text-sm font-medium">Comedy Magic</span>

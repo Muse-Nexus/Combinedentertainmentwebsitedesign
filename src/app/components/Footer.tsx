@@ -5,8 +5,9 @@ import {
   openAnalyticsPreferences,
 } from '../analytics/googleAnalytics';
 
-const brentonRoutes = ['/magic', '/game-show', '/casino', '/casino-gameshow', '/shows/mulligans-magic-show'];
+const brentonRoutes = ['/magic', '/casino', '/casino-gameshow', '/shows/mulligans-magic-show'];
 const jolieRoutes = ['/cirque-jolie', '/strolling', '/led-performers', '/balloon-twisting', '/face-painting', '/balloon-decor'];
+const gameshowRoutes = ['/game-show'];
 
 const isFeaturedRoute = (pathname: string, routes: string[]) =>
   routes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
@@ -15,6 +16,7 @@ export function Footer() {
   const { pathname } = useLocation();
   const featureBrenton = isFeaturedRoute(pathname, brentonRoutes);
   const featureJolie = isFeaturedRoute(pathname, jolieRoutes);
+  const featureGameshow = isFeaturedRoute(pathname, gameshowRoutes);
 
   return (
     <footer className="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
@@ -75,9 +77,9 @@ export function Footer() {
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-coral">Follow the fun</p>
               <h3 className="mt-1 text-xl font-bold text-white">See what Brenton and Jolie are creating on Maui.</h3>
             </div>
-            <p className="text-sm text-slate-500">Two feeds. One entertainment team.</p>
+            <p className="text-sm text-slate-500">Three profiles. One entertainment team.</p>
           </div>
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-3">
             <a
               href="https://www.instagram.com/magicbrent/"
               target="_blank"
@@ -94,7 +96,7 @@ export function Footer() {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block font-bold text-white">@magicbrent</span>
-                <span className="block text-sm text-slate-400">Magic · Game Show NITE · Casino NITE</span>
+                <span className="block text-sm text-slate-400">Magic · Casino NITE</span>
               </span>
               <ArrowUpRight className="h-5 w-5 shrink-0 text-slate-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-coral" aria-hidden="true" />
             </a>
@@ -118,6 +120,27 @@ export function Footer() {
                 <span className="block text-sm text-slate-400">Stilts · LED · Balloons · Face Painting</span>
               </span>
               <ArrowUpRight className="h-5 w-5 shrink-0 text-slate-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-lavender" aria-hidden="true" />
+            </a>
+
+            <a
+              href="https://www.instagram.com/gameshowfanatics/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group flex items-center gap-4 rounded-2xl border p-4 transition-all ${
+                featureGameshow
+                  ? 'border-coral/50 bg-coral/10 text-white'
+                  : 'border-white/10 bg-slate-950/40 hover:border-coral/35 hover:bg-coral/5'
+              }`}
+              aria-label="Follow Gameshow Fanatics on Instagram"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-coral/15 text-coral">
+                <Instagram className="h-5 w-5" aria-hidden="true" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-bold text-white">@gameshowfanatics</span>
+                <span className="block text-sm text-slate-400">Game Show NITE</span>
+              </span>
+              <ArrowUpRight className="h-5 w-5 shrink-0 text-slate-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-coral" aria-hidden="true" />
             </a>
           </div>
         </div>

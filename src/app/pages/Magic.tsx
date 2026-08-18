@@ -96,7 +96,7 @@ export default function Magic() {
                 { icon: <Award className="w-8 h-8" />, label: 'Maui\u2019s Funniest Comedian', sub: 'Voted by Maui Time Readers' },
                 { icon: <Star className="w-8 h-8" />, label: 'Magic Castle Alum', sub: 'Hollywood, CA' },
                 { icon: <Users className="w-8 h-8" />, label: 'Tens of Thousands of Shows', sub: 'Across All Islands' },
-                { icon: <Wand2 className="w-8 h-8" />, label: 'Longest-Running', sub: 'Active Magic Show on Maui' },
+                { icon: <Wand2 className="w-8 h-8" />, label: 'Longest-Running', sub: 'Magic Show in South Maui' },
               ].map((cred, i) => (
                 <div key={i} className="text-center bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6">
                   <div className="text-coral mb-3 flex justify-center">{cred.icon}</div>
@@ -161,7 +161,7 @@ export default function Magic() {
                 <div>
                   <div className="flex items-center gap-3 mb-4"><MapPin className="w-5 h-5 text-coral" /><p className="text-coral font-semibold tracking-widest uppercase text-sm">Weekly Residency</p></div>
                   <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">Mulligan&rsquo;s on the Blue<span className="text-coral"> Magic Show</span></h2>
-                  <p className="text-lg text-gray-300 leading-relaxed mb-6">Every Thursday night, Brenton takes over Mulligan&rsquo;s on the Blue in Wailea for a family-friendly comedy magic extravaganza. It&rsquo;s the longest-running active magic show on Maui.</p>
+                  <p className="text-lg text-gray-300 leading-relaxed mb-6">Normally every Thursday night, Brenton takes over Mulligan&rsquo;s on the Blue in Wailea for a family-friendly comedy magic extravaganza. It&rsquo;s South Maui&rsquo;s longest-running magic show. Confirm current dates with the venue.</p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-gray-300"><Clock className="w-5 h-5 text-coral shrink-0" /><span>Showtime: 6:30pm, with close-up tableside magic starting around 5:30pm</span></div>
                     <div className="flex items-center gap-3 text-gray-300"><MapPin className="w-5 h-5 text-coral shrink-0" /><span>Mulligan&rsquo;s on the Blue, Wailea</span></div>
@@ -171,9 +171,9 @@ export default function Magic() {
                 <div className="bg-gradient-to-br from-coral/20 to-burgundy/20 rounded-2xl p-1">
                   <div className="bg-slate-900/80 backdrop-blur rounded-xl p-8 text-center">
                     <Wand2 className="w-16 h-16 text-coral mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Maui&rsquo;s Longest-Running</h3>
+                    <h3 className="text-2xl font-bold mb-2">South Maui&rsquo;s Longest-Running</h3>
                     <p className="text-coral text-lg font-semibold">Live Magic Show</p>
-                    <p className="text-gray-400 text-sm mt-2">Catch it next Thursday!</p>
+                    <p className="text-gray-400 text-sm mt-2">Normally every Thursday &mdash; confirm with the venue.</p>
                   </div>
                 </div>
               </div>

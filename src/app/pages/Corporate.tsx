@@ -81,8 +81,8 @@ const corporateGallery = [
     objectPosition: 'center 42%',
   },
   { src: '/media/client-selected/corporate/casino-overhead-busy-room.webp', label: 'Packed Casino NITE Crowd', alt: 'Packed corporate Casino NITE room viewed from above' },
-  { src: '/media/500194188_1237146738413052_2903309702033879195_n.jpg', label: 'Casino Guests Under the Tent', alt: 'Corporate guests playing casino games under a Maui event tent' },
-  { src: '/media/500304533_1237146601746399_8139464562412602121_n.jpg', label: 'Corporate Celebration Crowd', alt: 'A lively crowd enjoying a Maui corporate celebration' },
+  { src: '/media/client-selected/casino/casino-dealer-team-selfie.webp', label: 'Casino NITE Dealer Team', alt: 'Casino NITE dealer team gathered under the illuminated Casino NITE sign at a Maui corporate event' },
+  { src: '/media/client-selected/casino/casino-full-venue-setup-email.webp', label: 'Casino Floor Setup', alt: 'Full Casino NITE floor set with blackjack, roulette, and poker tables for a Maui corporate party' },
 ];
 
 export default function Corporate() {

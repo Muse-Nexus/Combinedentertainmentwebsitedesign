@@ -35,6 +35,8 @@ const forbiddenClaims = [
   ['live bunny', /live bunny/i],
   ['Fire Dancing', /Fire Dancing/i],
   ['unverified clown training claim', /trained as ["“]clowns/i],
+  ['island-wide longest-running claim', /longest[- ]running (?:active |live )*magic show on (?:the island|maui)/i],
+  ['unqualified Maui longest-running claim', /(?<!south )maui(?:'|’|&rsquo;)s longest[- ]running/i],
 ];
 for (const [label, pattern] of forbiddenClaims) {
   assert(!pattern.test(combinedSource), `Superseded client claim remains in active source: ${label}`);

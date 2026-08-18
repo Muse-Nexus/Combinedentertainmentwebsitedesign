@@ -131,6 +131,7 @@ export function Contact() {
 
   const socials = [
     { icon: Instagram, href: 'https://www.instagram.com/magicbrent/', label: "Brenton Keith & His Bag O' Tricks" },
+    { icon: Instagram, href: 'https://www.instagram.com/gameshowfanatics/', label: 'Game Show Fanatics' },
     { icon: Instagram, href: 'https://www.instagram.com/cirquejolie/', label: 'Cirque Jolie' },
     { icon: Facebook, href: 'https://www.facebook.com/MagicBrent/', label: 'Facebook' },
     { icon: Youtube, href: 'https://www.youtube.com/@magicbrent', label: 'YouTube' },

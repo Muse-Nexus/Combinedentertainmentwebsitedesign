@@ -79,8 +79,8 @@ const services = [
   {
     title: 'Casino NITE',
     kicker: 'Blackjack, poker and craps—with the show built in',
-    image: '/media/casino-gameshow/casino-night-red-carpet-maui.webp',
-    alt: 'Maui Casino NITE red carpet entrance with balloon columns',
+    image: '/media/casino-nite/red-lantern-casino-room-maui.webp',
+    alt: 'Maui Casino NITE room set with roulette, blackjack, and craps tables under red lanterns',
     to: '/casino',
   },
 ];
