@@ -19,7 +19,7 @@ const services = [
     icon: Dice5,
     title: 'Casino NITE',
     description: 'Full Vegas-style casino experience with professional dealers, real tables, and custom funny money. Blackjack, craps, roulette & poker.',
-    image: '/media/casino-gameshow/casino-night-red-carpet-maui.webp',
+    image: '/media/client-selected/casino/blackjack-guests-action.webp',
     imagePosition: 'center',
     link: '/casino',
   },
