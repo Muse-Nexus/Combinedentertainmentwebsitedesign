@@ -9,6 +9,7 @@ const ENV_KEYS = [
   'SOCIALFANOUT_API_KEY',
   'SOCIALFANOUT_MAGICBRENT_CONNECTION_ID',
   'SOCIALFANOUT_CIRQUEJOLIE_CONNECTION_ID',
+  'SOCIALFANOUT_GAMESHOWFANATICS_CONNECTION_ID',
   'INSTAGRAM_FEED_SIGNING_SECRET',
 ] as const;
 
@@ -109,6 +110,38 @@ test('feed maps SocialFanout media without exposing private service values', asy
   assert.match(String(payload.moments[1]?.image), /^\/api\/instagram-image\?/);
   assert.equal(calls.length, 2);
   assert.ok(calls.every((call) => call.init?.headers && (call.init.headers as Record<string, string>)['x-api-key'] === 'website-private-key'));
+});
+
+test('feed supports the Game Show Fanatics account when its connection is configured', async () => {
+  configureEnvironment();
+  process.env.SOCIALFANOUT_GAMESHOWFANATICS_CONNECTION_ID = 'connection_gameshowfanatics';
+  globalThis.fetch = (async (input: string | URL | Request) => {
+    const url = new URL(String(input));
+    if (!url.pathname.includes('connection_gameshowfanatics')) {
+      return Response.json({ ok: true, media: [] });
+    }
+    return Response.json({
+      ok: true,
+      media: [
+        {
+          id: '18000000000000003',
+          mediaType: 'IMAGE',
+          mediaUrl: 'https://scontent.cdninstagram.com/gameshow.jpg',
+          permalink: 'https://www.instagram.com/p/GAMESHOW/',
+          caption: 'The room is ready to play.',
+          username: 'gameshowfanatics',
+        },
+      ],
+    });
+  }) as typeof fetch;
+  const { response, captured } = responseCapture();
+
+  await instagramHandler(request({ url: '/api/instagram' }), response);
+
+  assert.equal(captured.statusCode, 200);
+  const payload = captured.body as { accounts: string[]; moments: Array<Record<string, unknown>> };
+  assert.deepEqual(payload.accounts, ['@gameshowfanatics']);
+  assert.equal(payload.moments[0]?.service, 'Game Shows · Casino · Corporate');
 });
 
 test('feed stays unavailable when the signing secret is weaker than documented', async () => {

@@ -1,6 +1,6 @@
 import { optionalEnvironmentValue } from './airtable.js';
 
-export type InstagramAccountKey = 'magicbrent' | 'cirquejolie';
+export type InstagramAccountKey = 'magicbrent' | 'cirquejolie' | 'gameshowfanatics';
 
 export interface InstagramAccount {
   key: InstagramAccountKey;
@@ -36,6 +36,14 @@ const ACCOUNT_DEFINITIONS: InstagramAccountDefinition[] = [
     profileUrl: 'https://www.instagram.com/cirquejolie/',
     serviceLabel: 'Stilts · LED · Balloons',
     connectionIdEnvironmentName: 'SOCIALFANOUT_CIRQUEJOLIE_CONNECTION_ID',
+  },
+  {
+    key: 'gameshowfanatics',
+    handle: '@gameshowfanatics',
+    label: 'Game Show Fanatics',
+    profileUrl: 'https://www.instagram.com/gameshowfanatics/',
+    serviceLabel: 'Game Shows · Casino · Corporate',
+    connectionIdEnvironmentName: 'SOCIALFANOUT_GAMESHOWFANATICS_CONNECTION_ID',
   },
 ];
 
