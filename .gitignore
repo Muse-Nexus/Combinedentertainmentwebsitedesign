@@ -27,3 +27,4 @@ public/media/uploads/
 media/*.psd
 
 .env*.local
+.vercel

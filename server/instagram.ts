@@ -213,7 +213,7 @@ function socialFanoutConfiguration() {
   return { apiKey, signingSecret, baseUrl };
 }
 
-function safeSocialFanoutBaseUrl(value: string): string | undefined {
+export function safeSocialFanoutBaseUrl(value: string): string | undefined {
   try {
     const url = new URL(value);
     const isLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
