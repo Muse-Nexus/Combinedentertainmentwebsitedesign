@@ -7,8 +7,9 @@
     "airtable:setup": "node scripts/setup-airtable.mjs",
     "build": "vite build && node scripts/generate-route-html.mjs && node scripts/verify-seo-build.mjs && node scripts/verify-site-content.mjs",
     "dev": "vite",
-    "test": "npm run test:instagram",
+    "test": "npm run test:instagram && npm run test:instagram-invite",
     "test:instagram": "node --test --import tsx tests/instagram-feed.test.ts",
+    "test:instagram-invite": "node --test --import tsx tests/instagram-invite-broker.test.ts",
     "verify:seo": "node scripts/verify-seo-build.mjs",
     "verify:content": "node scripts/verify-site-content.mjs"
   },
