@@ -3,6 +3,7 @@ import { Play, Volume2, VolumeX } from 'lucide-react';
 
 type VideoSource =
   | { type: 'vimeo'; videoId: string }
+  | { type: 'youtube'; videoId: string }
   | { type: 'direct'; src: string };
 
 interface PromoVideoProps {
@@ -24,30 +25,38 @@ export function PromoVideo({
   const [isPlaying, setIsPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  if (source.type === 'vimeo') {
-    const embedUrl = `https://player.vimeo.com/video/${source.videoId}?autoplay=1&loop=1&muted=1&background=0&controls=0&title=0&byline=0&portrait=0&dnt=1`;
+  if (source.type === 'vimeo' || source.type === 'youtube') {
+    const isYouTube = source.type === 'youtube';
+    // YouTube does not support selecting individual native controls. Keep its
+    // accessible playback, volume and fullscreen controls instead of masking UI.
+    // The player is only mounted after the visitor chooses to play.
+    const embedUrl = isYouTube
+      ? `https://www.youtube-nocookie.com/embed/${source.videoId}?autoplay=1&mute=0&controls=1&fs=1&playsinline=1&rel=0&iv_load_policy=3`
+      : `https://player.vimeo.com/video/${source.videoId}?autoplay=1&loop=1&muted=1&background=0&controls=0&title=0&byline=0&portrait=0&dnt=1`;
 
     return (
-      <div className={`relative overflow-hidden rounded-2xl group ${className}`} style={{ aspectRatio }}>
+      <div className={`relative overflow-hidden rounded-2xl group ${className}`} style={{ aspectRatio, minHeight: isYouTube ? 200 : undefined }}>
         {isPlaying ? (
           <>
             <iframe
               ref={iframeRef}
-              src={isMuted ? embedUrl : embedUrl.replace('muted=1', 'muted=0')}
+              src={isYouTube || isMuted ? embedUrl : embedUrl.replace('muted=1', 'muted=0')}
               className="absolute inset-0 w-full h-full"
-              allow="autoplay; fullscreen; picture-in-picture"
+              allow={isYouTube ? 'autoplay; encrypted-media; fullscreen' : 'autoplay; fullscreen; picture-in-picture'}
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
               loading="lazy"
               style={{ border: 'none' }}
               title={title}
             />
-            <button
+            {!isYouTube && <button
               type="button"
               onClick={() => setIsMuted(!isMuted)}
               className="absolute bottom-4 right-4 z-10 bg-black/65 hover:bg-black/85 text-white p-3 rounded-full transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 focus-visible:opacity-100 backdrop-blur-sm"
               aria-label={isMuted ? 'Unmute video' : 'Mute video'}
             >
               {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-            </button>
+            </button>}
           </>
         ) : (
           <button
