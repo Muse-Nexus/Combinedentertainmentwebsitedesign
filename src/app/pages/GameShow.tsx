@@ -59,7 +59,7 @@ export default function GameShow() {
         <div className="container mx-auto px-4">
           <FadeInSection className="max-w-4xl mx-auto">
             <PromoVideo
-              source={{ type: 'youtube', videoId: '4kSEDPACLS8' }}
+              source={{ type: 'youtube', videoId: 'y0MnKH5pGvQ' }}
               poster="/media/casino-gameshow/gameshow-fanatics-crowd-maui.webp"
               title="Play the Gameshow Fanatics promo video"
               className="shadow-2xl shadow-coral/10"
